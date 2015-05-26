@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<info>
+  <id>ownpad</id>
+  <name>OwnPad</name>
+  <description>
+    OwnPad is an ownCloud application that allows to create and open
+    Etherpad and Ethercalc documents.
+
+    This application requires to have access to an instance of
+    Etherpad and/or Ethercalc to work properly.
+  </description>
+  <version>0.1.0</version>
+  <licence>AGPL</licence>
+  <author>Olivier Tétard</author>
+  <dependencies>
+    <owncloud min-version="8" />
+  </dependencies>
+</info>
