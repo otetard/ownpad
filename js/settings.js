@@ -8,11 +8,29 @@
  * @copyright Olivier Tétard <olivier.tetard@miskin.fr>, 2015
  */
 
-$(document).ready(function() {
-    $('#ownpad_settings input').change(function() {
-        value = $(this).val();
-        OC.AppConfig.setValue('ownpad', $(this).attr('name'), value);
+(function (window, document, $) {
+    'use strict';
 
-        console.log($(this).attr('name'));
+    $(document).ready(function() {
+        var savedMessage = $('#ownpad-saved-message');
+
+        var saved = function () {
+            if (savedMessage.is(':visible')) {
+                savedMessage.hide();
+            }
+
+            savedMessage.fadeIn(function () {
+                setTimeout(function () {
+                    savedMessage.fadeOut();
+                }, 5000);
+            });
+        };
+
+        $('#ownpad_settings input').change(function() {
+            var value = $(this).val();
+            OC.AppConfig.setValue('ownpad', $(this).attr('name'), value);
+            saved()
+        });
     });
-});
+
+}(window, document, jQuery));

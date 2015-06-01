@@ -22,4 +22,8 @@
 	         value="<?php p($_['ownpad_ethercalc_host']); ?>"
                  placeholder="http://wwW.framacalc.org" />
         </p>
+
+    <div id="ownpad-saved-message">
+      <span class="msg success"><?php p($l->t('Saved')); ?></span>
+    </div>
 </div>
