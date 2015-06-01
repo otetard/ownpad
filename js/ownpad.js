@@ -85,43 +85,26 @@ function createPadEvent(type, li) {
             form.on('submit', function(event) {
                 event.stopPropagation();
 		event.preventDefault();
-
-                if(type === "etherpad")
-                    extension = ".pad";
-                else if(type === "ethercalc")
-                    extension = ".calc";
                 
-                var rawfilename = $("#input-" + type).val();
-                var filename = FileList.getUniqueName(rawfilename + extension);
-                OC.AppConfig.getValue('ownpad', 'ownpad_'+type+'_host', false, function(host) {
-                    console.log(FileList.getUniqueName(rawfilename + '.pad'));
-                    
-                    if(type === "etherpad")
-                        url = host+'/p/'+FilenameToMD5(rawfilename, type);
-                    else if(type === "ethercalc")
-                        url = host+'/'+FilenameToMD5(rawfilename, type);
-                    
-                    var content='[InternetShortcut]\nURL='+url;
-
-		    $.post(OC.filePath('files', 'ajax', 'newfile.php'),
-                           {
-			       dir: $('#dir').val(),
-			       filename: FileList.getUniqueName(rawfilename + extension),
-			       content: content
-		           },
-		    	   function(result){
-		    	       if (result.status == 'success') {
-			           FileList.add(result.data, {
-                                       updateSummary: false,
-			               silent: true
-                                   });
-			           FileList.reload();
-                               }
-		    	       else {
-			           OC.dialogs.alert(result.data.message, t('core', 'Could not create file'));
-			       }
-                           });
-                });
+                var padname = $("#input-" + type).val();
+		$.post(OC.filePath('ownpad', 'ajax', 'newpad.php'),
+                       {
+			   dir: $('#dir').val(),
+			   padname: padname,
+                           type: type,
+		       },
+		       function(result) {
+		    	   if (result.status == 'success') {
+			       FileList.add(result.data, {
+                                   updateSummary: false,
+			           silent: true
+                               });
+			       FileList.reload();
+                           }
+		    	   else {
+			       OC.dialogs.alert(result.data.message, t('core', 'Could not create file'));
+			   }
+                       });
                 
                 var li = form.parent();
 		form.remove();
@@ -130,7 +113,7 @@ function createPadEvent(type, li) {
 		$('#content').focus();
 		li.append('<p>' + li.data('text') + '</p>');
 		$('#new>a').click();
-            })
+            });
         }
     }, 100);
 }

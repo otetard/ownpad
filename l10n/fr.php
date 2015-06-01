@@ -15,6 +15,7 @@ $TRANSLATIONS = array(
 	'Edit' => 'Éditer',
 	'Ethercalc Host' => 'Hôte Ethercalc',
 	'Etherpad Host' => 'Hôte Etherpad',
+	'Incorrect pad name' => 'Nom de pad incorrect',
 	'Pad' => 'Document collaboratif',
 	'Saved' => 'Sauvegardé',
 	'This is used to link collaborative documents inside ownCloud.' => 'Ceci est utilisé pour établir des liens avec des documents collaboratifs dans ownCloud',

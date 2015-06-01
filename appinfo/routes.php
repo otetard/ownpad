@@ -9,6 +9,12 @@
  * @copyright Olivier Tétard <olivier.tetard@miskin.fr>, 2015
  */
 
+namespace OCA\OwnPad\Appinfo;
+
+/** @var $this \OC\Route\Router */
+
+$this->create('ownpad_newpad', 'ajax/newpad.php')->actionInclude('ownpad/ajax/newpad.php');
+
 return ['routes' => [
 	['name' => 'display#showPad', 'url' => '/', 'verb' => 'GET'],
 ]];
