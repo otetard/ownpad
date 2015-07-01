@@ -39,12 +39,28 @@ class DisplayController extends Controller {
 	 * @return TemplateResponse
 	 */
 	public function showPad($file, $dir) {
-		/* Retrieve file content to find pad’s URL */		
+		/* Retrieve file content to find pad’s URL */
 		$content = \OC\Files\Filesystem::file_get_contents($dir."/".$file);
 		preg_match('/URL=(.*)$/', $content, $matches);
-		$url = $matches[1];		
+		$url = $matches[1];
 		$title = $file;
-		
+
+        /* Not totally sure that this is the right way to proceed…
+         *
+         * First we decode the URL (to avoid double encode), then we
+         * replace spaces with underscore (as they are converted as
+         * such by Etherpad), then we encode the URL properly (and we
+         * avoid to urlencode() the protocol scheme).
+         *
+         * Magic urlencode() function was stolen from this answer on
+         * StackOverflow: <http://stackoverflow.com/a/7974253>.
+         */
+        $url = urldecode($url);
+        $url = str_replace(' ', '_', $url);
+        $url = preg_replace_callback('#://([^/]+)/([^?]+)#', function ($match) {
+            return '://' . $match[1] . '/' . join('/', array_map('rawurlencode', explode('/', $match[2])));
+        }, $url);
+
 		$params = [
 			'urlGenerator' => $this->urlGenerator,
 			'url' => $url,
