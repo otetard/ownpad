@@ -68,6 +68,18 @@ class DisplayController extends Controller {
 		];
 		$response = new TemplateResponse($this->appName, 'viewer', $params, 'blank');
 
+
+        /* Allow Etherpad and Ethercalc domains to the
+         * Content-Security-frame- list.
+         *
+         * This feature was introduced in ownCloud 8.1.
+         */
+        $policy = new ContentSecurityPolicy();
+        $appConfig = \OC::$server->getAppConfig();
+        $policy->addAllowedFrameDomain($appConfig->getValue('ownpad', 'ownpad_etherpad_host', ''));
+        $policy->addAllowedFrameDomain($appConfig->getValue('ownpad', 'ownpad_ethercalc_host', ''));
+        $response->setContentSecurityPolicy($policy);
+
 		return $response;
 	}
 }
