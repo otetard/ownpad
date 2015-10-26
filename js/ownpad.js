@@ -8,11 +8,6 @@
  * @copyright Olivier Tétard <olivier.tetard@miskin.fr>, 2015
  */
 
-function FilenameToMD5(filename, type) {
-    d = new Date();
-    return md5('owncloud|' + filename + "|" + d.getTime() + d.getMilliseconds() + "|" + type);
-}
-
 (function(OCA) {
     OCA.FilesEtherpad = {
         attach: function(fileList) {
