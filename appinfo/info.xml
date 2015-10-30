@@ -13,6 +13,6 @@
   <licence>AGPL</licence>
   <author>Olivier Tétard</author>
   <dependencies>
-    <owncloud min-version="8.1" />
+    <owncloud min-version="8.1" max-version="8.1" />
   </dependencies>
 </info>
