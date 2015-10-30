@@ -9,10 +9,10 @@
     This application requires to have access to an instance of
     Etherpad and/or Ethercalc to work properly.
   </description>
-  <version>0.3.0</version>
+  <version>0.4.0</version>
   <licence>AGPL</licence>
   <author>Olivier Tétard</author>
   <dependencies>
-    <owncloud min-version="8.1" max-version="8.1" />
+    <owncloud min-version="9.0" />
   </dependencies>
 </info>
