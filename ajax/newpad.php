@@ -61,7 +61,11 @@ if(!\OC\Files\Filesystem::file_exists($dir . '/')) {
 	exit();
 }
 
-$filename = "$padname.$ext";
+// Add the extension only if padname doesn’t contain it
+if(substr($padname, -strlen(".$ext")) != ".$ext") {
+    $filename = "$padname.$ext";
+}
+
 $target = $dir . "/" . $filename;
 
 if(\OC\Files\Filesystem::file_exists($target)) {
