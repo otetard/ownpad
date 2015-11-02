@@ -65,6 +65,9 @@ if(!\OC\Files\Filesystem::file_exists($dir . '/')) {
 if(substr($padname, -strlen(".$ext")) != ".$ext") {
     $filename = "$padname.$ext";
 }
+else {
+    $filename = $padname;
+}
 
 $target = $dir . "/" . $filename;
 
