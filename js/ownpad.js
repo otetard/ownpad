@@ -66,73 +66,56 @@
 
 OC.Plugins.register('OCA.Files.FileList', OCA.FilesEtherpad);
 
+(function(OCA) {
+    OCA.FilesEtherpadMenu = {
+        attach: function(newFileMenu) {
+            var self = this;
 
-function createPadEvent(type, li) {
-    console.log(li);
-    
-    var checkExists = setInterval(function() {
-        var form = $(li).find('form');
-
-        if(form.length) {
-            clearInterval(checkExists);
-
-            form.unbind('submit');
-            form.on('submit', function(event) {
-                event.stopPropagation();
-		event.preventDefault();
-                
-                var padname = $("#input-" + type).val();
-		$.post(OC.filePath('ownpad', 'ajax', 'newpad.php'),
-                       {
-			   dir: $('#dir').val(),
-			   padname: padname,
-                           type: type,
-		       },
-		       function(result) {
-		    	   if (result.status == 'success') {
-			       FileList.add(result.data, {
-                                   updateSummary: false,
-			           silent: true
-                               });
-			       FileList.reload();
-                           }
-		    	   else {
-			       OC.dialogs.alert(result.data.message, t('core', 'Could not create file'));
-			   }
-                       });
-                
-                var li = form.parent();
-		form.remove();
-		/* workaround for IE 9&10 click event trap, 2 lines: */
-		$('input').first().focus();
-		$('#content').focus();
-		li.append('<p>' + li.data('text') + '</p>');
-		$('#new>a').click();
+            newFileMenu.addMenuEntry({
+                id: 'etherpad',
+                displayName: t('ownpad', 'Pad'),
+                templateName: t('ownpad', 'New pad.pad'),
+                iconClass: 'icon-filetype-etherpad',
+                fileType: 'etherpad',
+                actionHandler: function(filename) {
+                    self._createPad("etherpad", filename);
+                }
             });
+
+            newFileMenu.addMenuEntry({
+                id: 'ethercalc',
+                displayName: t('ownpad', 'Calc'),
+                templateName: t('ownpad', 'New calc.calc'),
+                iconClass: 'icon-filetype-ethercalc',
+                fileType: 'ethercalc',
+                actionHandler: function(filename) {
+                    self._createPad("ethercalc", filename);
+                }
+            });
+        },
+        _createPad: function(type, filename) {
+            var self = this;
+
+            OCA.Files.Files.isFileNameValid(filename);
+            filename = FileList.getUniqueName(filename);
+
+            $.post(
+                OC.generateUrl('/apps/ownpad/ajax/newpad.php'), {
+                    dir: $('#dir').val(),
+                    padname: filename,
+                    type: type,
+                },
+                function(result) {
+                    if(result.status == 'success') {
+                        FileList.add(result.data, {animate: true, scrollTo: true});
+                    }
+                    else {
+                        OC.dialogs.alert(result.data.message, t('core', 'Could not create file'));
+                    }
+                }
+            );
         }
-    }, 100);
-}
-
-$(document).ready(function() {
-    if($('#new > ul > li').length > 0) {
-        html = '<li class="icon-filetype-etherpad svg" data-newname="Etherpad" data-type="etherpad">';
-        html += '<p>' + t('ownpad', 'Pad') + '</p>';
-        html += '</li>';
-        $(html).appendTo('#new > ul');
-
-        html = '<li class="icon-filetype-ethercalc svg" data-newname="Ethercalc" data-type="ethercalc">';
-        html += '<p>' + t('ownpad', 'Calc') + '</p>';
-        html += '</li>';
-        $(html).appendTo('#new > ul');
-
-        var etherpadTarget = $('li[data-type="etherpad"]');
-        etherpadTarget.on('click', function(evt) {
-            createPadEvent("etherpad", etherpadTarget);
-        });
-
-        var ethercalcTarget = $('li[data-type="ethercalc"]');
-        ethercalcTarget.on('click', function(evt) {
-            createPadEvent("ethercalc", ethercalcTarget);
-        });
     }
-});
+})(OCA);
+
+OC.Plugins.register('OCA.Files.NewFileMenu', OCA.FilesEtherpadMenu);

@@ -1,3 +1,6 @@
+OwnPad (0.4.0)
+* **Enhancement**: port code to ownCloud 9
+
 OwnPad (0.3.0)
 **Bugfix**: Add Content-Security-Policy rules in order to allow the pad/calc iframe to be opened (required by ownCloud 8.1).
 **Bugfix**: Fix the way URL are encoded to make Etherpad happy.
