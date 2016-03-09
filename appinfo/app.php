@@ -14,5 +14,5 @@ OCP\App::registerAdmin('ownpad','settings');
 OCP\Util::addscript('ownpad', 'ownpad');
 OCP\Util::addStyle('ownpad', 'ownpad');
 
-\OC_Helper::getMimetypeDetector()->registerType("pad", "application/x-ownpad");
-\OC_Helper::getMimetypeDetector()->registerType("calc", "application/x-ownpad");
+\OC::$server->getMimeTypeDetector()->registerType("pad", "application/x-ownpad");
+\OC::$server->getMimeTypeDetector()->registerType("calc", "application/x-ownpad");
