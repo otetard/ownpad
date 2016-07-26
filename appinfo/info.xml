@@ -9,7 +9,7 @@
     This application requires to have access to an instance of
     Etherpad and/or Ethercalc to work properly.
   </description>
-  <version>0.5.0</version>
+  <version>0.5.1</version>
   <licence>AGPL</licence>
   <author>Olivier Tétard</author>
   <dependencies>

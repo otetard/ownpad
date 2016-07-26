@@ -1,3 +1,9 @@
+OwnPad (0.5.1)
+* **Bugfix**: disable OwnPad’s mimetypes registration at application level, to prevent breaking all other mimetypes. This requires to manually add mimetypes to ownCloud’s configuration (see README.md).
+
+OwnPad (0.5.0)
+* **Bugfix**: fix portability to ownCloud 9.
+
 OwnPad (0.4.0)
 * **Enhancement**: port code to ownCloud 9
 
