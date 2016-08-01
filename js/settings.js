@@ -29,7 +29,7 @@
         $('#ownpad_settings input').change(function() {
             var value = $(this).val();
             OC.AppConfig.setValue('ownpad', $(this).attr('name'), value);
-            saved()
+            saved();
         });
     });
 

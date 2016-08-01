@@ -67,32 +67,61 @@
 OC.Plugins.register('OCA.Files.FileList', OCA.FilesEtherpad);
 
 (function(OCA) {
-    OCA.FilesEtherpadMenu = {
+
+    var FilesEtherpadMenu = function() {
+        this.initialize();
+    }
+
+    FilesEtherpadMenu.prototype = {
+
+        _etherpadEnabled: false,
+        _ethercalcEnabled: false,
+
+        initialize: function() {
+            var self = this;
+
+            OC.AppConfig.getValue('ownpad', 'ownpad_etherpad_host', false, function(host) {
+                self._etherpadEnabled = (host !== false && host !== "");
+            });
+
+            OC.AppConfig.getValue('ownpad', 'ownpad_ethercalc_host', false, function(host) {
+                self._ethercalcEnabled = (host !== false && host !== "");
+            });
+
+            OC.Plugins.register('OCA.Files.NewFileMenu', self);
+        },
+
+
         attach: function(newFileMenu) {
             var self = this;
 
-            newFileMenu.addMenuEntry({
-                id: 'etherpad',
-                displayName: t('ownpad', 'Pad'),
-                templateName: t('ownpad', 'New pad.pad'),
-                iconClass: 'icon-filetype-etherpad',
-                fileType: 'etherpad',
-                actionHandler: function(filename) {
-                    self._createPad("etherpad", filename);
-                }
-            });
+            if(self._etherpadEnabled === true) {
+                newFileMenu.addMenuEntry({
+                    id: 'etherpad',
+                    displayName: t('ownpad', 'Pad'),
+                    templateName: t('ownpad', 'New pad.pad'),
+                    iconClass: 'icon-filetype-etherpad',
+                    fileType: 'etherpad',
+                    actionHandler: function(filename) {
+                        self._createPad("etherpad", filename);
+                    }
+                });
+            }
 
-            newFileMenu.addMenuEntry({
-                id: 'ethercalc',
-                displayName: t('ownpad', 'Calc'),
-                templateName: t('ownpad', 'New calc.calc'),
-                iconClass: 'icon-filetype-ethercalc',
-                fileType: 'ethercalc',
-                actionHandler: function(filename) {
-                    self._createPad("ethercalc", filename);
-                }
-            });
+            if(self._ethercalcEnabled === true) {
+                newFileMenu.addMenuEntry({
+                    id: 'ethercalc',
+                    displayName: t('ownpad', 'Calc'),
+                    templateName: t('ownpad', 'New calc.calc'),
+                    iconClass: 'icon-filetype-ethercalc',
+                    fileType: 'ethercalc',
+                    actionHandler: function(filename) {
+                        self._createPad("ethercalc", filename);
+                    }
+                });
+            }
         },
+
         _createPad: function(type, filename) {
             var self = this;
 
@@ -115,7 +144,7 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesEtherpad);
                 }
             );
         }
-    }
-})(OCA);
+    };
 
-OC.Plugins.register('OCA.Files.NewFileMenu', OCA.FilesEtherpadMenu);
+    OCA.FilesEtherpadMenu = new FilesEtherpadMenu();
+})(OCA);
