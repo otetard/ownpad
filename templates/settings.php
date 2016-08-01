@@ -13,14 +13,14 @@
       <label for="ownpad_etherpad_host"><?php p($l->t('Etherpad Host')); ?></label>
       <input type="text" name="ownpad_etherpad_host" id="ownpad_etherpad_host"
 	     value="<?php p($_['ownpad_etherpad_host']); ?>"
-             placeholder="http://lite.framapad.org" />
+             placeholder="https://mensuel.framapad.org" />
     </p>
 
     <p>
       <label for="ownpad_ethercalc_host"><?php p($l->t('Ethercalc Host')); ?></label>
       <input type="text" name="ownpad_ethercalc_host" id="ownpad_ethercalc_host"
 	     value="<?php p($_['ownpad_ethercalc_host']); ?>"
-             placeholder="http://wwW.framacalc.org" />
+             placeholder="https://framacalc.org" />
     </p>
 
     <div id="ownpad-saved-message">
