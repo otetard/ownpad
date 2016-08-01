@@ -8,6 +8,15 @@ This application works pretty much like
 [`files_etherpad`](https://github.com/EELV-fr/Owncloud-Ether-Docs) but
 is a complete rewrite.
 
+## Configuration
+
+In order to make Ownpad work, you need to go to the configuration
+panel and then fill the “Collaborative documents” section. There is no
+need to fill both Etherpad and Ethercalc hosts.
+
+Afterwards, the “pad” and/or “calc” items will be available in the “+”
+menu from the “File” app.
+
 ## Mimetype detection
 
 Unfortunatly, apps can’t declare new mimetypes on the fly. To make
