@@ -9,7 +9,7 @@
  */
 
 (function(OCA) {
-    OCA.FilesEtherpad = {
+    OCA.FilesOwnpad = {
         attach: function(fileList) {
             this._extendFileActions(fileList.fileActions);
         },
@@ -64,15 +64,15 @@
     };
 })(OCA);
 
-OC.Plugins.register('OCA.Files.FileList', OCA.FilesEtherpad);
+OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
 
 (function(OCA) {
 
-    var FilesEtherpadMenu = function() {
+    var FilesOwnpadMenu = function() {
         this.initialize();
     }
 
-    FilesEtherpadMenu.prototype = {
+    FilesOwnpadMenu.prototype = {
 
         _etherpadEnabled: false,
         _ethercalcEnabled: false,
@@ -146,5 +146,5 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesEtherpad);
         }
     };
 
-    OCA.FilesEtherpadMenu = new FilesEtherpadMenu();
+    OCA.FilesOwnpadMenu = new FilesOwnpadMenu();
 })(OCA);
