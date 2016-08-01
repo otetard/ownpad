@@ -1,6 +1,6 @@
-# OwnPad — Etherpad and Ethercalc links in ownCloud
+# Ownpad — Etherpad and Ethercalc links in ownCloud
 
-OwnPad is an ownCloud application that allows to create and open
+Ownpad is an ownCloud application that allows to create and open
 Etherpad and Ethercalc documents. This application requires to have
 access to an instance of Etherpad and/or Ethercalc to work properly.
 
@@ -11,7 +11,7 @@ is a complete rewrite.
 ## Mimetype detection
 
 Unfortunatly, apps can’t declare new mimetypes on the fly. To make
-OwnPad work properly, you need to add two new mimetypes in the
+Ownpad work properly, you need to add two new mimetypes in the
 `mimetypemapping.json` file (at ownCloud level).
 
 To proceed, just copy `/resources/config/mimetypemapping.dist.json` to

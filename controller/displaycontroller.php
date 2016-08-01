@@ -1,6 +1,6 @@
 <?php
 /**
- * ownCloud - OwnPad
+ * ownCloud - Ownpad
  *
  * This file is licensed under the Affero General Public License
  * version 3 or later. See the COPYING file.
@@ -9,7 +9,7 @@
  * @copyright Olivier Tétard <olivier.tetard@miskin.fr>, 2015
  */
 
-namespace OCA\OwnPad\Controller;
+namespace OCA\Ownpad\Controller;
 
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
