@@ -1,3 +1,7 @@
+Ownpad (0.5.2)
+* **Enhancement**: don’t display pad/calc if no URL is configured for Ownpad.
+* **Enhancement**: some minor changes (typo, etc.)
+* **Enhancement**: minor changes to the configuration page.
 
 Ownpad (0.5.1)
 * **Bugfix**: disable Ownpad’s mimetypes registration at application level, to prevent breaking all other mimetypes. This requires to manually add mimetypes to ownCloud’s configuration (see README.md).
