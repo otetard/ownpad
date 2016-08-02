@@ -80,12 +80,12 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
         initialize: function() {
             var self = this;
 
-            OC.AppConfig.getValue('ownpad', 'ownpad_etherpad_host', false, function(host) {
-                self._etherpadEnabled = (host !== false && host !== "");
+            OC.AppConfig.getValue('ownpad', 'ownpad_etherpad_enable', 'no', function(val) {
+                self._etherpadEnabled = (val !== "no");
             });
 
-            OC.AppConfig.getValue('ownpad', 'ownpad_ethercalc_host', false, function(host) {
-                self._ethercalcEnabled = (host !== false && host !== "");
+            OC.AppConfig.getValue('ownpad', 'ownpad_ethercalc_enable', 'no', function(val) {
+                self._ethercalcEnabled = (val !== "no");
             });
 
             OC.Plugins.register('OCA.Files.NewFileMenu', self);

@@ -55,3 +55,7 @@
     margin: 15px 0;
     display: none;
 }
+
+#ownpad_settings .indent {
+    padding-left: 28px;
+}
