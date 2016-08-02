@@ -14,11 +14,10 @@
  * Etherpad/Ethercalc.
  */
 if(version_compare($installedVersion, '0.5.2', '<')) {
-
-    $appConfig = \OC::$server->getAppConfig();
-    $enabled = ($appConfig->getValue('ownpad', 'ownpad_etherpad_host', '') !== '') ? 'yes' : 'no';
+    $appConfig = \OC::$server->getConfig();
+    $enabled = ($appConfig->getAppValue('ownpad', 'ownpad_etherpad_host', '') !== '') ? 'yes' : 'no';
     $appConfig->setValue('ownpad', 'ownpad_etherpad_enable', $enabled);
 
-    $enabled = ($appConfig->getValue('ownpad', 'ownpad_ethercalc_host', '') !== '') ? 'yes' : 'no';
+    $enabled = ($appConfig->getAppValue('ownpad', 'ownpad_ethercalc_host', '') !== '') ? 'yes' : 'no';
     $appConfig->setValue('ownpad', 'ownpad_ethercalc_enable', $enabled);
 }

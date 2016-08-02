@@ -15,10 +15,12 @@
 
 $template = new OCP\Template('ownpad', 'settings');
 
-$appConfig = \OC::$server->getAppConfig();
-$template->assign('ownpad_etherpad_enable', $appConfig->getValue('ownpad', 'ownpad_etherpad_enable', 'no'));
-$template->assign('ownpad_etherpad_host', $appConfig->getValue('ownpad', 'ownpad_etherpad_host', ''));
-$template->assign('ownpad_ethercalc_enable', $appConfig->getValue('ownpad', 'ownpad_ethercalc_enable', 'no'));
-$template->assign('ownpad_ethercalc_host', $appConfig->getValue('ownpad', 'ownpad_ethercalc_host', ''));
+$appConfig = \OC::$server->getConfig();
+$template->assign('ownpad_etherpad_enable', $appConfig->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no'));
+$template->assign('ownpad_etherpad_host', $appConfig->getAppValue('ownpad', 'ownpad_etherpad_host', ''));
+$template->assign('ownpad_etherpad_useapi', $appConfig->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no'));
+$template->assign('ownpad_etherpad_apikey', $appConfig->getAppValue('ownpad', 'ownpad_etherpad_apikey', ''));
+$template->assign('ownpad_ethercalc_enable', $appConfig->getAppValue('ownpad', 'ownpad_ethercalc_enable', 'no'));
+$template->assign('ownpad_ethercalc_host', $appConfig->getAppValue('ownpad', 'ownpad_ethercalc_host', ''));
 
 return $template->fetchPage();
