@@ -10,7 +10,7 @@
  */
 
 /*
- * 0.6.0 introduces a new checkbox to enable/disable
+ * 0.5.2 introduces a new checkbox to enable/disable
  * Etherpad/Ethercalc.
  */
 if(version_compare($installedVersion, '0.5.2', '<')) {
