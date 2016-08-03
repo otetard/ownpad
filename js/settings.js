@@ -29,13 +29,13 @@
         $('#ownpad_settings input').change(function() {
             var value = $(this).val();
 
-	    if($(this).attr('type') === 'checkbox') {
-		if (this.checked) {
-		    value = 'yes';
-		} else {
-		    value = 'no';
-		}
-	    }
+            if($(this).attr('type') === 'checkbox') {
+                if (this.checked) {
+                    value = 'yes';
+                } else {
+                    value = 'no';
+                }
+            }
 
             OC.AppConfig.setValue('ownpad', $(this).attr('name'), value);
             saved();

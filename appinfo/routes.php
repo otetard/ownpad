@@ -16,5 +16,5 @@ namespace OCA\Ownpad\Appinfo;
 $this->create('ownpad_newpad', 'ajax/newpad.php')->actionInclude('ownpad/ajax/newpad.php');
 
 return ['routes' => [
-	['name' => 'display#showPad', 'url' => '/', 'verb' => 'GET'],
+    ['name' => 'display#showPad', 'url' => '/', 'verb' => 'GET'],
 ]];

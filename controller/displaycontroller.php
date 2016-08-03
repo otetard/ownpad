@@ -20,35 +20,35 @@ use OCP\IConfig;
 
 class DisplayController extends Controller {
 
-	/** @var IURLGenerator */
-	private $urlGenerator;
+    /** @var IURLGenerator */
+    private $urlGenerator;
 
-	/** @var IConfig */
-	private $config;
+    /** @var IConfig */
+    private $config;
 
-	/**
-	 * @param string $AppName
-	 * @param IRequest $request
-	 * @param IURLGenerator $urlGenerator
-	 */
-	public function __construct($AppName, IRequest $request, IURLGenerator $urlGenerator, IConfig $config) {
-		parent::__construct($AppName, $request);
-		$this->urlGenerator = $urlGenerator;
-		$this->config = $config;
-	}
+    /**
+     * @param string $AppName
+     * @param IRequest $request
+     * @param IURLGenerator $urlGenerator
+     */
+    public function __construct($AppName, IRequest $request, IURLGenerator $urlGenerator, IConfig $config) {
+        parent::__construct($AppName, $request);
+        $this->urlGenerator = $urlGenerator;
+        $this->config = $config;
+    }
 
-	/**
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 *
-	 * @return TemplateResponse
-	 */
-	public function showPad($file, $dir) {
-		/* Retrieve file content to find pad’s URL */
-		$content = \OC\Files\Filesystem::file_get_contents($dir."/".$file);
-		preg_match('/URL=(.*)$/', $content, $matches);
-		$url = $matches[1];
-		$title = $file;
+    /**
+     * @PublicPage
+     * @NoCSRFRequired
+     *
+     * @return TemplateResponse
+     */
+    public function showPad($file, $dir) {
+        /* Retrieve file content to find pad’s URL */
+        $content = \OC\Files\Filesystem::file_get_contents($dir."/".$file);
+        preg_match('/URL=(.*)$/', $content, $matches);
+        $url = $matches[1];
+        $title = $file;
 
         /*
          * Not totally sure that this is the right way to proceed…
@@ -67,12 +67,12 @@ class DisplayController extends Controller {
             return '://' . $match[1] . '/' . join('/', array_map('rawurlencode', explode('/', $match[2])));
         }, $url);
 
-		$params = [
-			'urlGenerator' => $this->urlGenerator,
-			'url' => $url,
-			'title' => $title,
-		];
-		$response = new TemplateResponse($this->appName, 'viewer', $params, 'blank');
+        $params = [
+            'urlGenerator' => $this->urlGenerator,
+            'url' => $url,
+            'title' => $title,
+        ];
+        $response = new TemplateResponse($this->appName, 'viewer', $params, 'blank');
 
 
         /*
@@ -93,6 +93,6 @@ class DisplayController extends Controller {
 
         $response->setContentSecurityPolicy($policy);
 
-		return $response;
-	}
+        return $response;
+    }
 }

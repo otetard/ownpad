@@ -18,8 +18,8 @@
             $('#etherpad').remove();
             FileList.setViewerMode(false);
 
-	    // replace the controls with our own
-	    $('#app-content #controls').removeClass('hidden');
+            // replace the controls with our own
+            $('#app-content #controls').removeClass('hidden');
         },
 
         show: function(fileName, dirName) {
@@ -34,18 +34,18 @@
 
             $('#app-content').append($iframe);
             $("#pageWidthOption").attr("selected","selected");
-	    $('#app-content #controls').addClass('hidden');
+            $('#app-content #controls').addClass('hidden');
 
             $('#etherpad').load(function(){
-		var iframe = $('#etherpad').contents();
-		if ($('#fileList').length) {
-		    iframe.find('#filetopad_close').click(function() {
-			self.hide();
-		    });
-		} else {
-		    iframe.find("#filetopad_close").addClass('hidden');
-		}
-	    });
+                var iframe = $('#etherpad').contents();
+                if ($('#fileList').length) {
+                    iframe.find('#filetopad_close').click(function() {
+                        self.hide();
+                    });
+                } else {
+                    iframe.find("#filetopad_close").addClass('hidden');
+                }
+            });
         },
 
         _extendFileActions: function(fileActions) {
