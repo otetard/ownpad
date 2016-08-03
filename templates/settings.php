@@ -22,6 +22,18 @@
 	           value="<?php p($_['ownpad_etherpad_host']); ?>"
                    placeholder="https://mensuel.framapad.org" />
         </p>
+
+        <p>
+	    <input type="checkbox" name="ownpad_etherpad_useapi" id="ownpad_etherpad_useapi" class="checkbox"
+	           value="1" <?php if ($_['ownpad_etherpad_useapi'] === 'yes') print_unescaped('checked="checked"'); ?> />
+	    <label for="ownpad_etherpad_useapi"><?php p($l->t('Use Etherpad API'));?></label><br/>
+        </p>
+        <div id="ownpad_etherpad_useapi_settings" class="indent <?php if ($_['ownpad_etherpad_useapi'] !== 'yes') p('hidden'); ?>">
+            <p>
+                <label for="ownpad_etherpad_apikey"><?php p($l->t('Etherpad Apikey')); ?></label>
+                <input type="text" name="ownpad_etherpad_apikey" id="ownpad_etherpad_apikey" value="<?php p($_['ownpad_etherpad_apikey']); ?>" />
+            </p>
+        </div>
     </div>
 
     <p>
