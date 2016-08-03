@@ -18,6 +18,8 @@ use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\IConfig;
 
+use EtherpadLite\Client;
+
 class DisplayController extends Controller {
 
     /** @var IURLGenerator */
@@ -25,6 +27,9 @@ class DisplayController extends Controller {
 
     /** @var IConfig */
     private $config;
+
+    /** @var Client */
+    private $eplInstance;
 
     /**
      * @param string $AppName
@@ -35,6 +40,14 @@ class DisplayController extends Controller {
         parent::__construct($AppName, $request);
         $this->urlGenerator = $urlGenerator;
         $this->config = $config;
+
+        if($this->config->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no') !== 'no' AND
+           $this->config->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no') !== 'no')
+        {
+            $eplHost = $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', '');
+            $eplApiKey = $this->config->getAppValue('ownpad', 'ownpad_etherpad_apikey', '');
+            $this->eplInstance = new Client($eplApiKey, $eplHost . "/api");
+        }
     }
 
     /**
