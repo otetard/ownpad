@@ -9,6 +9,8 @@
  * @copyright Olivier Tétard <olivier.tetard@miskin.fr>, 2015
  */
 
+require_once __DIR__ . '/../3rdparty/autoload.php';
+
 OCP\App::registerAdmin('ownpad','settings');
 
 OCP\Util::addscript('ownpad', 'ownpad');

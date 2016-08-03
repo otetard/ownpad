@@ -1,0 +1,13 @@
+{
+    "name": "tomnomnom/etherpad-lite-client",
+    "description": "Etherpad Lite client for PHP",
+    "homepage": "https://github.com/TomNomNom/etherpad-lite-client/",
+    "license": "Apache",
+
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
+    "autoload": {
+        "psr-4": {"EtherpadLite\\": "EtherpadLite/"}
+    }
+}
