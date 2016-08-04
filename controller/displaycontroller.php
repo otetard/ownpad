@@ -114,7 +114,7 @@ class DisplayController extends Controller {
         $response = new TemplateResponse($this->appName, 'viewer', $params, 'blank');
 
         $cookieDomain = $this->config->getAppValue('ownpad', 'ownpad_etherpad_cookie_domain', '');
-        setcookie('sessionID', $session->sessionID, 0, '/', $cookieDomain, true, true);
+        setcookie('sessionID', $session->sessionID, 0, '/', $cookieDomain, true, false);
 
         /*
          * Allow Etherpad and Ethercalc domains to the
