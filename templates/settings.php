@@ -30,8 +30,19 @@
         </p>
         <div id="ownpad_etherpad_useapi_settings" class="indent <?php if ($_['ownpad_etherpad_useapi'] !== 'yes') p('hidden'); ?>">
             <p>
+                <em>
+                    <?php p($l->t('You need to enable Etherpad API if you want to create “protected” pads, that will only be accessible through ownCloud. To make this work, you need to host your Etherpad instance in a sub of sibbling domain of the one that is used by ownCloud (due to cookie isolation).')); ?>
+                </em>
+            </p>
+
+            <p>
                 <label for="ownpad_etherpad_apikey"><?php p($l->t('Etherpad Apikey')); ?></label>
                 <input type="text" name="ownpad_etherpad_apikey" id="ownpad_etherpad_apikey" value="<?php p($_['ownpad_etherpad_apikey']); ?>" />
+            </p>
+
+            <p>
+                <label for="ownpad_etherpad_cookie_domain"><?php p($l->t('Etherpad cookie domain')); ?></label>
+                <input type="text" name="ownpad_etherpad_cookie_domain" id="ownpad_etherpad_cookie_domain" value="<?php p($_['ownpad_etherpad_cookie_domain']); ?>" />
             </p>
         </div>
     </div>
