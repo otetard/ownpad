@@ -75,6 +75,7 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
     FilesOwnpadMenu.prototype = {
 
         _etherpadEnabled: false,
+        _etherpadAPIEnabled: false,
         _ethercalcEnabled: false,
 
         initialize: function() {
@@ -82,6 +83,10 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
 
             OC.AppConfig.getValue('ownpad', 'ownpad_etherpad_enable', 'no', function(val) {
                 self._etherpadEnabled = (val !== "no");
+            });
+
+            OC.AppConfig.getValue('ownpad', 'ownpad_etherpad_useapi', 'no', function(val) {
+                self._etherpadAPIEnabled = (val !== "no");
             });
 
             OC.AppConfig.getValue('ownpad', 'ownpad_ethercalc_enable', 'no', function(val) {
@@ -106,6 +111,19 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
                         self._createPad("etherpad", filename);
                     }
                 });
+
+                if(self._etherpadAPIEnabled === true) {
+                    newFileMenu.addMenuEntry({
+                        id: 'etherpad',
+                        displayName: t('ownpad', 'Protected Pad'),
+                        templateName: t('ownpad', 'New protected pad.pad'),
+                        iconClass: 'icon-filetype-etherpad',
+                        fileType: 'etherpad',
+                        actionHandler: function(filename) {
+                            self._createPad("etherpad", filename, true);
+                        }
+                    });
+                }
             }
 
             if(self._ethercalcEnabled === true) {
@@ -122,7 +140,10 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
             }
         },
 
-        _createPad: function(type, filename) {
+        _createPad: function(type, filename, is_protected) {
+            // Default value for `is_protected`.
+            var is_protected = typeof is_protected !== 'undefined' ? is_protected : false;
+
             var self = this;
 
             OCA.Files.Files.isFileNameValid(filename);
@@ -133,6 +154,7 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
                     dir: $('#dir').val(),
                     padname: filename,
                     type: type,
+                    protected: is_protected
                 },
                 function(result) {
                     if(result.status == 'success') {
