@@ -16,6 +16,7 @@ use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IRequest;
 use OCP\IURLGenerator;
+use OCP\IUserSession;
 use OCP\IConfig;
 
 use EtherpadLite\Client;
@@ -24,6 +25,9 @@ class DisplayController extends Controller {
 
     /** @var IURLGenerator */
     private $urlGenerator;
+
+    /** @var IUserSession */
+    private $userSession;
 
     /** @var IConfig */
     private $config;
@@ -36,9 +40,16 @@ class DisplayController extends Controller {
      * @param IRequest $request
      * @param IURLGenerator $urlGenerator
      */
-    public function __construct($AppName, IRequest $request, IURLGenerator $urlGenerator, IConfig $config) {
+    public function __construct(
+        $AppName,
+        IRequest $request,
+        IURLGenerator $urlGenerator,
+        IUserSession $userSession,
+        IConfig $config,
+    ) {
         parent::__construct($AppName, $request);
         $this->urlGenerator = $urlGenerator;
+        $this->userSession = $userSession;
         $this->config = $config;
 
         if($this->config->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no') !== 'no' AND
@@ -62,6 +73,21 @@ class DisplayController extends Controller {
         preg_match('/URL=(.*)$/', $content, $matches);
         $url = $matches[1];
         $title = $file;
+
+        $eplHost = $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', '');
+        $protectedPadRexex = sprintf('/%s\/p\/(g\.\w{16})\\$(.*)$/', preg_quote($eplHost, '/'));
+        $match = preg_match($protectedPadRexex, $url, $matches);
+
+        // We are facing a “protected” pad.
+        if($match) {
+            $groupID = $matches[1];
+
+            $username = $this->userSession->getUser()->getUID();
+            $displayName = $this->userSession->getUser()->getDisplayName();
+            $author = $this->eplInstance->createAuthorIfNotExistsFor($username, $displayName);
+
+            $session = $this->eplInstance->createSession($groupID, $author->authorID, time() + 3600);
+        }
 
         /*
          * Not totally sure that this is the right way to proceed…
@@ -87,6 +113,8 @@ class DisplayController extends Controller {
         ];
         $response = new TemplateResponse($this->appName, 'viewer', $params, 'blank');
 
+        $cookieDomain = $this->config->getAppValue('ownpad', 'ownpad_etherpad_cookie_domain', '');
+        setcookie('sessionID', $session->sessionID, 0, '/', $cookieDomain, true, true);
 
         /*
          * Allow Etherpad and Ethercalc domains to the
