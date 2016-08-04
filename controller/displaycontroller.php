@@ -45,7 +45,7 @@ class DisplayController extends Controller {
         IRequest $request,
         IURLGenerator $urlGenerator,
         IUserSession $userSession,
-        IConfig $config,
+        IConfig $config
     ) {
         parent::__construct($AppName, $request);
         $this->urlGenerator = $urlGenerator;
