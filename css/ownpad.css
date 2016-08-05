@@ -44,8 +44,9 @@
     border:#F00 1px solid;
 }
 
-.icon-filetype-pad {
-    background-image: url("../img/pad.png");
+.icon-filetype-etherpad.svg {
+    background-image: url("../img/etherpad.svg");
+    background-size: 16px;
 }
 .icon-filetype-calc {
     background-image: url("../img/calc.png");
