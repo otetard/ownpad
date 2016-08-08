@@ -85,6 +85,7 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
                   function(result) {
                       if(result.status == 'success') {
                           self._etherpadEnabled = result.data.ownpad_etherpad_enable === "yes";
+                          self._etherpadAPIEnabled = result.data.ownpad_etherpad_useapi === "yes";
                           self._ethercalcEnabled = result.data.ownpad_ethercalc_enable === "yes";
                       }
 

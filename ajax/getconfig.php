@@ -17,6 +17,7 @@ $config = [];
 
 $appConfig = \OC::$server->getConfig();
 $config['ownpad_etherpad_enable'] = $appConfig->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no');
+$config['ownpad_etherpad_useapi'] = $appConfig->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no');
 $config['ownpad_ethercalc_enable'] = $appConfig->getAppValue('ownpad', 'ownpad_ethercalc_enable', 'no');
 
 OC_JSON::success(array('data' => $config));
