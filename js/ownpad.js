@@ -80,15 +80,15 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
         initialize: function() {
             var self = this;
 
-            OC.AppConfig.getValue('ownpad', 'ownpad_etherpad_enable', 'no', function(val) {
-                self._etherpadEnabled = (val !== "no");
-            });
+            $.get(OC.generateUrl('/apps/ownpad/ajax/getconfig.php'), {},
+                  function(result) {
+                      if(result.status == 'success') {
+                          self._etherpadEnabled = result.data.ownpad_etherpad_enable === "yes";
+                          self._ethercalcEnabled = result.data.ownpad_ethercalc_enable === "yes";
+                      }
 
-            OC.AppConfig.getValue('ownpad', 'ownpad_ethercalc_enable', 'no', function(val) {
-                self._ethercalcEnabled = (val !== "no");
-            });
-
-            OC.Plugins.register('OCA.Files.NewFileMenu', self);
+                      OC.Plugins.register('OCA.Files.NewFileMenu', self);
+                  });
         },
 
 
