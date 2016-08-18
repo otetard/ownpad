@@ -111,7 +111,7 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
 
                 if(self._etherpadAPIEnabled === true) {
                     newFileMenu.addMenuEntry({
-                        id: 'etherpad',
+                        id: 'etherpad-api',
                         displayName: t('ownpad', 'Protected Pad'),
                         templateName: t('ownpad', 'New protected pad.pad'),
                         iconClass: 'icon-filetype-etherpad',
