@@ -146,5 +146,12 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
         }
     };
 
-    OCA.FilesOwnpadMenu = new FilesOwnpadMenu();
+    // Only initialize the Ownpad menu when user is logged in and
+    // using the “files” app.
+    $(document).ready(function() {
+        if($('#filesApp').val()) {
+            OCA.FilesOwnpadMenu = new FilesOwnpadMenu();
+        }
+    });
+
 })(OCA);
