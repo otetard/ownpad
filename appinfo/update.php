@@ -16,8 +16,8 @@
 if(version_compare($installedVersion, '0.5.2', '<')) {
     $appConfig = \OC::$server->getConfig();
     $enabled = ($appConfig->getAppValue('ownpad', 'ownpad_etherpad_host', '') !== '') ? 'yes' : 'no';
-    $appConfig->setValue('ownpad', 'ownpad_etherpad_enable', $enabled);
+    $appConfig->setAppValue('ownpad', 'ownpad_etherpad_enable', $enabled);
 
     $enabled = ($appConfig->getAppValue('ownpad', 'ownpad_ethercalc_host', '') !== '') ? 'yes' : 'no';
-    $appConfig->setValue('ownpad', 'ownpad_ethercalc_enable', $enabled);
+    $appConfig->setAppValue('ownpad', 'ownpad_ethercalc_enable', $enabled);
 }
