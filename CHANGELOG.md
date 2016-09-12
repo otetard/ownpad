@@ -1,3 +1,8 @@
+Ownpad (0.5.3)
+* **Enhancement**: add icon for Etherpad in the “+” menu.
+* **Enhancement**: some minor code enhacements.
+* **Bugfix**: fix upgrade code (issue was introduced in 6560a6adf1b5027dfb70c0df6eff527f4d2304f2).
+
 Ownpad (0.5.2)
 * **Enhancement**: don’t display pad/calc if no URL is configured for Ownpad.
 * **Enhancement**: some minor changes (typo, etc.)
