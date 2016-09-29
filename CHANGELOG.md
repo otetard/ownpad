@@ -1,3 +1,6 @@
+Ownpad (0.5.4)
+* **Bugfix**: fix info.xml format for Nextcloud appstore.
+
 Ownpad (0.5.3)
 * **Enhancement**: add icon for Etherpad in the “+” menu.
 * **Enhancement**: some minor code enhacements.
