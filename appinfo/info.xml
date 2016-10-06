@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<info>
+<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
   <id>ownpad</id>
   <name>Ownpad</name>
   <summary>
@@ -14,10 +15,16 @@
   </description>
   <version>0.5.4</version>
   <licence>agpl</licence>
-  <author>Olivier Tétard</author>
+  <author mail="olivier.tetard@miskin.fr">Olivier Tétard</author>
+  <documentation>
+    <user>https://github.com/otetard/ownpad/blob/master/README.md#mimetype-detection</user>
+  </documentation>
   <category>tools</category>
+  <bugs>https://github.com/otetard/ownpad/issues</bugs>
+  <repository>https://github.com/otetard/ownpad</repository>
   <dependencies>
     <owncloud min-version="9.0" max-version="9.1" />
     <nextcloud min-version="9" max-version="10" />
   </dependencies>
+  <ocsid>174679</ocsid>
 </info>
