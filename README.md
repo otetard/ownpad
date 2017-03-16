@@ -19,7 +19,7 @@ menu from the “File” app.
 
 ## Mimetype detection
 
-Unfortunatly, apps can’t declare new mimetypes on the fly. To make
+Unfortunately, apps can’t declare new mimetypes on the fly. To make
 Ownpad work properly, you need to add two new mimetypes in the
 `mimetypemapping.json` file (at ownCloud level).
 
