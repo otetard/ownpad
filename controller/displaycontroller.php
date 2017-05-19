@@ -85,10 +85,12 @@ class DisplayController extends Controller {
 
         if($this->config->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no') !== 'no') {
             $policy->addAllowedFrameDomain($this->config->getAppValue('ownpad', 'ownpad_etherpad_host', ''));
+            $policy->addAllowedChildSrcDomain($this->config->getAppValue('ownpad', 'ownpad_etherpad_host', ''));
         }
 
         if($this->config->getAppValue('ownpad', 'ownpad_ethercalc_enable', 'no') !== 'no') {
             $policy->addAllowedFrameDomain($this->config->getAppValue('ownpad', 'ownpad_ethercalc_host', ''));
+            $policy->addAllowedChildSrcDomain($this->config->getAppValue('ownpad', 'ownpad_ethercalc_host', ''));
         }
 
         $response->setContentSecurityPolicy($policy);
