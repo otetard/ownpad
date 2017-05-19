@@ -28,7 +28,16 @@ $token = \OC::$server->getSecureRandom()->getMediumStrengthGenerator()->generate
 if($type === "ethercalc") {
     $ext = "calc";
     $host = \OCP\Config::getAppValue('ownpad', 'ownpad_ethercalc_host', false);
-    $url = sprintf("%s/%s", rtrim($host, "/"), $token);
+
+    /*
+     * Prepend the calc’s name with a `=` to enable multisheet
+     * support.
+     *
+     * More info:
+     *   – https://github.com/audreyt/ethercalc/issues/138
+     *   – https://github.com/otetard/ownpad/issues/26
+     */
+    $url = sprintf("%s/=%s", rtrim($host, "/"), $token);
 }
 elseif($type === "etherpad") {
     $ext = "pad";
