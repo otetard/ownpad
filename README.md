@@ -24,8 +24,10 @@ Ownpad work properly, you need to add two new mimetypes in the
 `mimetypemapping.json` file (at ownCloud level).
 
 To proceed, just copy `/resources/config/mimetypemapping.dist.json` to
-`/config/mimetypemapping.json`, and then add the two following lines
-just after the “_comment” lines.
+`/config/mimetypemapping.json` (in the `config/` folder at Nextcloud’s
+root directory; the file should be stored next to the `config.php`
+file)., and then add the two following lines just after the “_comment”
+lines.
 
     "pad": ["application/x-ownpad"],
     "calc": ["application/x-ownpad"],
