@@ -72,7 +72,36 @@ class DisplayController extends Controller {
             'url' => $url,
             'title' => $title,
         ];
-        $response = new TemplateResponse($this->appName, 'viewer', $params, 'blank');
+
+        // Check for valid URL
+        // Get File-Ending
+        $split = explode(".", $file);
+        $fileending = $split[count($split)-1];
+
+        // Get Host-URL
+        if($fileending === "calc") {
+            $host = \OCP\Config::getAppValue('ownpad', 'ownpad_ethercalc_host', false);
+        }
+        elseif($fileending === "pad") {
+            $host = \OCP\Config::getAppValue('ownpad', 'ownpad_etherpad_host', false);
+        }
+
+		// Escape all RegEx-Characters
+		$hostreg = preg_quote($host);
+        // Escape all Slashes in URL to use in RegEx
+        $hostreg = preg_replace("/\//", "\/", $host);
+
+        // Final Regex-String
+        $regex = "/^".$hostreg."(\/|)p\/\w+$/";
+
+        // Show the Pad, if URL is valid
+        if (preg_match($regex, $url) == 1) {
+            $response = new TemplateResponse($this->appName, 'viewer', $params, 'blank');
+        }
+        else {  // Show Error-Page
+            $response = new TemplateResponse($this->appName, 'noviewer', $params, 'blank');
+        }
+
 
 
         /*
