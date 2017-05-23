@@ -15,6 +15,6 @@ $title = $_['title'];
     <div id="filetopad_bar">
       <span>Title</span><strong><?php p($title); ?></strong><a id="filetopad_close">x</a>
     </div>
-    <p><?php` p($l->t("The Target-URL of this File does not match the allowed server. The Forwading to Etherpad/Ethercalc has been blocked."); ?></p>
+    <p><?php p($l->t("The Target-URL of this File does not match the allowed server. The Forwading to Etherpad/Ethercalc has been blocked.")); ?></p>
   </body>
 </html>
