@@ -86,23 +86,30 @@ class DisplayController extends Controller {
             $host = \OCP\Config::getAppValue('ownpad', 'ownpad_etherpad_host', false);
         }
 
-		// Escape all RegEx-Characters
-		$hostreg = preg_quote($host);
+        if(substr($host, -1, 1) != '/') {
+            $host .= '/';
+        }
+
+        // Escape all RegEx-Characters
+        $hostreg = preg_quote($host);
         // Escape all Slashes in URL to use in RegEx
         $hostreg = preg_replace("/\//", "\/", $host);
 
         // Final Regex-String
-        $regex = "/^".$hostreg."(\/|)p\/\w+$/";
-
-        // Show the Pad, if URL is valid
-        if (preg_match($regex, $url) == 1) {
-            $response = new TemplateResponse($this->appName, 'viewer', $params, 'blank');
+        if($fileending === "calc") {
+            /*
+             * Ethercalc documents with “multisheet” support starts
+             * with a `=`.
+             */
+            $regex = "/^".$hostreg."=?[^\/]+$/";
         }
-        else {  // Show Error-Page
-            $response = new TemplateResponse($this->appName, 'noviewer', $params, 'blank');
+        elseif($fileending === "pad") {
+            /*
+             * Etherpad documents can contain special characters, for
+             * “protected pads” for example.
+             */
+            $regex = "/^".$hostreg."p\/[^\/]+$/";
         }
-
-
 
         /*
          * Allow Etherpad and Ethercalc domains to the
