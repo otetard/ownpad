@@ -1,3 +1,16 @@
+Ownpad (0.5.9)
+* **Enhancement**: check for valid URL in pads/calcs to prevent bad redirections (thanks to Stephan Wiefling).
+* **Enhancement**: make Ownpad compatible with Nextcloud 12.
+* **Enhancement**: update documentation.
+
+Ownpad (0.5.8)
+* **Enhancement**: enable multisheet support for new Ethercalc.
+* **Enhancement**: update Content-Security-Policy rules.
+
+Ownpad (0.5.6)
+* **Enhancement**: make Ownpad compatible with Nextcloud 11.
+* **Bugfix**: don’t call for Ownpad configuration on public pages (fixes page reload on public pages)
+
 Ownpad (0.5.4)
 * **Bugfix**: fix info.xml format for Nextcloud appstore.
 
