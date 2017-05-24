@@ -63,8 +63,8 @@ class DisplayController extends Controller {
          */
         $url = urldecode($url);
         $url = str_replace(' ', '_', $url);
-        $url = preg_replace_callback('#://([^/]+)/([^?]+)#', function ($match) {
-            return '://' . $match[1] . '/' . join('/', array_map('rawurlencode', explode('/', $match[2])));
+        $url = preg_replace_callback('#://([^/]+)/(=)?([^?]+)#', function ($match) {
+            return '://' . $match[1] . '/' . $match[2] . join('/', array_map('rawurlencode', explode('/', $match[3])));
         }, $url);
 
         $params = [
