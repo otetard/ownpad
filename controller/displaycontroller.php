@@ -111,6 +111,14 @@ class DisplayController extends Controller {
             $regex = "/^".$hostreg."p\/[^\/]+$/";
         }
 
+        // Show the Pad, if URL is valid
+        if (preg_match($regex, $url) == 1) {
+            $response = new TemplateResponse($this->appName, 'viewer', $params, 'blank');
+        }
+        else {  // Show Error-Page
+            $response = new TemplateResponse($this->appName, 'noviewer', $params, 'blank');
+        }
+
         /*
          * Allow Etherpad and Ethercalc domains to the
          * Content-Security-frame- list.
