@@ -20,7 +20,7 @@
             <label for="ownpad_etherpad_host"><?php p($l->t('Etherpad Host')); ?></label>
             <input type="text" name="ownpad_etherpad_host" id="ownpad_etherpad_host"
 	           value="<?php p($_['ownpad_etherpad_host']); ?>"
-                   placeholder="https://mensuel.framapad.org" />
+                   placeholder="https://beta.etherpad.org/" />
         </p>
     </div>
 
@@ -35,7 +35,7 @@
             <label for="ownpad_ethercalc_host"><?php p($l->t('Ethercalc Host')); ?></label>
             <input type="text" name="ownpad_ethercalc_host" id="ownpad_ethercalc_host"
 	           value="<?php p($_['ownpad_ethercalc_host']); ?>"
-                   placeholder="https://framacalc.org" />
+                   placeholder="https://ethercalc.org" />
         </p>
     </div>
 
