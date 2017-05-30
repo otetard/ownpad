@@ -1,3 +1,10 @@
+Ownpad (0.5.10)
+* **Bugfix**: Fix HTML code in template settings (thanks to KTim21).
+* **Bugfix**: Change Etherpad/Ethercalc instances hints on the configuration page.
+* **Bugfix**: Fix “multisheet support” for Ethercalc.
+* **Bugfix**: Fix Ethercalc URL validation.
+* **Bugfix**: Fix HTML code in the `noviewer.php` template.
+
 Ownpad (0.5.9)
 * **Enhancement**: check for valid URL in pads/calcs to prevent bad redirections (thanks to Stephan Wiefling).
 * **Enhancement**: make Ownpad compatible with Nextcloud 12.
