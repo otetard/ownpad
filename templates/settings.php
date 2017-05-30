@@ -42,4 +42,5 @@
     <div id="ownpad-saved-message">
       <span class="msg success"><?php p($l->t('Saved')); ?></span>
     </div>
+  </form>
 </div>
