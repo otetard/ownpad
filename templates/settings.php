@@ -26,7 +26,7 @@
         <p>
 	    <input type="checkbox" name="ownpad_etherpad_useapi" id="ownpad_etherpad_useapi" class="checkbox"
 	           value="1" <?php if ($_['ownpad_etherpad_useapi'] === 'yes') print_unescaped('checked="checked"'); ?> />
-	    <label for="ownpad_etherpad_useapi"><?php p($l->t('Use Etherpad API'));?></label><br/>
+	    <label for="ownpad_etherpad_useapi"><?php p($l->t('Use Etherpad API (*experimental*)'));?></label><br/>
         </p>
         <div id="ownpad_etherpad_useapi_settings" class="indent <?php if ($_['ownpad_etherpad_useapi'] !== 'yes') p('hidden'); ?>">
             <p>
