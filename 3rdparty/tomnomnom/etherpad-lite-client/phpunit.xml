@@ -1,0 +1,7 @@
+<phpunit>
+  <testsuites>
+    <testsuite name="FullStack">
+      <directory>test/FullStack</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>

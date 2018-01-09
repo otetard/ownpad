@@ -20,6 +20,7 @@ $template->assign('ownpad_etherpad_enable', $appConfig->getAppValue('ownpad', 'o
 $template->assign('ownpad_etherpad_host', $appConfig->getAppValue('ownpad', 'ownpad_etherpad_host', ''));
 $template->assign('ownpad_etherpad_useapi', $appConfig->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no'));
 $template->assign('ownpad_etherpad_apikey', $appConfig->getAppValue('ownpad', 'ownpad_etherpad_apikey', ''));
+$template->assign('ownpad_etherpad_cookie_domain', $appConfig->getAppValue('ownpad', 'ownpad_etherpad_cookie_domain', ''));
 $template->assign('ownpad_ethercalc_enable', $appConfig->getAppValue('ownpad', 'ownpad_ethercalc_enable', 'no'));
 $template->assign('ownpad_ethercalc_host', $appConfig->getAppValue('ownpad', 'ownpad_ethercalc_host', ''));
 

@@ -45,6 +45,9 @@
             $("#ownpad_etherpad_settings").toggleClass('hidden', !this.checked);
         });
 
+        $('#ownpad_etherpad_useapi').change(function() {
+            $("#ownpad_etherpad_useapi_settings").toggleClass('hidden', !this.checked);
+        });
 
         $('#ownpad_ethercalc_enable').change(function() {
             $("#ownpad_ethercalc_settings").toggleClass('hidden', !this.checked);

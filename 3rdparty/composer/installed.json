@@ -1,0 +1,35 @@
+[
+    {
+        "name": "tomnomnom/etherpad-lite-client",
+        "version": "0.1.2",
+        "version_normalized": "0.1.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/TomNomNom/etherpad-lite-client.git",
+            "reference": "932ac4903d7982038d5d04c03f8f9c809a5356bd"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/TomNomNom/etherpad-lite-client/zipball/932ac4903d7982038d5d04c03f8f9c809a5356bd",
+            "reference": "932ac4903d7982038d5d04c03f8f9c809a5356bd",
+            "shasum": ""
+        },
+        "require-dev": {
+            "phpunit/phpunit": "3.7.*"
+        },
+        "time": "2016-02-09 14:27:44",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "EtherpadLite\\": "EtherpadLite/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache"
+        ],
+        "description": "Etherpad Lite client for PHP",
+        "homepage": "https://github.com/TomNomNom/etherpad-lite-client/"
+    }
+]
