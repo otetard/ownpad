@@ -102,7 +102,10 @@ class AjaxController extends Controller {
             return $this->error($l10n->t('Incorrect padname.'));
         }
 
-        if(!\OCP\Util::isValidFileName($padname)) {
+        try {
+            \OC\Files\View::verifyPath($dir, $padname);
+        }
+        catch(\OCP\Files\InvalidPathException $ex) {
             return $this->error($l10n_files->t("Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed."));
         }
 
