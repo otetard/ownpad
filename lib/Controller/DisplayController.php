@@ -126,7 +126,7 @@ class DisplayController extends Controller {
             $host = \OC::$server->getConfig()->getAppValue('ownpad', 'ownpad_etherpad_host', false);
         }
 
-        if(substr($host, -1, 1) != '/') {
+        if(substr($host, -1, 1) !== '/') {
             $host .= '/';
         }
 
@@ -152,7 +152,7 @@ class DisplayController extends Controller {
         }
 
         // Show the Pad, if URL is valid
-        if (preg_match($regex, $url) == 1) {
+        if (preg_match($regex, $url) === 1) {
             $response = new TemplateResponse($this->appName, 'viewer', $params, 'blank');
         }
         else {  // Show Error-Page
