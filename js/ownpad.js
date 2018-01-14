@@ -83,7 +83,7 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
 
             if(OC.getCurrentUser().uid !== null) {
                 $.ajax({
-                    url: OC.generateUrl('/apps/ownpad/ajax/getconfig.php')
+                    url: OC.generateUrl('/apps/ownpad/ajax/v1.0/getconfig')
                 }).done(function(result) {
                     self._etherpadEnabled = result.data.ownpad_etherpad_enable === "yes";
                     self._etherpadAPIEnabled = result.data.ownpad_etherpad_useapi === "yes";

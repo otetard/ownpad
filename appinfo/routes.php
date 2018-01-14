@@ -14,8 +14,8 @@ namespace OCA\Ownpad\Appinfo;
 /** @var $this \OC\Route\Router */
 
 $this->create('ownpad_newpad', 'ajax/newpad.php')->actionInclude('ownpad/ajax/newpad.php');
-$this->create('ownpad_getconfig', 'ajax/getconfig.php')->actionInclude('ownpad/ajax/getconfig.php');
 
 return ['routes' => [
     ['name' => 'display#showPad', 'url' => '/', 'verb' => 'GET'],
+    ['name' => 'ajax#getconfig', 'url' => '/ajax/v1.0/getconfig', 'verb' => 'GET'],
 ]];
