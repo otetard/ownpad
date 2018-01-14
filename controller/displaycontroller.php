@@ -120,10 +120,10 @@ class DisplayController extends Controller {
 
         // Get Host-URL
         if($fileending === "calc") {
-            $host = \OCP\Config::getAppValue('ownpad', 'ownpad_ethercalc_host', false);
+            $host = \OC::$server->getConfig()->getAppValue('ownpad', 'ownpad_ethercalc_host', false);
         }
         elseif($fileending === "pad") {
-            $host = \OCP\Config::getAppValue('ownpad', 'ownpad_etherpad_host', false);
+            $host = \OC::$server->getConfig()->getAppValue('ownpad', 'ownpad_etherpad_host', false);
         }
 
         if(substr($host, -1, 1) != '/') {

@@ -36,7 +36,7 @@ $result = ['success' => false,
 
 if($type === "ethercalc") {
     $ext = "calc";
-    $host = \OCP\Config::getAppValue('ownpad', 'ownpad_ethercalc_host', false);
+    $host = \OC::$server->getConfig()->getAppValue('ownpad', 'ownpad_ethercalc_host', false);
 
     /*
      * Prepend the calc’s name with a `=` to enable multisheet
@@ -72,7 +72,7 @@ elseif($type === "etherpad") {
     }
 
     $ext = "pad";
-    $host = \OCP\Config::getAppValue('ownpad', 'ownpad_etherpad_host', false);
+    $host = \OC::$server->getConfig()->getAppValue('ownpad', 'ownpad_etherpad_host', false);
     $url = sprintf("%s/p/%s", rtrim($host, "/"), $padID);
 }
 
