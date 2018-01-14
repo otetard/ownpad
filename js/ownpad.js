@@ -147,7 +147,7 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
             filename = FileList.getUniqueName(filename);
 
             $.post(
-                OC.generateUrl('/apps/ownpad/ajax/newpad.php'), {
+                OC.generateUrl('/apps/ownpad/ajax/v1.0/newpad'), {
                     dir: $('#dir').val(),
                     padname: filename,
                     type: type,
