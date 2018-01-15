@@ -1,3 +1,12 @@
+Ownpad (0.6.1):
+* **Enhancement**: Move internal logic to a new OwnpadService class.
+* **Bugfix**: fix regression introduced in previous version (bb3f3199c44d35b21a45d1ae6dd5524853f401cf).
+
+Ownpad (0.6.0):
+* **Enhancement**: Support for Etherpad API (experimental, incomplete and probably not totally secure) which allows to create private pads.
+* **Enhancement**: Refactor app to use AppFramework.
+* **Bugfix**: Remove deprecated code (thanks @MorrisJobke!).
+
 Ownpad (0.5.10)
 * **Bugfix**: Fix HTML code in template settings (thanks to KTim21).
 * **Bugfix**: Change Etherpad/Ethercalc instances hints on the configuration page.
