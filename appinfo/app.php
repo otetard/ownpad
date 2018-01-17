@@ -9,10 +9,9 @@
  * @copyright Olivier Tétard <olivier.tetard@miskin.fr>, 2017
  */
 
+namespace OCA\Ownpad\AppInfo;
+
 require_once __DIR__ . '/../3rdparty/autoload.php';
 
-OCP\App::registerAdmin('ownpad','settings');
-
-OCP\Util::addscript('ownpad', 'ownpad');
-OCP\Util::addStyle('ownpad', 'ownpad');
-
+$app = new Application();
+$app->registerHooks();
