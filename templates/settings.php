@@ -1,6 +1,8 @@
 <?php
 /** @var \OCP\IL10N $l */
 /** @var array $_ */
+
+script('ownpad', 'settings');
 ?>
 <div class="section">
   <form id="ownpad_settings">
