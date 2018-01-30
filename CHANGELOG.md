@@ -1,18 +1,28 @@
+Ownpad (0.6.3):
+* **Enhancement**: move application to the `office` section on Nextcloud app store.
+* **Bugfix**: update message displayed when pad/calc URL doesn’t match configuration.
+* **Bugfix**: when applying migration, don’t forget to check version…
+
+Ownpad (0.6.2):
+* **Enhancement**: make app compatible with Nextcloud 13 (and drop ownCloud support).
+* **Enhancement**: finish code refactoring (`app.php` moved to `Application` class).
+* **Bugfix**: don’t forget to load JavaScript code on the settings page.
+
 Ownpad (0.6.1):
-* **Enhancement**: Move internal logic to a new OwnpadService class.
+* **Enhancement**: move internal logic to a new OwnpadService class.
 * **Bugfix**: fix regression introduced in previous version (bb3f3199c44d35b21a45d1ae6dd5524853f401cf).
 
 Ownpad (0.6.0):
-* **Enhancement**: Support for Etherpad API (experimental, incomplete and probably not totally secure) which allows to create private pads.
-* **Enhancement**: Refactor app to use AppFramework.
-* **Bugfix**: Remove deprecated code (thanks @MorrisJobke!).
+* **Enhancement**: support for Etherpad API (experimental, incomplete and probably not totally secure) which allows to create private pads.
+* **Enhancement**: refactor app to use AppFramework.
+* **Bugfix**: remove deprecated code (thanks @MorrisJobke!).
 
 Ownpad (0.5.10)
-* **Bugfix**: Fix HTML code in template settings (thanks to KTim21).
-* **Bugfix**: Change Etherpad/Ethercalc instances hints on the configuration page.
-* **Bugfix**: Fix “multisheet support” for Ethercalc.
-* **Bugfix**: Fix Ethercalc URL validation.
-* **Bugfix**: Fix HTML code in the `noviewer.php` template.
+* **Bugfix**: fix HTML code in template settings (thanks to KTim21).
+* **Bugfix**: change Etherpad/Ethercalc instances hints on the configuration page.
+* **Bugfix**: fix “multisheet support” for Ethercalc.
+* **Bugfix**: fix Ethercalc URL validation.
+* **Bugfix**: fix HTML code in the `noviewer.php` template.
 
 Ownpad (0.5.9)
 * **Enhancement**: check for valid URL in pads/calcs to prevent bad redirections (thanks to Stephan Wiefling).
