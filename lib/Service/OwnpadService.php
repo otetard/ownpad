@@ -48,7 +48,7 @@ class OwnpadService {
                     if($config->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no') !== 'no' AND $config->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no') !== 'no') {
                         $eplHost = $config->getAppValue('ownpad', 'ownpad_etherpad_host', '');
                         $eplApiKey = $config->getAppValue('ownpad', 'ownpad_etherpad_apikey', '');
-                        $eplInstance = new Client($eplApiKey, $eplHost . "/api");
+                        $eplInstance = new \EtherpadLite\Client($eplApiKey, $eplHost . "/api");
                     }
 
                     $group = $eplInstance->createGroup();
