@@ -1,3 +1,7 @@
+Ownpad (0.6.4):
+* **Bugfix**: fix protected pads (thanks @frissdiegurke).
+* **Enhancement**: replace ownCloud by Nextcloud.
+
 Ownpad (0.6.3):
 * **Enhancement**: move application to the `office` section on Nextcloud app store.
 * **Bugfix**: update message displayed when pad/calc URL doesn’t match configuration.
