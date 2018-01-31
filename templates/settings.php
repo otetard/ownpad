@@ -9,7 +9,7 @@ script('ownpad', 'settings');
 
     <h2><?php p($l->t('Collaborative documents'));?></h2>
 
-    <p><?php p($l->t('This is used to link collaborative documents inside ownCloud.')); ?></p>
+    <p><?php p($l->t('This is used to link collaborative documents inside Nextcloud.')); ?></p>
 
     <p>
 	<input type="checkbox" name="ownpad_etherpad_enable" id="ownpad_etherpad_enable" class="checkbox"
@@ -33,7 +33,7 @@ script('ownpad', 'settings');
         <div id="ownpad_etherpad_useapi_settings" class="indent <?php if ($_['ownpad_etherpad_useapi'] !== 'yes') p('hidden'); ?>">
             <p>
                 <em>
-                    <?php p($l->t('You need to enable Etherpad API if you want to create “protected” pads, that will only be accessible through ownCloud. To make this work, you need to host your Etherpad instance in a sub of sibbling domain of the one that is used by ownCloud (due to cookie isolation).')); ?>
+                    <?php p($l->t('You need to enable Etherpad API if you want to create “protected” pads, that will only be accessible through Nextcloud. To make this work, you need to host your Etherpad instance in a sub of sibbling domain of the one that is used by Nextcloud (due to cookie isolation).')); ?>
                 </em>
             </p>
 

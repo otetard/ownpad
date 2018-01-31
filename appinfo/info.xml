@@ -7,7 +7,7 @@
     Create and open Etherpad and Ethercalc documents.
   </summary>
   <description>
-    Ownpad is an ownCloud application that allows to create and open
+    Ownpad is a Nextcloud application that allows to create and open
     Etherpad and Ethercalc documents.
 
     This application requires to have access to an instance of

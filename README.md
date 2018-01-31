@@ -1,12 +1,8 @@
-# Ownpad — Etherpad and Ethercalc links in ownCloud
+# Ownpad — Etherpad and Ethercalc links in Nextcloud
 
-Ownpad is an ownCloud application that allows to create and open
+Ownpad is a Nextcloud application that allows to create and open
 Etherpad and Ethercalc documents. This application requires to have
 access to an instance of Etherpad and/or Ethercalc to work properly.
-
-This application works pretty much like
-[`files_etherpad`](https://github.com/EELV-fr/Owncloud-Ether-Docs) but
-is a complete rewrite.
 
 ## Configuration
 
@@ -21,7 +17,7 @@ menu from the “File” app.
 
 Unfortunately, apps can’t declare new mimetypes on the fly. To make
 Ownpad work properly, you need to add two new mimetypes in the
-`mimetypemapping.json` file (at ownCloud level).
+`mimetypemapping.json` file (at Nextcloud level).
 
 To proceed, just copy `/resources/config/mimetypemapping.dist.json` to
 `/config/mimetypemapping.json` (in the `config/` folder at Nextcloud’s
@@ -54,12 +50,12 @@ instance.
 
 You’ll need to host your Etherpad instance under a the same
 domain. For example, you can host your Etherpad in `pad.example.org`
-and your ownCloud in `cloud.example.org`. In that case, you’ll have to
-configure `example.org` as the domain cookie in Ownpad’s
+and your Nextcloud in `cloud.example.org`. In that case, you’ll have
+to configure `example.org` as the domain cookie in Ownpad’s
 configuration.
 
 If you wan’t to create *really* private pads, you have to use a
-dedicated Etherpad instance for ownCloud. You will then configure
+dedicated Etherpad instance for Nextcloud. You will then configure
 Etherpad to prevent pads creation (by manipulating URL) and will
 enforce API usage to create pad. To do so, you have to add the two
 following lines in your Etherpad configuration file (`settings.json`):
