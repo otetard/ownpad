@@ -51,12 +51,3 @@
 .icon-filetype-calc {
     background-image: url("../img/calc.png");
 }
-
-#ownpad-saved-message {
-    margin: 15px 0;
-    display: none;
-}
-
-#ownpad_settings .indent {
-    padding-left: 28px;
-}

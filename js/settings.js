@@ -43,6 +43,14 @@
 
         $('#ownpad_etherpad_enable').change(function() {
             $("#ownpad_etherpad_settings").toggleClass('hidden', !this.checked);
+
+            if(this.checked && $("#ownpad_etherpad_useapi").is(":checked")) {
+                $("#ownpad_etherpad_useapi_settings").removeClass('hidden');
+            }
+            else {
+                $("#ownpad_etherpad_useapi_settings").addClass('hidden');
+            }
+
         });
 
         $('#ownpad_etherpad_useapi').change(function() {
