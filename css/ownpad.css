@@ -8,46 +8,46 @@
  * @copyright Olivier Tétard <olivier.tetard@miskin.fr>, 2017
  */
 
-#filetopad_bar{
-    background:#333;
-    color:#999;
-    min-height: 25px;
-    padding:6px 6px 6px 10px;
+#ownpad_bar {
+    background: #333;
+    color: #999;
+    min-height:  25px;
+    padding: 6px 6px 6px 10px;
 }
-#filetopad_bar span{
-    opacity:0;
-    transition:all 1s ease;
-    -o-transition:all 1s ease;
-    -moz-transition:all 1s ease;
-    -webkit-transition: all 1s ease;
+#ownpad_bar span {
+    opacity: 0;
+    transition: all 1s ease;
+    -o-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -webkit-transition:  all 1s ease;
 }
-#filetopad_bar:hover span{
-    opacity:1;
+#ownpad_bar:hover span {
+    opacity: 1;
 }
-#filetopad_bar a,#filetopad_bar strong{
-    color:#CCC;
+#ownpad_bar a,#ownpad_bar strong {
+    color: #CCC;
 }
-#filetopad_close{
-    display:inline-block;
-    padding:0 10px;
-    height:20px;
-    background:#900;
-    color:#F5F5F5;
-    border-radius:3px;
-    border:#C00 1px solid;
-    font-weight:900;
-    float:right;
+#ownpad_close {
+    display: inline-block;
+    padding: 0 10px;
+    height: 20px;
+    background: #900;
+    color: #F5F5F5;
+    border-radius: 3px;
+    border: #C00 1px solid;
+    font-weight: 900;
+    float: right;
 }
-#filetopad_close:hover{
-    background:#C00;
-    color:#FFF;
-    border:#F00 1px solid;
+#ownpad_close:hover {
+    background: #C00;
+    color: #FFF;
+    border: #F00 1px solid;
 }
 
 .icon-filetype-etherpad.svg {
-    background-image: url("../img/etherpad.svg");
-    background-size: 16px;
+    background-image:  url("../img/etherpad.svg");
+    background-size:  16px;
 }
 .icon-filetype-calc {
-    background-image: url("../img/calc.png");
+    background-image:  url("../img/calc.png");
 }

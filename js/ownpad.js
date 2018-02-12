@@ -15,7 +15,7 @@
         },
 
         hide: function() {
-            $('#etherpad').remove();
+            $('#ownpad').remove();
             FileList.setViewerMode(false);
 
             // replace the controls with our own
@@ -28,7 +28,7 @@
 
             var viewer = OC.generateUrl('/apps/ownpad/?file={file}&dir={dir}', {file: fileName, dir: dirName});
 
-            $iframe = $('<iframe id="etherpad" style="width:100%;height:100%;display:block;position:absolute;top:0;" src="'+viewer+'"/>');
+            $iframe = $('<iframe id="ownpad" style="width:100%;height:100%;display:block;position:absolute;top:0;" src="'+viewer+'"/>');
 
             FileList.setViewerMode(true);
 
@@ -36,14 +36,14 @@
             $("#pageWidthOption").attr("selected","selected");
             $('#app-content #controls').addClass('hidden');
 
-            $('#etherpad').load(function(){
-                var iframe = $('#etherpad').contents();
+            $('#ownpad').load(function(){
+                var iframe = $('#ownpad').contents();
                 if ($('#fileList').length) {
-                    iframe.find('#filetopad_close').click(function() {
+                    iframe.find('#ownpad_close').click(function() {
                         self.hide();
                     });
                 } else {
-                    iframe.find("#filetopad_close").addClass('hidden');
+                    iframe.find("#ownpad_close").addClass('hidden');
                 }
             });
         },
