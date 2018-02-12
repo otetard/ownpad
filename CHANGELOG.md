@@ -1,3 +1,7 @@
+Ownpad (0.6.5):
+* **Bugfix**: fix UI with Nextcloud 13 (thanks @frissdiegurke).
+* **Enhancement**: enhance settings page.
+
 Ownpad (0.6.4):
 * **Bugfix**: fix protected pads (thanks @frissdiegurke).
 * **Enhancement**: replace ownCloud by Nextcloud.

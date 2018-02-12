@@ -13,7 +13,7 @@
     This application requires to have access to an instance of
     Etherpad and/or Ethercalc to work properly.
   </description>
-  <version>0.6.4</version>
+  <version>0.6.5</version>
   <licence>agpl</licence>
   <author mail="olivier.tetard@miskin.fr">Olivier Tétard</author>
   <documentation>
