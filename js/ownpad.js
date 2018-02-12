@@ -52,7 +52,7 @@
             var self = this;
             fileActions.registerAction({
                 name: 'view',
-                displayName: 'Etherpad',
+                displayName: 'Ownpad',
                 mime: 'application/x-ownpad',
                 permissions: OC.PERMISSION_READ,
                 actionHandler: function(fileName, context) {
