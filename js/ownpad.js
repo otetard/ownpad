@@ -28,7 +28,7 @@
 
             var viewer = OC.generateUrl('/apps/ownpad/?file={file}&dir={dir}', {file: fileName, dir: dirName});
 
-            $iframe = $('<iframe id="ownpad" style="width:100%;height:100%;display:block;position:absolute;top:0;" src="'+viewer+'"/>');
+            $iframe = $('<iframe id="ownpad" style="width:100%;height:100%;display:block;position:absolute;top:0;z-index:999;" src="'+viewer+'"/>');
 
             FileList.setViewerMode(true);
 
