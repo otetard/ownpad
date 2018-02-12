@@ -37,6 +37,14 @@ class AdminSettings implements ISettings {
      * @return TemplateResponse
      */
     public function getForm() {
+        if(\OC::$server->getMimeTypeDetector()->detectPath("test.pad") === 'application/x-ownpad') {
+            $ownpad_mimetype_ep_configured = "yes";
+        }
+
+        if(\OC::$server->getMimeTypeDetector()->detectPath("test.calc") === 'application/x-ownpad') {
+            $ownpad_mimetype_ec_configured = "yes";
+        }
+
         return new TemplateResponse($this->appName, 'settings', [
             'ownpad_etherpad_enable' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no'),
             'ownpad_etherpad_host' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', ''),
@@ -45,6 +53,8 @@ class AdminSettings implements ISettings {
             'ownpad_etherpad_cookie_domain' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_cookie_domain', ''),
             'ownpad_ethercalc_enable' => $this->config->getAppValue('ownpad', 'ownpad_ethercalc_enable', 'no'),
             'ownpad_ethercalc_host' => $this->config->getAppValue('ownpad', 'ownpad_ethercalc_host', ''),
+            'ownpad_mimetype_ep_configured' => $ownpad_mimetype_ep_configured,
+            'ownpad_mimetype_ec_configured' => $ownpad_mimetype_ec_configured,
         ], 'blank');
     }
 

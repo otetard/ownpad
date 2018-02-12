@@ -12,6 +12,10 @@ style('ownpad', 'settings');
 
         <p class="settings-hint"><?php p($l->t('This is used to link collaborative documents inside Nextcloud.')); ?></p>
 
+        <?php if ($_['ownpad_mimetype_ep_configured'] !== 'yes' || $_['ownpad_mimetype_ec_configured'] !== 'yes') { ?>
+            <p class="settings-hint"><b><?php p($l->t('Ownpad is not correctly configured, you should update your configuration. Please refer to the documentation for more information.')); ?></b></p>
+        <?php } ?>
+
         <p>
 	    <input type="checkbox" name="ownpad_etherpad_enable" id="ownpad_etherpad_enable" class="checkbox"
 	           value="1" <?php if ($_['ownpad_etherpad_enable'] === 'yes') print_unescaped('checked="checked"'); ?> />
