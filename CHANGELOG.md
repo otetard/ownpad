@@ -1,3 +1,6 @@
+Upcoming:
+* **Enhancement**: use proper icons of etherpad-lite and ethercalc.
+
 Ownpad (0.6.5):
 * **Bugfix**: fix UI with Nextcloud 13 (thanks @frissdiegurke).
 * **Enhancement**: enhance settings page.
