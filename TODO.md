@@ -1,8 +1,5 @@
 # Todo list
 
-Before we can merge this `feature/etherpad-api` branch to `master`,
-some issues need to be fixed.
-
 - [x] Add basic support for Etherpad API (create & open pads).
 - [ ] Check rights before opening the file (mainly, respect rights if
       share doesn’t allow modifications).

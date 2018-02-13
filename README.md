@@ -6,9 +6,9 @@ access to an instance of Etherpad and/or Ethercalc to work properly.
 
 ## Configuration
 
-In order to make Ownpad work, you need to go to the configuration
-panel and then fill the “Collaborative documents” section. There is no
-need to fill both Etherpad and Ethercalc hosts.
+In order to make Ownpad work, go to the configuration panel (Settings /
+Admininstration / Additional Settings) and fill in the necessary data
+within the “Ownpad (collaborative documents)” section.
 
 Afterwards, the “pad” and/or “calc” items will be available in the “+”
 menu from the “File” app.
@@ -22,7 +22,7 @@ Ownpad work properly, you need to add two new mimetypes in the
 To proceed, just copy `/resources/config/mimetypemapping.dist.json` to
 `/config/mimetypemapping.json` (in the `config/` folder at Nextcloud’s
 root directory; the file should be stored next to the `config.php`
-file)., and then add the two following lines just after the “_comment”
+file). Afterwards add the two following lines just after the “_comment”
 lines.
 
     "pad": ["application/x-ownpad"],
@@ -33,32 +33,31 @@ following command:
 
     sudo -u www-data php occ files:scan --all
 
-## Create access limited pads
+## Create access restricted pads
 
-That development branch of Ownpad (`features/etherpad-api`) supports
-communication with Etherpad through its API. With that branch, it’s
-now possible to create really private pads that won’t be accessible
-without using Ownpad.
+Ownpad supports communication with the Etherpad API for access
+restriction (so called *protected pads*). This support is considered
+**experimental** due to work in progress; some features are still
+missing. See the [TODO.md](TODO.md) for details.
 
-Be careful, this is a **work in progress**! [As you can see](TODO.md),
-some features are still missing.
+Protected pads need to be accessed via Nextcloud in order to gain access
+privileges.
 
-To work, you’ll need to give your API key to Ownpad (in the main
-configuration page, in the « Collaborative documents » section). You
-can find your API key in the `APIKEY.txt` file on your Etherpad
-instance.
+In order for this to work, you’ll need to enter your Etherpad API key
+within the Ownpad settings. You can find your API key in the
+`APIKEY.txt` file of your Etherpad instance.
 
-You’ll need to host your Etherpad instance under a the same
-domain. For example, you can host your Etherpad in `pad.example.org`
-and your Nextcloud in `cloud.example.org`. In that case, you’ll have
-to configure `example.org` as the domain cookie in Ownpad’s
-configuration.
+In addition you’ll need to host your Etherpad and Nextcloud instances
+under the same domain. For example, you can host your Etherpad in
+`pad.example.org` and your Nextcloud in `cloud.example.org`. For this
+example, you’ll have to set the cookie domain to `example.org` within
+the Ownpad settings.
 
-If you wan’t to create *really* private pads, you have to use a
-dedicated Etherpad instance for Nextcloud. You will then configure
-Etherpad to prevent pads creation (by manipulating URL) and will
-enforce API usage to create pad. To do so, you have to add the two
-following lines in your Etherpad configuration file (`settings.json`):
+If you want to create *truly* private pads, you have to dedicate an
+Etherpad instance for Nextcloud. You will then configure Etherpad to
+restrict pad access via sessions and pad creation via the API.
+For this, you have to adjust your Etherpad configuration file
+(`settings.json`) as following:
 
     "requireSession" : true,
     "editOnly" : true,
