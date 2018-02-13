@@ -78,7 +78,10 @@ class DisplayController extends Controller {
         $protectedPadRexex = sprintf('/%s\/p\/(g\.\w{16})\\$(.*)$/', preg_quote($eplHost, '/'));
         $match = preg_match($protectedPadRexex, $url, $matches);
 
-        // We are facing a “protected” pad.
+        /*
+         * We are facing a “protected” pad. Call for Etherpad API to
+         * create the session and then properly configure the cookie.
+         */
         if($match) {
             $groupID = $matches[1];
 
@@ -87,6 +90,9 @@ class DisplayController extends Controller {
             $author = $this->eplInstance->createAuthorIfNotExistsFor($username, $displayName);
 
             $session = $this->eplInstance->createSession($groupID, $author->authorID, time() + 3600);
+
+            $cookieDomain = $this->config->getAppValue('ownpad', 'ownpad_etherpad_cookie_domain', '');
+            setcookie('sessionID', $session->sessionID, 0, '/', $cookieDomain, true, false);
         }
 
         /*
@@ -158,9 +164,6 @@ class DisplayController extends Controller {
         else {  // Show Error-Page
             $response = new TemplateResponse($this->appName, 'noviewer', $params, 'blank');
         }
-
-        $cookieDomain = $this->config->getAppValue('ownpad', 'ownpad_etherpad_cookie_domain', '');
-        setcookie('sessionID', $session->sessionID, 0, '/', $cookieDomain, true, false);
 
         /*
          * Allow Etherpad and Ethercalc domains to the
