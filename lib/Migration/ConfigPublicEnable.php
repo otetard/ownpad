@@ -33,7 +33,7 @@ class ConfigPublicEnable implements IRepairStep {
 
     public function run(IOutput $output) {
         $installedVersion = $this->config->getAppValue('ownpad', 'installed_version', '0.0.0');
-        if(version_compare($installedVersion, '0.6.6', '<')) {
+        if(version_compare($installedVersion, '0.6.6', '<') AND $installedVersion !== '0.0.0') {
             $appConfig = \OC::$server->getConfig();
 
             $enabled = ($appConfig->getAppValue('ownpad', 'ownpad_etherpad_public_enable', '') === '') ? 'yes' : 'no';
