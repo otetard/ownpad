@@ -44,10 +44,11 @@
     border: #F00 1px solid;
 }
 
-.icon-filetype-etherpad.svg {
-    background-image:  url("../img/etherpad.svg");
+.icon-filetype-etherpad {
+    background-image:  url("../img/etherpad-lite.ico");
     background-size:  16px;
 }
-.icon-filetype-calc {
-    background-image:  url("../img/calc.png");
+.icon-filetype-ethercalc {
+    background-image:  url("../img/ethercalc.ico");
+    background-size:  16px;
 }
