@@ -41,6 +41,10 @@ style('ownpad', 'settings');
 
         <p id="ownpad_etherpad_useapi_settings" class="double-indent <?php if ($_['ownpad_etherpad_enable'] !== 'yes' || $_['ownpad_etherpad_useapi'] !== 'yes') p('hidden'); ?>">
 
+            <input type="checkbox" name="ownpad_etherpad_public_enable" id="ownpad_etherpad_public_enable" class="checkbox"
+                   value="1" <?php if ($_['ownpad_etherpad_public_enable'] === 'yes') print_unescaped('checked="checked"'); ?> />
+            <label for="ownpad_etherpad_public_enable"><?php p($l->t('Allow “public” pads'));?></label><br/>
+
             <label for="ownpad_etherpad_apikey"><?php p($l->t('Etherpad Apikey')); ?></label><br/>
             <input type="text" name="ownpad_etherpad_apikey" id="ownpad_etherpad_apikey" value="<?php p($_['ownpad_etherpad_apikey']); ?>" /><br/>
 
