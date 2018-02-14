@@ -75,6 +75,7 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
     FilesOwnpadMenu.prototype = {
 
         _etherpadEnabled: false,
+        _etherpadPublicEnabled: false,
         _etherpadAPIEnabled: false,
         _ethercalcEnabled: false,
 
@@ -86,6 +87,7 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
                     url: OC.generateUrl('/apps/ownpad/ajax/v1.0/getconfig')
                 }).done(function(result) {
                     self._etherpadEnabled = result.data.ownpad_etherpad_enable === "yes";
+                    self._etherpadPublicEnabled = result.data.ownpad_etherpad_public_enable === "yes";
                     self._etherpadAPIEnabled = result.data.ownpad_etherpad_useapi === "yes";
                     self._ethercalcEnabled = result.data.ownpad_ethercalc_enable === "yes";
                     OC.Plugins.register('OCA.Files.NewFileMenu', self);
@@ -98,22 +100,26 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
             var self = this;
 
             if(self._etherpadEnabled === true) {
-                newFileMenu.addMenuEntry({
-                    id: 'etherpad',
-                    displayName: t('ownpad', 'Pad'),
-                    templateName: t('ownpad', 'New pad.pad'),
-                    iconClass: 'icon-filetype-etherpad',
-                    fileType: 'etherpad',
-                    actionHandler: function(filename) {
-                        self._createPad("etherpad", filename);
-                    }
-                });
+                if (self._etherpadPublicEnabled === true || self._etherpadAPIEnabled === false) {
+                    newFileMenu.addMenuEntry({
+                        id: 'etherpad',
+                        displayName: t('ownpad', 'Pad'),
+                        templateName: t('ownpad', 'New pad.pad'),
+                        iconClass: 'icon-filetype-etherpad',
+                        fileType: 'etherpad',
+                        actionHandler: function (filename) {
+                            self._createPad("etherpad", filename);
+                        }
+                    });
+                }
 
                 if(self._etherpadAPIEnabled === true) {
+                    var displayName = self._etherpadPublicEnabled === true ? 'Protected Pad' : 'Pad';
+                    var templateName = self._etherpadPublicEnabled === true ? 'New protected pad.pad' : 'New pad.pad';
                     newFileMenu.addMenuEntry({
                         id: 'etherpad-api',
-                        displayName: t('ownpad', 'Protected Pad'),
-                        templateName: t('ownpad', 'New protected pad.pad'),
+                        displayName: t('ownpad', displayName),
+                        templateName: t('ownpad', templateName),
                         iconClass: 'icon-filetype-etherpad',
                         fileType: 'etherpad',
                         actionHandler: function(filename) {

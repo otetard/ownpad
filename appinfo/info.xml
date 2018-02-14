@@ -29,6 +29,7 @@
   <repair-steps>
     <post-migration>
       <step>OCA\Ownpad\Migration\MigrateSettings</step>
+      <step>OCA\Ownpad\Migration\ConfigPublicEnable</step>
     </post-migration>
   </repair-steps>
   <settings>

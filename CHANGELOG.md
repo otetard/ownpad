@@ -1,3 +1,6 @@
+Upcoming:
+* **Enhancement**: add option to disable non-protected 'public' pads.
+
 Ownpad (0.6.5):
 * **Bugfix**: fix UI with Nextcloud 13 (thanks @frissdiegurke).
 * **Enhancement**: enhance settings page.
