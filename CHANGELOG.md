@@ -1,4 +1,4 @@
-Upcoming:
+Ownpad (0.6.6):
 * **Enhancement**: add option to disable non-protected 'public' pads.
 * **Enhancement**: use proper icons of etherpad-lite and ethercalc.
 
