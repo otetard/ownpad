@@ -37,6 +37,9 @@ class AdminSettings implements ISettings {
      * @return TemplateResponse
      */
     public function getForm() {
+        $ownpad_mimetype_ep_configured = "no";
+        $ownpad_mimetype_ec_configured = "no";
+
         if(\OC::$server->getMimeTypeDetector()->detectPath("test.pad") === 'application/x-ownpad') {
             $ownpad_mimetype_ep_configured = "yes";
         }
