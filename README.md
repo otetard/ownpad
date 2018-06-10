@@ -10,6 +10,13 @@ In order to make Ownpad work, go to the configuration panel (Settings /
 Admininstration / Additional Settings) and fill in the necessary data
 within the “Ownpad (collaborative documents)” section.
 
+**Set a Etherpad Host:**  
+To be able to process the document, a must configure a Host. Additional public host provider [more public Host-Provider](https://github.com/ether/etherpad-lite/wiki/Sites-that-run-Etherpad-Lite)
+
+*Example:*
+* Etherpad Host   https://etherpad.wikimedia.org/
+* Ethercalc Host  https://ethercalc.org/
+
 Afterwards, the “pad” and/or “calc” items will be available in the “+”
 menu from the “File” app.
 
