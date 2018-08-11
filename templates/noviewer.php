@@ -2,7 +2,7 @@
 /** @var array $_ */
 /** @var OCP\IURLGenerator $urlGenerator */
 $urlGenerator = $_['urlGenerator'];
-$version = \OCP\App::getAppVersion('ownpad');
+$version = \OC::$server->getAppManager()->getAppVersion('ownpad');
 $url = $_['url'];
 $title = $_['title'];
 ?>

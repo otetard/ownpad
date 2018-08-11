@@ -19,8 +19,6 @@ use \OCP\AppFramework\Http;
 use OCA\Ownpad\Service\OwnpadService;
 use OCA\Ownpad\Service\OwnpadException;
 
-\OCP\App::checkAppEnabled('ownpad');
-
 class AjaxController extends Controller {
 
     /** @var OwnpadService */
