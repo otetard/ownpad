@@ -1,3 +1,6 @@
+Ownpad (0.6.7):
+* **Enhancement**: remove deprecated code calls and let Ownpad be compatible with Nextcloud 14.
+
 Ownpad (0.6.6):
 * **Enhancement**: add option to disable non-protected 'public' pads.
 * **Enhancement**: use proper icons of etherpad-lite and ethercalc.
