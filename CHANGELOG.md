@@ -1,3 +1,6 @@
+Ownpad (0.6.8):
+* **Fix**: update previous fix to let Ownpad be also compatible with NC 13.
+
 Ownpad (0.6.7):
 * **Enhancement**: remove deprecated code calls and let Ownpad be compatible with Nextcloud 14.
 
