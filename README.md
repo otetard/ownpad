@@ -1,8 +1,14 @@
-# Ownpad — Etherpad and Ethercalc links in Nextcloud
+# Ownpad — Etherpad and Ethercalc _links_ in Nextcloud
 
 Ownpad is a Nextcloud application that allows to create and open
 Etherpad and Ethercalc documents. This application requires to have
 access to an instance of Etherpad and/or Ethercalc to work properly.
+
+Note that the documents are only stored with your Etherpad/Ethercalc
+service provider; no copy is kept on Nextcloud. As documents are
+created this way Nextcloud is not responsible for the documents
+security, e.g. anyone with access to the Etherpad/Ethercalc service
+can access your document.
 
 ## Configuration
 
