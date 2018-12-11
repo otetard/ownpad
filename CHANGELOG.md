@@ -1,3 +1,9 @@
+Ownpad (0.6.9):
+* **Enhancement**: use API to create unprotected pads (thanks @m0urs).
+* **Fix**: remove deprecated method `getMediumStrengthGenerator` (thanks @rullzer).
+* **Fix**: only use lower case in pad and calc names to prevent an issue with Ethercalc (thanks @dtygel)
+* **Fix**: update `README.md` to make more explicit that this app is no more than doing links to Etherpad/Ethercalc.
+
 Ownpad (0.6.8):
 * **Fix**: update previous fix to let Ownpad be also compatible with NC 13.
 
