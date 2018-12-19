@@ -1,3 +1,6 @@
+Ownpad (0.6.10):
+* **Enhancement**: ownpad should work fine with Nextcloud 15.
+
 Ownpad (0.6.9):
 * **Enhancement**: use API to create unprotected pads (thanks @m0urs).
 * **Fix**: remove deprecated method `getMediumStrengthGenerator` (thanks @rullzer).
