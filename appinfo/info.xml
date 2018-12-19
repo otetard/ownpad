@@ -24,7 +24,7 @@
   <repository>https://github.com/otetard/ownpad</repository>
   <screenshot small-thumbnail="https://raw.githubusercontent.com/otetard/ownpad/master/screenshots/1-small.png">https://raw.githubusercontent.com/otetard/ownpad/master/screenshots/1.png</screenshot>
   <dependencies>
-    <nextcloud min-version="13" max-version="14" />
+    <nextcloud min-version="13" max-version="15" />
   </dependencies>
   <repair-steps>
     <post-migration>
