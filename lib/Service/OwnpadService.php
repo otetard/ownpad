@@ -41,13 +41,14 @@ class OwnpadService {
         }
         elseif($type === "etherpad") {
             $padID = $token;
+
+            $config = \OC::$server->getConfig();
+            if($config->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no') !== 'no' AND $config->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no') !== 'no') {
                 try {
-                    $config = \OC::$server->getConfig();
-                    if($config->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no') !== 'no' AND $config->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no') !== 'no') {
-                        $eplHost = $config->getAppValue('ownpad', 'ownpad_etherpad_host', '');
-                        $eplApiKey = $config->getAppValue('ownpad', 'ownpad_etherpad_apikey', '');
-                        $eplInstance = new \EtherpadLite\Client($eplApiKey, $eplHost . "/api");
-                    }
+                    $eplHost = $config->getAppValue('ownpad', 'ownpad_etherpad_host', '');
+                    $eplApiKey = $config->getAppValue('ownpad', 'ownpad_etherpad_apikey', '');
+                    $eplInstance = new \EtherpadLite\Client($eplApiKey, $eplHost . "/api");
+
                     if($protected === true) {
                         // Create a protected (group) pad via API
                         $group = $eplInstance->createGroup();
@@ -57,11 +58,12 @@ class OwnpadService {
                     else {
                         // Create a public pad via API
                         $createPadResult = $eplInstance->createPad($token);
-                    }               
+                    }
                 }
                 catch(Exception $e) {
                     throw new OwnpadException($l10n->t('Unable to communicate with Etherpad API.'));
                 }
+            }
 
             $ext = "pad";
             $host = \OC::$server->getConfig()->getAppValue('ownpad', 'ownpad_etherpad_host', false);
