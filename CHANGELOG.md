@@ -1,3 +1,6 @@
+Ownpad (0.6.11):
+* **Fix**: fix public pad creation if Etherpad API is not used.
+
 Ownpad (0.6.10):
 * **Enhancement**: ownpad should work fine with Nextcloud 15.
 
