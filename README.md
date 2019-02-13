@@ -67,7 +67,7 @@ example, you’ll have to set the cookie domain to `example.org` within
 the Ownpad settings.
 
 If you want to create *truly* private pads, you have to dedicate an
-Etherpad instance for Nextcloud. You will then configure Etherpad to
+Etherpad instance for Nextcloud **running both with HTTPS**. You will then configure Etherpad to
 restrict pad access via sessions and pad creation via the API.
 For this, you have to adjust your Etherpad configuration file
 (`settings.json`) as following:
