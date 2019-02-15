@@ -75,8 +75,9 @@ class DisplayController extends Controller {
         $title = $file;
 
         $eplHost = $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', '');
-        $protectedPadRexex = sprintf('/%s\/p\/(g\.\w{16})\\$(.*)$/', preg_quote($eplHost, '/'));
-        $match = preg_match($protectedPadRexex, $url, $matches);
+        $eplHost = rtrim($eplHost, '/');
+        $protectedPadRegex = sprintf('/%s\/p\/(g\.\w{16})\\$(.*)$/', preg_quote($eplHost, '/'));
+        $match = preg_match($protectedPadRegex, $url, $matches);
 
         /*
          * We are facing a “protected” pad. Call for Etherpad API to
