@@ -1,3 +1,6 @@
+Ownpad (0.6.12):
+* **Fix**: fix regexp used to enable protected pads by removing trailing slash from EPL hostname.
+
 Ownpad (0.6.11):
 * **Fix**: fix public pad creation if Etherpad API is not used.
 
