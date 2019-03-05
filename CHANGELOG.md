@@ -1,3 +1,6 @@
+Ownpad (0.6.13):
+* **Enhancement**: add support to configure a fixed pad/spreadsheet ID suffix.
+
 Ownpad (0.6.12):
 * **Fix**: fix regexp used to enable protected pads by removing trailing slash from EPL hostname.
 
