@@ -35,7 +35,11 @@ Ownpad work properly, you need to add two new mimetypes in the
 To proceed, just copy `/resources/config/mimetypemapping.dist.json` to
 `/config/mimetypemapping.json` (in the `config/` folder at Nextcloud’s
 root directory; the file should be stored next to the `config.php`
-file). Afterwards add the two following lines just after the “_comment”
+file).
+
+For the [snap-distribution of Nextcloud](https://github.com/nextcloud/nextcloud-snap) the template file can be found under `/snap/nextcloud/current/htdocs/resources/config/mimetypemapping.dist.json` and the active config-folder by default is `/var/snap/nextcloud/current/nextcloud/config/`.
+
+Afterwards add the two following lines just after the “_comment”
 lines.
 
     "pad": ["application/x-ownpad"],
@@ -45,6 +49,10 @@ If all other mimetypes are not working properly, just run the
 following command:
 
     sudo -u www-data php occ files:scan --all
+
+For the snap-distribution that is
+
+    sudo nextcloud.occ files:scan --all
 
 ## Create access restricted pads
 
