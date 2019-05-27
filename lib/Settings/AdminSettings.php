@@ -59,6 +59,7 @@ class AdminSettings implements ISettings {
             'ownpad_ethercalc_host' => $this->config->getAppValue('ownpad', 'ownpad_ethercalc_host', ''),
             'ownpad_mimetype_ep_configured' => $ownpad_mimetype_ep_configured,
             'ownpad_mimetype_ec_configured' => $ownpad_mimetype_ec_configured,
+            'ownpad_suffix' => $this->config->getAppValue('ownpad', 'ownpad_suffix', ''),
         ], 'blank');
     }
 

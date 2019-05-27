@@ -71,6 +71,16 @@ style('ownpad', 'settings');
             </p>
         </div>
 
+        <p>
+            <label for="ownpad_suffix"><?php p($l->t('Ownpad suffix for pads/spreadsheets')); ?></label><br/>
+            <em>
+                <?php p($l->t('Set a suffix to be appended to each pad/spreadsheet ID. Useful for identifying Ownpad pads/spreadsheets on a shared Etherpad/Ethercalc instance.')); ?>
+            </em><br/>
+            <input type="text" name="ownpad_suffix" id="ownpad_suffix"
+                   value="<?php p($_['ownpad_suffix']); ?>"
+                   placeholder="-cloud" />
+        </p>
+
         <div id="ownpad-saved-message">
             <span class="msg success"><?php p($l->t('Saved')); ?></span>
         </div>
