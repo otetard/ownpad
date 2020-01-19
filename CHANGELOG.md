@@ -1,3 +1,9 @@
+Ownpad (0.6.14):
+* **Fix**: Add Nextcloud 17 & 18 compatibility (no changes)
+
+Ownpad (0.6.13):
+* **Fix**: Add Nextcloud 16 compatibility (no changes)
+
 Ownpad (0.6.12):
 * **Fix**: fix regexp used to enable protected pads by removing trailing slash from EPL hostname.
 
