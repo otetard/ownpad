@@ -8,7 +8,7 @@ Note that the documents are only stored with your Etherpad/Ethercalc
 service provider; no copy is kept on Nextcloud. As documents are
 created this way Nextcloud is not responsible for the documents
 security, e.g. anyone with access to the Etherpad/Ethercalc service
-can access your document.
+can access your documents.
 
 ## Configuration
 
@@ -17,11 +17,13 @@ Admininstration / Additional Settings) and fill in the necessary data
 within the “Ownpad (collaborative documents)” section.
 
 **Set a Etherpad Host:**  
-To be able to process the document, a must configure a Host. Additional public host provider [more public Host-Provider](https://github.com/ether/etherpad-lite/wiki/Sites-that-run-Etherpad-Lite)
+To be able to process the document, you must configure a Host. [Find more public providers at the Etherpad-Lite wiki](https://github.com/ether/etherpad-lite/wiki/Sites-that-run-Etherpad-Lite)
 
 *Example:*
 * Etherpad Host   https://etherpad.wikimedia.org/
 * Ethercalc Host  https://ethercalc.org/
+
+Note that most browsers will only display the content if both Nextcloud and Etherpad/Ethercalc are served via HTTPS.
 
 Afterwards, the “pad” and/or “calc” items will be available in the “+”
 menu from the “File” app.
