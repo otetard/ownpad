@@ -84,3 +84,7 @@ For this, you have to adjust your Etherpad configuration file
 
     "requireSession" : true,
     "editOnly" : true,
+
+## License
+
+The code is licensed under the AGPLv3 which can be found as the file [COPYING](COPYING) in the source code repository.
