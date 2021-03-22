@@ -68,8 +68,17 @@ class DisplayController extends Controller {
      * @return TemplateResponse
      */
     public function showPad($file, $dir) {
+        /*
+         * Filesystem is not setup per default on normal route since
+         * Nextcloud 21. More information:
+         * - https://github.com/nextcloud/server/issues/23210
+         * - https://github.com/nextcloud/server/pull/23821
+         */
+        \OC_Util::setupFS();
+
         /* Retrieve file content to find pad’s URL */
-        $content = \OC\Files\Filesystem::file_get_contents($dir."/".$file);
+        $path = \OC\Files\Filesystem::normalizePath($dir."/".$file);
+        $content = \OC\Files\Filesystem::file_get_contents($path);
         preg_match('/URL=(.*)$/', $content, $matches);
         $url = $matches[1];
         $title = $file;
