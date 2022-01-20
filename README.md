@@ -58,6 +58,15 @@ For the snap-distribution that is
 
 ## Create access restricted pads
 
+### HTTP Auth
+
+Basic HTTP auth enabled on the Etherpad webserver is compatible with 
+Ownpad. If this is used then the user will simply be prompted to enter 
+login credentials by their browser when they try to access a pad from 
+within Nextcloud.
+
+### Etherpad-managed auth
+
 Ownpad supports communication with the Etherpad API for access
 restriction (so called *protected pads*). This support is considered
 **experimental** due to work in progress; some features are still
