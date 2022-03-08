@@ -21,7 +21,7 @@ To be able to process the document, you must configure a Host. [Find more public
 
 *Example:*
 * Etherpad Host   https://etherpad.wikimedia.org/
-* Ethercalc Host  https://ethercalc.org/
+* Ethercalc Host  https://ethercalc.net/
 
 Note that most browsers will only display the content if both Nextcloud and Etherpad/Ethercalc are served via HTTPS.
 
