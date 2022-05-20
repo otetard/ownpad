@@ -48,6 +48,8 @@ class AjaxController extends Controller {
      * @NoAdminRequired
      */
     public function newpad($dir, $padname, $type, $protected) {
+        \OC_Util::setupFS();
+
         $dir = isset($dir) ? '/'.trim($dir, '/\\') : '';
         $padname = isset($padname) ? trim($padname, '/\\') : '';
         $type = isset($type) ? trim($type, '/\\') : '';
