@@ -1,3 +1,6 @@
+Ownpad (0.6.18):
+* **Fix**: Add Nextcloud 24 compatibility.
+
 Ownpad (0.6.17):
 * **Fix**: Add Nextcloud 23 compatibility.
 
