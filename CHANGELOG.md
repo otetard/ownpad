@@ -1,3 +1,7 @@
+Ownpad (0.7.0):
+* **Fix**: Add Nextcloud 25 compatibility.
+* **Enhancement**: Improve style of the top bar when opening a pad (thanks to @fenglisch!)
+
 Ownpad (0.6.18):
 * **Fix**: Add Nextcloud 24 compatibility.
 
