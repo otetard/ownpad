@@ -18,6 +18,7 @@ use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\IUserSession;
 use OCP\IConfig;
+use OCP\App\IAppManager;
 
 use EtherpadLite\Client;
 
@@ -35,6 +36,9 @@ class DisplayController extends Controller {
     /** @var Client */
     private $eplInstance;
 
+    /** @var IAppManager */
+    private $appManager;
+
     /**
      * @param string $AppName
      * @param IRequest $request
@@ -45,12 +49,14 @@ class DisplayController extends Controller {
         IRequest $request,
         IURLGenerator $urlGenerator,
         IUserSession $userSession,
+        IAppManager $appManager,
         IConfig $config
     ) {
         parent::__construct($AppName, $request);
         $this->urlGenerator = $urlGenerator;
         $this->userSession = $userSession;
         $this->config = $config;
+        $this->appManager = $appManager;
 
         if($this->config->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no') !== 'no' AND
            $this->config->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no') !== 'no')
@@ -122,12 +128,14 @@ class DisplayController extends Controller {
             return '://' . $match[1] . '/' . $match[2] . join('/', array_map('rawurlencode', explode('/', $match[3])));
         }, $url);
 
+        $ownpad_version = $this->appManager->getAppVersion('ownpad');
+
         $params = [
             'urlGenerator' => $this->urlGenerator,
             'url' => $url,
             'title' => $title,
+            'ownpad_version' => $ownpad_version,
         ];
-
 
         // Check for valid URL
         // Get File-Ending
