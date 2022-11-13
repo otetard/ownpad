@@ -1,3 +1,6 @@
+Ownpad (0.7.1):
+* **Fix**: Update the way we identify the current directory (don’t rely [on now removed `#dir`](https://github.com/nextcloud/server/pull/33373)).
+
 Ownpad (0.7.0):
 * **Fix**: Add Nextcloud 25 compatibility.
 * **Enhancement**: Improve style of the top bar when opening a pad (thanks to @fenglisch!)
