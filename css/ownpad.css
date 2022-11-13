@@ -8,40 +8,70 @@
  * @copyright Olivier Tétard <olivier.tetard@miskin.fr>, 2017
  */
 
-#ownpad_bar {
-    background: #333;
-    color: #999;
-    min-height:  25px;
-    padding: 6px 6px 6px 10px;
+/* quicksand-regular - latin */
+@font-face {
+    font-family: 'Quicksand';
+    font-style: normal;
+    font-weight: 400;
+    src: local(''),
+         url('../fonts/quicksand-v29-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+         url('../fonts/quicksand-v29-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
+
+/* quicksand-700 - latin */
+@font-face {
+    font-family: 'Quicksand';
+    font-style: normal;
+    font-weight: 700;
+    src: local(''),
+         url('../fonts/quicksand-v29-latin-700.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+         url('../fonts/quicksand-v29-latin-700.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+
+#ownpad_bar {
+    background: #f2f3f4;
+    color: #576273;
+    padding: 10px;
+    font-family: Quicksand;
+}
+
 #ownpad_bar span {
     opacity: 0;
     transition: all 1s ease;
     -o-transition: all 1s ease;
     -moz-transition: all 1s ease;
     -webkit-transition:  all 1s ease;
+    font-size: 15px;
 }
+
+#ownpad_bar span:first-child {
+    visibility: hidden;
+}
+
+#ownpad_bar span:nth-last-child(2)::before {
+    content: '\a0\a0 (';
+}
+
+#ownpad_bar span:nth-last-child(2)::after {
+    content: ')';
+}
+
 #ownpad_bar:hover span {
     opacity: 1;
 }
-#ownpad_bar a,#ownpad_bar strong {
-    color: #CCC;
-}
+
 #ownpad_close {
     display: inline-block;
-    padding: 0 10px;
-    height: 20px;
-    background: #900;
-    color: #F5F5F5;
+    padding: 2px 10px;
+    background: #576273;
     border-radius: 3px;
-    border: #C00 1px solid;
     font-weight: 900;
     float: right;
+    color: #fff;
 }
 #ownpad_close:hover {
-    background: #C00;
-    color: #FFF;
-    border: #F00 1px solid;
+    background: #900;
 }
 
 .icon-filetype-etherpad {
@@ -52,3 +82,4 @@
     background-image:  url("../img/ethercalc.ico");
     background-size:  16px;
 }
+
