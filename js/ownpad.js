@@ -150,7 +150,7 @@ OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
 
             $.post(
                 OC.generateUrl('/apps/ownpad/ajax/v1.0/newpad'), {
-                    dir: $('#dir').val(),
+                    dir: OCA.Files.App.currentFileList.getCurrentDirectory(),
                     padname: filename,
                     type: type,
                     protected: is_protected
