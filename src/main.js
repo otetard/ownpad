@@ -9,60 +9,6 @@
  */
 
 (function(OCA) {
-    OCA.FilesOwnpad = {
-        attach: function(fileList) {
-            this._extendFileActions(fileList.fileActions);
-        },
-
-        hide: function() {
-            $('#ownpad').remove();
-            FileList.setViewerMode(false);
-
-            // replace the controls with our own
-            $('#app-content #controls').removeClass('hidden');
-        },
-
-        show: function(fileName, dirName) {
-            var self = this;
-            var $iframe;
-
-            var viewer = OC.generateUrl('/apps/ownpad/?file={file}&dir={dir}', {file: fileName, dir: dirName});
-
-            $iframe = $('<iframe id="ownpad" style="width:100%;height:100%;display:block;position:absolute;top:0;z-index:999;background-color:white;" src="'+viewer+'"/>');
-
-            FileList.setViewerMode(true);
-
-            $('#app-content').append($iframe);
-            $("#pageWidthOption").attr("selected","selected");
-            $('#app-content #controls').addClass('hidden');
-
-            $('#ownpad').load(function(){
-                var iframe = $('#ownpad').contents();
-                iframe.find('#ownpad_close').click(function() {
-                    self.hide();
-                });
-            });
-        },
-
-        _extendFileActions: function(fileActions) {
-            var self = this;
-            fileActions.registerAction({
-                name: 'view',
-                displayName: 'Ownpad',
-                mime: 'application/x-ownpad',
-                permissions: OC.PERMISSION_READ,
-                actionHandler: function(fileName, context) {
-                    self.show(fileName, context.dir);
-                }
-            });
-            fileActions.setDefault('application/x-ownpad', 'view');
-        }
-    };
-})(OCA);
-
-OC.Plugins.register('OCA.Files.FileList', OCA.FilesOwnpad);
-
-(function(OCA) {
 
     var FilesOwnpadMenu = function() {
         this.initialize();

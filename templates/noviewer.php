@@ -13,7 +13,7 @@ $title = $_['title'];
   </head>
   <body style="margin: 0px; padding: 0px; overflow: hidden; bottom: 37px; top: 0px; left: 0px; right: 0px; position: absolute;">
     <div id="ownpad_bar">
-      <span>Title</span><strong><?php p($title); ?></strong><a id="ownpad_close">x</a>
+      <span>Title</span><strong><?php p($title); ?></strong>
     </div>
     <p><?php p($l->t("Your Etherpad/Ethercalc document could not be opened: the URL specified in your file does not match the allowed server.")); ?></p>
   </body>

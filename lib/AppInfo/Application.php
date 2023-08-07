@@ -11,12 +11,18 @@
 
 namespace OCA\Ownpad\AppInfo;
 
+use OCA\Ownpad\Listeners\LoadViewerListener;
+
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
+use OCA\Viewer\Event\LoadViewer;
 use OCP\AppFramework\App;
+use OCP\AppFramework\Bootstrap\IBootContext;
+use OCP\AppFramework\Bootstrap\IBootstrap;
+use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Util;
 
-class Application extends App {
+class Application extends App implements IBootstrap {
     public const APP_ID = 'ownpad';
 
     public function __construct() {
@@ -30,5 +36,12 @@ class Application extends App {
                 Util::addScript('ownpad', 'ownpad-main');
             }
         );
+    }
+
+    public function register(IRegistrationContext $context): void {
+        $context->registerEventListener(LoadViewer::class, LoadViewerListener::class);
+    }
+
+    public function boot(IBootContext $context): void {
     }
 }
