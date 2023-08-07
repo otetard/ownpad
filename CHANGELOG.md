@@ -1,3 +1,8 @@
+Ownpad (0.8.0):
+* **Enhancement**: Rely on Files viewer to open pad and calc files.
+* **Enhancement**: Add Nextcloud 26, 27 and 28 compatibility.
+* **Refactoring**: Use Webpack to minify Javascript files.
+
 Ownpad (0.7.1):
 * **Fix**: Update the way we identify the current directory (don’t rely [on now removed `#dir`](https://github.com/nextcloud/server/pull/33373)).
 
@@ -118,9 +123,9 @@ Ownpad (0.4.0)
 * **Enhancement**: port code to ownCloud 9
 
 Ownpad (0.3.0)
-**Bugfix**: Add Content-Security-Policy rules in order to allow the pad/calc iframe to be opened (required by ownCloud 8.1).
-**Bugfix**: Fix the way URL are encoded to make Etherpad happy.
-**Bugfix**: Fix the pad’s viewer size
+* **Bugfix**: Add Content-Security-Policy rules in order to allow the pad/calc iframe to be opened (required by ownCloud 8.1).
+* **Bugfix**: Fix the way URL are encoded to make Etherpad happy.
+* **Bugfix**: Fix the pad’s viewer size
 
 Ownpad (0.2.0)
 * **Enhancement**: New pads/calcs are now handled by a specific AJAX script (`ajax/newpad.php`) that manage the file content.

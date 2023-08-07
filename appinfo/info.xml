@@ -13,7 +13,7 @@
     This application requires to have access to an instance of
     Etherpad and/or Ethercalc to work properly.
   </description>
-  <version>0.7.1</version>
+  <version>0.8.0</version>
   <licence>agpl</licence>
   <author mail="olivier.tetard@miskin.fr">Olivier Tétard</author>
   <documentation>
@@ -24,7 +24,7 @@
   <repository>https://github.com/otetard/ownpad</repository>
   <screenshot small-thumbnail="https://raw.githubusercontent.com/otetard/ownpad/master/screenshots/1-small.png">https://raw.githubusercontent.com/otetard/ownpad/master/screenshots/1.png</screenshot>
   <dependencies>
-    <nextcloud min-version="21" max-version="25" />
+    <nextcloud min-version="25" max-version="28" />
   </dependencies>
   <repair-steps>
     <post-migration>
