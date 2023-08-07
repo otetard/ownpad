@@ -2,7 +2,7 @@
 /** @var \OCP\IL10N $l */
 /** @var array $_ */
 
-script('ownpad', 'settings');
+script('ownpad', 'ownpad-settings');
 style('ownpad', 'settings');
 ?>
 <div class="section" id="ownpad">

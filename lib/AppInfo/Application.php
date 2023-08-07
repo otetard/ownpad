@@ -27,7 +27,7 @@ class Application extends App {
             LoadAdditionalScriptsEvent::class,
             function() {
                 Util::addStyle('ownpad', 'ownpad');
-                Util::addScript('ownpad', 'ownpad');
+                Util::addScript('ownpad', 'ownpad-main');
             }
         );
     }

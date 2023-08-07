@@ -1,0 +1,44 @@
+{
+  "name": "ownpad",
+  "description": "PDF viewer plugin for Nextcloud",
+  "version": "0.7.1",
+  "author": "Olivier Tétard <olivier.tetard@miskin.fr>",
+  "contributors": [],
+  "bugs": {
+    "url": "https://github.com/otetard/ownpad/issues"
+  },
+  "repository": {
+    "url": "https://github.com/otetard/ownpad",
+    "type": "git"
+  },
+  "homepage": "https://github.com/otetard/ownpad",
+  "license": "AGPL-3.0-or-later",
+  "private": true,
+  "scripts": {
+    "build": "webpack --node-env production --progress",
+    "dev": "webpack --node-env development --progress",
+    "watch": "webpack --node-env development --progress --watch",
+    "lint": "eslint --ext .js,.vue src",
+    "lint:fix": "eslint --ext .js,.vue src --fix",
+    "stylelint": "stylelint src css",
+    "stylelint:fix": "stylelint src css --fix"
+  },
+  "dependencies": {
+    "@nextcloud/logger": "^2.5.0",
+    "@nextcloud/router": "^2.1.2"
+  },
+  "browserslist": [
+    "extends @nextcloud/browserslist-config"
+  ],
+  "engines": {
+    "node": "^16.0.0",
+    "npm": "^7.0.0 || ^8.0.0"
+  },
+  "devDependencies": {
+    "@nextcloud/babel-config": "^1.0.0",
+    "@nextcloud/browserslist-config": "^2.3.0",
+    "@nextcloud/eslint-config": "^8.2.1",
+    "@nextcloud/stylelint-config": "^2.3.1",
+    "@nextcloud/webpack-vue-config": "^5.5.1"
+  }
+}
