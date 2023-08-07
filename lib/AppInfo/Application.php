@@ -11,23 +11,24 @@
 
 namespace OCA\Ownpad\AppInfo;
 
+use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCP\AppFramework\App;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Util;
 
 class Application extends App {
+    public const APP_ID = 'ownpad';
 
-    public function __construct(array $urlParams = array()) {
-        parent::__construct('ownpad', $urlParams);
-    }
+    public function __construct() {
+        parent::__construct(self::APP_ID);
 
-    public function registerHooks() {
-        $dispatcher = $this->getContainer()->getServer()->getEventDispatcher();
-
+        $dispatcher = $this->getContainer()->query(IEventDispatcher::class);
         $dispatcher->addListener(
-            'OCA\Files::loadAdditionalScripts',
+            LoadAdditionalScriptsEvent::class,
             function() {
                 Util::addStyle('ownpad', 'ownpad');
                 Util::addScript('ownpad', 'ownpad');
-            });
+            }
+        );
     }
 }
