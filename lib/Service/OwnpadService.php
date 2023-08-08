@@ -13,7 +13,6 @@ namespace OCA\Ownpad\Service;
 
 use OCP\IConfig;
 use OCP\IUserSession;
-use OCP\IL10N;
 
 use EtherpadLite\Client;
 use Exception;
@@ -132,7 +131,7 @@ class OwnpadService {
         throw new OwnpadException($l10n_files->t('Error when creating the file'));
     }
 
-    public function parseOwnpadContent($file, $content) {
+    public function parseOwnpadContent($file, $content, bool $publicMode = false) {
         $l10n = \OC::$server->getL10N('ownpad');
 
         preg_match('/URL=(.*)$/', $content, $matches);
@@ -148,6 +147,10 @@ class OwnpadService {
          * create the session and then properly configure the cookie.
          */
         if($match) {
+            if($publicMode === true) {
+                throw new OwnpadException($l10n->t('You are not allowed to open this pad.'));
+            }
+
             $groupID = $matches[1];
 
             $username = $this->userSession->getUser()->getUID();

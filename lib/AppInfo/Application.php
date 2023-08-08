@@ -12,6 +12,7 @@
 namespace OCA\Ownpad\AppInfo;
 
 use OCA\Ownpad\Listeners\LoadViewerListener;
+use OCA\Ownpad\Listeners\LoadPublicViewerListener;
 use OCA\Ownpad\Listeners\CSPListener;
 
 use OCP\Security\CSP\AddContentSecurityPolicyEvent;
@@ -22,6 +23,7 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
 use OCP\Util;
 
 class Application extends App implements IBootstrap {
@@ -44,6 +46,7 @@ class Application extends App implements IBootstrap {
         require_once __DIR__ . '/../../3rdparty/autoload.php';
 
         $context->registerEventListener(LoadViewer::class, LoadViewerListener::class);
+        $context->registerEventListener(BeforeTemplateRenderedEvent::class, LoadPublicViewerListener::class);
         $context->registerEventListener(AddContentSecurityPolicyEvent::class, CSPListener::class);
     }
 
