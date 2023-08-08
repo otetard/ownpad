@@ -1,7 +1,7 @@
 {
   "name": "ownpad",
   "description": "PDF viewer plugin for Nextcloud",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "author": "Olivier Tétard <olivier.tetard@miskin.fr>",
   "contributors": [],
   "bugs": {

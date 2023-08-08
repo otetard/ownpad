@@ -1,3 +1,6 @@
+Ownpad (0.8.1):
+* **Fix**: Reintroduce autoloading of EtherpadLiteClient third-party library (thanks to @e1mo for the feeback!).
+
 Ownpad (0.8.0):
 * **Enhancement**: Rely on Files viewer to open pad and calc files.
 * **Enhancement**: Add Nextcloud 26, 27 and 28 compatibility.
