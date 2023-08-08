@@ -20,9 +20,7 @@
 
      computed: {
 	 iframeSrc() {
-             const filename = this.filename;
-             const dirname = this.filename.substring(0, this.filename.length - this.basename.length);
-             return generateUrl('/apps/ownpad/?file={file}&dir={dir}', {file: filename, dir: dirname});
+             return generateUrl('/apps/ownpad/?file={file}', {file: this.filename});
 	 },
      },
 
