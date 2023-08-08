@@ -20,7 +20,6 @@ namespace OCA\Ownpad\Migration;
 use OCP\Migration\IRepairStep;
 use OCP\Migration\IOutput;
 use OC\Core\Command\Maintenance\Mimetype\UpdateJS;
-use OCP\ILogger;
 use OCP\Files\IMimeTypeLoader;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
