@@ -11,9 +11,38 @@
 
 namespace OCA\Ownpad\Service;
 
+use OCP\IConfig;
+use OCP\IUserSession;
+use OCP\IL10N;
+
+use EtherpadLite\Client;
 use Exception;
 
 class OwnpadService {
+    /** @var IConfig */
+    private $config;
+
+    /** @var IUserSession */
+    private $userSession;
+
+    /** @var Client */
+    private $eplInstance;
+
+    public function __construct(
+        IConfig $config,
+        IUserSession $userSession,
+    ) {
+        $this->config = $config;
+        $this->userSession = $userSession;
+
+        if($this->config->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no') !== 'no' AND
+           $this->config->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no') !== 'no')
+        {
+            $eplHost = $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', '');
+            $eplApiKey = $this->config->getAppValue('ownpad', 'ownpad_etherpad_apikey', '');
+            $this->eplInstance = new Client($eplApiKey, $eplHost . "/api");
+        }
+    }
 
     public function create($dir, $padname, $type, $protected) {
         // Generate a random pad name
@@ -21,9 +50,6 @@ class OwnpadService {
 
         $l10n = \OC::$server->getL10N('ownpad');
         $l10n_files = \OC::$server->getL10N('files');
-
-        $result = ['success' => false,
-                   'data' => NULL];
 
         if($type === "ethercalc") {
             $ext = "calc";
@@ -45,19 +71,15 @@ class OwnpadService {
             $config = \OC::$server->getConfig();
             if($config->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no') !== 'no' AND $config->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no') !== 'no') {
                 try {
-                    $eplHost = $config->getAppValue('ownpad', 'ownpad_etherpad_host', '');
-                    $eplApiKey = $config->getAppValue('ownpad', 'ownpad_etherpad_apikey', '');
-                    $eplInstance = new \EtherpadLite\Client($eplApiKey, $eplHost . "/api");
-
                     if($protected === true) {
                         // Create a protected (group) pad via API
-                        $group = $eplInstance->createGroup();
-                        $groupPad = $eplInstance->createGroupPad($group->groupID, $token);
+                        $group = $this->eplInstance->createGroup();
+                        $groupPad = $this->eplInstance->createGroupPad($group->groupID, $token);
                         $padID = $groupPad->padID;
                     }
                     else {
                         // Create a public pad via API
-                        $createPadResult = $eplInstance->createPad($token);
+                        $this->eplInstance->createPad($token);
                     }
                 }
                 catch(Exception $e) {
@@ -108,5 +130,95 @@ class OwnpadService {
         }
 
         throw new OwnpadException($l10n_files->t('Error when creating the file'));
+    }
+
+    public function parseOwnpadContent($file, $content) {
+        $l10n = \OC::$server->getL10N('ownpad');
+
+        preg_match('/URL=(.*)$/', $content, $matches);
+        $url = $matches[1];
+
+        $eplHost = $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', '');
+        $eplHost = rtrim($eplHost, '/');
+        $protectedPadRegex = sprintf('/%s\/p\/(g\.\w{16})\\$(.*)$/', preg_quote($eplHost, '/'));
+        $match = preg_match($protectedPadRegex, $url, $matches);
+
+        /*
+         * We are facing a “protected” pad. Call for Etherpad API to
+         * create the session and then properly configure the cookie.
+         */
+        if($match) {
+            $groupID = $matches[1];
+
+            $username = $this->userSession->getUser()->getUID();
+            $displayName = $this->userSession->getUser()->getDisplayName();
+            $author = $this->eplInstance->createAuthorIfNotExistsFor($username, $displayName);
+
+            $session = $this->eplInstance->createSession($groupID, $author->authorID, time() + 3600);
+
+            $cookieDomain = $this->config->getAppValue('ownpad', 'ownpad_etherpad_cookie_domain', '');
+            setcookie('sessionID', $session->sessionID, 0, '/', $cookieDomain, true, false);
+        }
+
+        /*
+         * Not totally sure that this is the right way to proceed…
+         *
+         * First we decode the URL (to avoid double encode), then we
+         * replace spaces with underscore (as they are converted as
+         * such by Etherpad), then we encode the URL properly (and we
+         * avoid to urlencode() the protocol scheme).
+         *
+         * Magic urlencode() function was stolen from this answer on
+         * StackOverflow: <http://stackoverflow.com/a/7974253>.
+         */
+        $url = urldecode($url);
+        $url = str_replace(' ', '_', $url);
+        $url = preg_replace_callback('#://([^/]+)/(=)?([^?]+)#', function ($match) {
+            return '://' . $match[1] . '/' . $match[2] . join('/', array_map('rawurlencode', explode('/', $match[3])));
+        }, $url);
+
+        // Check for valid URL
+        // Get File-Ending
+        $split = explode(".", $file);
+        $fileending = $split[count($split)-1];
+
+        // Get Host-URL
+        if($fileending === "calc") {
+            $host = \OC::$server->getConfig()->getAppValue('ownpad', 'ownpad_ethercalc_host', false);
+        }
+        elseif($fileending === "pad") {
+            $host = \OC::$server->getConfig()->getAppValue('ownpad', 'ownpad_etherpad_host', false);
+        }
+
+        if(substr($host, -1, 1) !== '/') {
+            $host .= '/';
+        }
+
+        // Escape all RegEx-Characters
+        $hostreg = preg_quote($host);
+        // Escape all Slashes in URL to use in RegEx
+        $hostreg = preg_replace("/\//", "\/", $host);
+
+        // Final Regex-String
+        if($fileending === "calc") {
+            /*
+             * Ethercalc documents with “multisheet” support starts
+             * with a `=`.
+             */
+            $regex = "/^".$hostreg."=?[^\/]+$/";
+        }
+        elseif($fileending === "pad") {
+            /*
+             * Etherpad documents can contain special characters, for
+             * “protected pads” for example.
+             */
+            $regex = "/^".$hostreg."p\/[^\/]+$/";
+        }
+
+        if (preg_match($regex, $url) !== 1) {
+            throw new OwnpadException($l10n->t('URL in your Etherpad/Ethercalc document does not match the allowed server'));
+        }
+
+        return $url;
     }
 }

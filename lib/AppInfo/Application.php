@@ -12,7 +12,9 @@
 namespace OCA\Ownpad\AppInfo;
 
 use OCA\Ownpad\Listeners\LoadViewerListener;
+use OCA\Ownpad\Listeners\CSPListener;
 
+use OCP\Security\CSP\AddContentSecurityPolicyEvent;
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCA\Viewer\Event\LoadViewer;
 use OCP\AppFramework\App;
@@ -42,6 +44,7 @@ class Application extends App implements IBootstrap {
         require_once __DIR__ . '/../../3rdparty/autoload.php';
 
         $context->registerEventListener(LoadViewer::class, LoadViewerListener::class);
+        $context->registerEventListener(AddContentSecurityPolicyEvent::class, CSPListener::class);
     }
 
     public function boot(IBootContext $context): void {

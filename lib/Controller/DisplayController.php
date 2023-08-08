@@ -11,30 +11,25 @@
 
 namespace OCA\Ownpad\Controller;
 
+use OCA\Ownpad\Service\OwnpadService;
+use OCA\Ownpad\Service\OwnpadException;
+
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\App\IAppManager;
 
-use EtherpadLite\Client;
-
 class DisplayController extends Controller {
 
     /** @var IURLGenerator */
     private $urlGenerator;
 
-    /** @var IUserSession */
-    private $userSession;
-
-    /** @var IConfig */
-    private $config;
-
-    /** @var Client */
-    private $eplInstance;
-
     /** @var IAppManager */
     private $appManager;
+
+    /** @var OwnpadService */
+    private $ownpadService;
 
     /**
      * @param string $AppName
@@ -45,23 +40,13 @@ class DisplayController extends Controller {
         $AppName,
         IRequest $request,
         IURLGenerator $urlGenerator,
-        IUserSession $userSession,
         IAppManager $appManager,
-        IConfig $config
+        OwnpadService $ownpadService
     ) {
         parent::__construct($AppName, $request);
         $this->urlGenerator = $urlGenerator;
-        $this->userSession = $userSession;
-        $this->config = $config;
         $this->appManager = $appManager;
-
-        if($this->config->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no') !== 'no' AND
-           $this->config->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no') !== 'no')
-        {
-            $eplHost = $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', '');
-            $eplApiKey = $this->config->getAppValue('ownpad', 'ownpad_etherpad_apikey', '');
-            $this->eplInstance = new Client($eplApiKey, $eplHost . "/api");
-        }
+        $this->ownpadService = $ownpadService;
     }
 
     /**
@@ -70,135 +55,24 @@ class DisplayController extends Controller {
      *
      * @return TemplateResponse
      */
-    public function showPad($file) {
-        /*
-         * Filesystem is not setup per default on normal route since
-         * Nextcloud 21. More information:
-         * - https://github.com/nextcloud/server/issues/23210
-         * - https://github.com/nextcloud/server/pull/23821
-         */
+    public function showPad($file): TemplateResponse {
         \OC_Util::setupFS();
 
         /* Retrieve file content to find pad’s URL */
         $content = \OC\Files\Filesystem::file_get_contents($file);
-        preg_match('/URL=(.*)$/', $content, $matches);
-        $url = $matches[1];
-        $title = $file;
-
-        $eplHost = $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', '');
-        $eplHost = rtrim($eplHost, '/');
-        $protectedPadRegex = sprintf('/%s\/p\/(g\.\w{16})\\$(.*)$/', preg_quote($eplHost, '/'));
-        $match = preg_match($protectedPadRegex, $url, $matches);
-
-        /*
-         * We are facing a “protected” pad. Call for Etherpad API to
-         * create the session and then properly configure the cookie.
-         */
-        if($match) {
-            $groupID = $matches[1];
-
-            $username = $this->userSession->getUser()->getUID();
-            $displayName = $this->userSession->getUser()->getDisplayName();
-            $author = $this->eplInstance->createAuthorIfNotExistsFor($username, $displayName);
-
-            $session = $this->eplInstance->createSession($groupID, $author->authorID, time() + 3600);
-
-            $cookieDomain = $this->config->getAppValue('ownpad', 'ownpad_etherpad_cookie_domain', '');
-            setcookie('sessionID', $session->sessionID, 0, '/', $cookieDomain, true, false);
-        }
-
-        /*
-         * Not totally sure that this is the right way to proceed…
-         *
-         * First we decode the URL (to avoid double encode), then we
-         * replace spaces with underscore (as they are converted as
-         * such by Etherpad), then we encode the URL properly (and we
-         * avoid to urlencode() the protocol scheme).
-         *
-         * Magic urlencode() function was stolen from this answer on
-         * StackOverflow: <http://stackoverflow.com/a/7974253>.
-         */
-        $url = urldecode($url);
-        $url = str_replace(' ', '_', $url);
-        $url = preg_replace_callback('#://([^/]+)/(=)?([^?]+)#', function ($match) {
-            return '://' . $match[1] . '/' . $match[2] . join('/', array_map('rawurlencode', explode('/', $match[3])));
-        }, $url);
-
-        $ownpad_version = $this->appManager->getAppVersion('ownpad');
 
         $params = [
             'urlGenerator' => $this->urlGenerator,
-            'url' => $url,
-            'title' => $title,
-            'ownpad_version' => $ownpad_version,
+            'ownpad_version' => $this->appManager->getAppVersion('ownpad'),
+            'title' => $file,
         ];
 
-        // Check for valid URL
-        // Get File-Ending
-        $split = explode(".", $file);
-        $fileending = $split[count($split)-1];
-
-        // Get Host-URL
-        if($fileending === "calc") {
-            $host = \OC::$server->getConfig()->getAppValue('ownpad', 'ownpad_ethercalc_host', false);
+        try {
+            $params['url'] = $this->ownpadService->parseOwnpadContent($file, $content);
+            return new TemplateResponse($this->appName, 'viewer', $params, 'blank');
         }
-        elseif($fileending === "pad") {
-            $host = \OC::$server->getConfig()->getAppValue('ownpad', 'ownpad_etherpad_host', false);
+        catch(OwnpadException $e) {
+            return new TemplateResponse($this->appName, 'noviewer', $params, 'blank');
         }
-
-        if(substr($host, -1, 1) !== '/') {
-            $host .= '/';
-        }
-
-        // Escape all RegEx-Characters
-        $hostreg = preg_quote($host);
-        // Escape all Slashes in URL to use in RegEx
-        $hostreg = preg_replace("/\//", "\/", $host);
-
-        // Final Regex-String
-        if($fileending === "calc") {
-            /*
-             * Ethercalc documents with “multisheet” support starts
-             * with a `=`.
-             */
-            $regex = "/^".$hostreg."=?[^\/]+$/";
-        }
-        elseif($fileending === "pad") {
-            /*
-             * Etherpad documents can contain special characters, for
-             * “protected pads” for example.
-             */
-            $regex = "/^".$hostreg."p\/[^\/]+$/";
-        }
-
-        // Show the Pad, if URL is valid
-        if (preg_match($regex, $url) === 1) {
-            $response = new TemplateResponse($this->appName, 'viewer', $params, 'blank');
-        }
-        else {  // Show Error-Page
-            $response = new TemplateResponse($this->appName, 'noviewer', $params, 'blank');
-        }
-
-        /*
-         * Allow Etherpad and Ethercalc domains to the
-         * Content-Security-frame- list.
-         *
-         * This feature was introduced in ownCloud 8.1.
-         */
-        $policy = new ContentSecurityPolicy();
-
-        if($this->config->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no') !== 'no') {
-            $policy->addAllowedFrameDomain($this->config->getAppValue('ownpad', 'ownpad_etherpad_host', ''));
-            $policy->addAllowedChildSrcDomain($this->config->getAppValue('ownpad', 'ownpad_etherpad_host', ''));
-        }
-
-        if($this->config->getAppValue('ownpad', 'ownpad_ethercalc_enable', 'no') !== 'no') {
-            $policy->addAllowedFrameDomain($this->config->getAppValue('ownpad', 'ownpad_ethercalc_host', ''));
-            $policy->addAllowedChildSrcDomain($this->config->getAppValue('ownpad', 'ownpad_ethercalc_host', ''));
-        }
-
-        $response->setContentSecurityPolicy($policy);
-
-        return $response;
     }
 }
