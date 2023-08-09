@@ -23,5 +23,7 @@ OC.L10N.register("ownpad", {
     "You need to enable Etherpad API if you want to create “protected” pads, that will only be accessible through Nextcloud.": "Vous devez activer l’API d’Etherpad si vous voulez pouvoir créer des pad « protégés », qui seront accessibles uniquement au travers de Nextcloud.",
     "You have to host your Etherpad instance in a subdomain or sibbling domain of the one that is used by Nextcloud (due to cookie isolation).": "Vous devez héberger votre instance Etherpad dans un sous-domaine ou un domaine frère de celui utilisé par Nextcloud (pour des questions d’isolation de cookie).",
     "For example, if you host your Etherpad instance on `pad.example.org` and your Nextcloud instance on `cloud.example.org` you need to configure your cookie to `example.org` domain.": "Par exemple, si vous hébergez votre instance Etherpad sur `pad.example.org` et que votre instance Nextcloud est sur `cloud.example.org`, you devez configurer le cookie avec comme valeur le domaine `example.org`.",
-    "Your Etherpad/Ethercalc document could not be opened: the URL specified in your file does not match the allowed server.": "Votre document Etherpad/Ethercalc n’a pas pu être ouvert : l’URL contenue dans votre fichier ne correspond pas avec le serveur autorisé"
+    "Your Etherpad/Ethercalc document could not be opened, the following error was reported: “%s”.": "Votre document Etherpad/Ethercalc n’a pas pu être ouvert, l’erreur suivante a été retournée: « %s ».",
+    "URL in your Etherpad/Ethercalc document does not match the allowed server": "l’URL contenue dans votre fichier ne correspond pas avec le serveur autorisé",
+    "You are not allowed to open this pad.": "Vous n’êtes pas autorisés à ouvrir ce pad",
 });

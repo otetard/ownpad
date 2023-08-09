@@ -5,6 +5,7 @@ $urlGenerator = $_['urlGenerator'];
 $version = $_['ownpad_version'];
 $url = $_['url'];
 $title = $_['title'];
+$error = $_['error'];
 ?>
 <!DOCTYPE html>
 <html style="height: 100%;">
@@ -16,7 +17,7 @@ $title = $_['title'];
       <span>Title</span><strong><?php p($title); ?></strong>
     </div>
     <div style="background-color: white; height: 100%; width: 100%;">
-      <p><?php p($l->t("Your Etherpad/Ethercalc document could not be opened: the URL specified in your file does not match the allowed server.")); ?></p>
+     <p><?php p($l->t("Your Etherpad/Ethercalc document could not be opened, the following error was reported: “%s”.", [$error])); ?></p>
     </div>
   </body>
 </html>

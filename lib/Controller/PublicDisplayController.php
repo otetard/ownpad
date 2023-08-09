@@ -98,6 +98,7 @@ class PublicDisplayController extends Controller {
             return new TemplateResponse($this->appName, 'viewer', $params, 'blank');
         }
         catch(OwnpadException $e) {
+            $params["error"] = $e->getMessage();
             return new TemplateResponse($this->appName, 'noviewer', $params, 'blank');
         }
 
