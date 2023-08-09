@@ -1,4 +1,4 @@
-Ownpad (0.9.0):
+Ownpad (0.9.0-beta.1):
 * **Enhancement**: Configure MIME type and add icon for Etherpad & Ethercalc documents. This is heavily inspired by [`drawio-nextcloud`][drawio] and [`files_mindmap`][mindmap] Nextcloud applications.
 * **Enhancement**: Add support for shared pad/calc documents.
 * **Enhancement**: Increase the size of random pad/calc names and make the size variable (from 32 to 64 characters).
