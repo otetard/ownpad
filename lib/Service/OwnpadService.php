@@ -17,7 +17,7 @@ class OwnpadService {
 
     public function create($dir, $padname, $type, $protected) {
         // Generate a random pad name
-        $token = \OC::$server->getSecureRandom()->generate(16, \OCP\Security\ISecureRandom::CHAR_LOWER.\OCP\Security\ISecureRandom::CHAR_DIGITS);
+        $token = \OC::$server->getSecureRandom()->generate(rand(32, 64), \OCP\Security\ISecureRandom::CHAR_LOWER.\OCP\Security\ISecureRandom::CHAR_DIGITS);
 
         $l10n = \OC::$server->getL10N('ownpad');
         $l10n_files = \OC::$server->getL10N('files');
