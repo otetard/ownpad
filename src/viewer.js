@@ -14,7 +14,8 @@ OCA.Viewer.registerHandler({
     id: 'ownpad',
 
     mimes: [
-	'application/x-ownpad',
+        'application/x-ownpad',
+        'application/x-ownpad-calc',
     ],
 
     component: Ownpad,

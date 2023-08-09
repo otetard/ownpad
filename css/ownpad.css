@@ -75,11 +75,10 @@
 }
 
 .icon-filetype-etherpad {
-    background-image:  url("../img/etherpad-lite.ico");
+    background-image:  url("../img/pad.svg");
     background-size:  16px;
 }
 .icon-filetype-ethercalc {
-    background-image:  url("../img/ethercalc.ico");
+    background-image:  url("../img/calc.svg");
     background-size:  16px;
 }
-

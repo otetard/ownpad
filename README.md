@@ -16,7 +16,7 @@ In order to make Ownpad work, go to the configuration panel (Settings /
 Admininstration / Additional Settings) and fill in the necessary data
 within the “Ownpad (collaborative documents)” section.
 
-**Set a Etherpad Host:**  
+**Set a Etherpad Host:**
 To be able to process the document, you must configure a Host. [Find more public providers at the Etherpad-Lite wiki](https://github.com/ether/etherpad-lite/wiki/Sites-that-run-Etherpad-Lite)
 
 *Example:*
@@ -28,24 +28,50 @@ Note that most browsers will only display the content if both Nextcloud and Ethe
 Afterwards, the “pad” and/or “calc” items will be available in the “+”
 menu from the “File” app.
 
-## Mimetype detection
+## Mimetype Detection
 
-Unfortunately, apps can’t declare new mimetypes on the fly. To make
-Ownpad work properly, you need to add two new mimetypes in the
-`mimetypemapping.json` file (at Nextcloud level).
+### Automatic Configuration
 
-To proceed, just copy `/resources/config/mimetypemapping.dist.json` to
-`/config/mimetypemapping.json` (in the `config/` folder at Nextcloud’s
-root directory; the file should be stored next to the `config.php`
-file).
+Ownpad now automatically tries to register MIME types by editing
+`/config/mimetypemapping.json` and `/config/mimetypealiases.json`
+files. To do so, the `config` directory should be editable by the user
+used to execute the PHP code.
+
+### Manual Configuration
+
+This step can also be done manually.
+
+First, you should add the following content in the `/config/mimetypealiases.json` file:
+
+```json
+{
+    "application/x-ownpad": "pad",
+    "application/x-ownpad-calc": "calc"
+}
+```
+
+Then, you should add the following content in the `/config/mimetypemapping.json` file:
+
+```json
+{
+    "pad": ["application/x-ownpad"],
+    "calc": ["application/x-ownpad-calc"]
+}
+```
 
 For the [snap-distribution of Nextcloud](https://github.com/nextcloud/nextcloud-snap) the template file can be found under `/snap/nextcloud/current/htdocs/resources/config/mimetypemapping.dist.json` and the active config-folder by default is `/var/snap/nextcloud/current/nextcloud/config/`.
 
-Afterwards add the two following lines just after the “_comment”
-lines.
+Then you should copy the MIME type icons from Ownpad to the Nextcloud core:
 
-    "pad": ["application/x-ownpad"],
-    "calc": ["application/x-ownpad"],
+```
+cp apps/ownpad/img/{calc,pad}.svg core/img/filetypes
+```
+
+Finally, you should update the `mimetypelist.js` file using the following command:
+
+```
+php occ maintenance:mimetype:update-js
+```
 
 If all other mimetypes are not working properly, just run the
 following command:
@@ -60,9 +86,9 @@ For the snap-distribution that is
 
 ### HTTP Auth
 
-Basic HTTP auth enabled on the Etherpad webserver is compatible with 
-Ownpad. If this is used then the user will simply be prompted to enter 
-login credentials by their browser when they try to access a pad from 
+Basic HTTP auth enabled on the Etherpad webserver is compatible with
+Ownpad. If this is used then the user will simply be prompted to enter
+login credentials by their browser when they try to access a pad from
 within Nextcloud.
 
 ### Etherpad-managed auth

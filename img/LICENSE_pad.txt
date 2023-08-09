@@ -1,0 +1,5 @@
+Files: pad.svg
+
+Licence: Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0), http://creativecommons.org/licenses/by-sa/3.0/
+Copyright: Marcel Klehr
+Source: https://github.com/ether/ether.github.com/

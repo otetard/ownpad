@@ -1,5 +1,9 @@
 Ownpad (0.9.0):
+* **Enhancement**: Configure MIME type and add icon for Etherpad & Ethercalc documents. This is heavily inspired by [`drawio-nextcloud`][drawio] and [`files_mindmap`][mindmap] Nextcloud applications.
 * **Fix**: Add white background in pad/calc’s main iframe.
+
+[drawio]: https://github.com/jgraph/drawio-nextcloud
+[mindmap]: https://github.com/ACTom/files_mindmap
 
 Ownpad (0.8.1):
 * **Fix**: Reintroduce autoloading of EtherpadLiteClient third-party library (thanks to @e1mo for the feeback!).

@@ -30,7 +30,11 @@
     <post-migration>
       <step>OCA\Ownpad\Migration\MigrateSettings</step>
       <step>OCA\Ownpad\Migration\ConfigPublicEnable</step>
+      <step>OCA\Ownpad\Migration\RegisterMimeType</step>
     </post-migration>
+    <uninstall>
+      <step>OCA\Ownpad\Migration\UnregisterMimeType</step>
+    </uninstall>
   </repair-steps>
   <settings>
     <admin>OCA\Ownpad\Settings\AdminSettings</admin>
