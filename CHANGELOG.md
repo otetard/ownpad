@@ -1,3 +1,6 @@
+Ownpad (0.9.0):
+* **Fix**: Add white background in pad/calc’s main iframe.
+
 Ownpad (0.8.1):
 * **Fix**: Reintroduce autoloading of EtherpadLiteClient third-party library (thanks to @e1mo for the feeback!).
 

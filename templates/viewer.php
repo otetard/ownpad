@@ -15,6 +15,6 @@ $title = $_['title'];
     <div id="ownpad_bar">
       <span>Title</span><strong><?php p($title); ?></strong><span><a target="_parent" href="<?php p($url); ?>"><?php p($url); ?></a></span>
     </div>
-    <iframe frameborder="0" id="ownpad_frame" style="overflow:hidden;width:100%;height:100%;display:block;" height="100%" width="100%" src="<?php p($url); ?>"></iframe>
+    <iframe frameborder="0" id="ownpad_frame" style="overflow:hidden;width:100%;height:100%;display:block;background-color:white;" height="100%" width="100%" src="<?php p($url); ?>"></iframe>
   </body>
 </html>
