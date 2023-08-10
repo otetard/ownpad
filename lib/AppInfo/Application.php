@@ -11,45 +11,45 @@
 
 namespace OCA\Ownpad\AppInfo;
 
-use OCA\Ownpad\Listeners\LoadViewerListener;
-use OCA\Ownpad\Listeners\LoadPublicViewerListener;
-use OCA\Ownpad\Listeners\CSPListener;
-
-use OCP\Security\CSP\AddContentSecurityPolicyEvent;
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
+use OCA\Ownpad\Listeners\CSPListener;
+use OCA\Ownpad\Listeners\LoadPublicViewerListener;
+
+use OCA\Ownpad\Listeners\LoadViewerListener;
 use OCA\Viewer\Event\LoadViewer;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
-use OCP\EventDispatcher\IEventDispatcher;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Security\CSP\AddContentSecurityPolicyEvent;
 use OCP\Util;
 
 class Application extends App implements IBootstrap {
-    public const APP_ID = 'ownpad';
+	public const APP_ID = 'ownpad';
 
-    public function __construct() {
-        parent::__construct(self::APP_ID);
+	public function __construct() {
+		parent::__construct(self::APP_ID);
 
-        $dispatcher = $this->getContainer()->query(IEventDispatcher::class);
-        $dispatcher->addListener(
-            LoadAdditionalScriptsEvent::class,
-            function() {
-                Util::addStyle('ownpad', 'ownpad');
-                Util::addScript('ownpad', 'ownpad-main');
-            }
-        );
-    }
+		$dispatcher = $this->getContainer()->query(IEventDispatcher::class);
+		$dispatcher->addListener(
+			LoadAdditionalScriptsEvent::class,
+			function () {
+				Util::addStyle('ownpad', 'ownpad');
+				Util::addScript('ownpad', 'ownpad-main');
+			}
+		);
+	}
 
-    public function register(IRegistrationContext $context): void {
-        require_once __DIR__ . '/../../3rdparty/autoload.php';
+	public function register(IRegistrationContext $context): void {
+		require_once __DIR__ . '/../../3rdparty/autoload.php';
 
-        $context->registerEventListener(LoadViewer::class, LoadViewerListener::class);
-        $context->registerEventListener(BeforeTemplateRenderedEvent::class, LoadPublicViewerListener::class);
-        $context->registerEventListener(AddContentSecurityPolicyEvent::class, CSPListener::class);
-    }
+		$context->registerEventListener(LoadViewer::class, LoadViewerListener::class);
+		$context->registerEventListener(BeforeTemplateRenderedEvent::class, LoadPublicViewerListener::class);
+		$context->registerEventListener(AddContentSecurityPolicyEvent::class, CSPListener::class);
+	}
 
-    public function boot(IBootContext $context): void {
-    }
+	public function boot(IBootContext $context): void {
+	}
 }

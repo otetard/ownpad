@@ -18,10 +18,10 @@ use OCP\EventDispatcher\IEventListener;
 use OCP\Util;
 
 class LoadViewerListener implements IEventListener {
-    public function handle(Event $event): void {
-        if (!$event instanceof LoadViewer) {
-            return;
-        }
-        Util::addScript(Application::APP_ID, 'ownpad-viewer', 'viewer');
-    }
+	public function handle(Event $event): void {
+		if (!$event instanceof LoadViewer) {
+			return;
+		}
+		Util::addScript(Application::APP_ID, 'ownpad-viewer', 'viewer');
+	}
 }
