@@ -34,10 +34,10 @@
 </script>
 
 <style lang="scss" scoped>
- iframe {
-     position: absolute;
-     top: 0;
-     width: 100%;
-     height: calc(100vh - var(--header-height));
- }
+iframe {
+	position: absolute;
+	top: 0;
+	width: 100%;
+	height: calc(100vh - var(--header-height));
+}
 </style>
