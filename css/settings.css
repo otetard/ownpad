@@ -9,16 +9,16 @@
  */
 
 #ownpad-saved-message {
-    margin: 15px 0;
-    display: none;
+	margin: 15px 0;
+	display: none;
 }
 
 #ownpad .indent {
-    padding-left: 28px;
+	padding-left: 28px;
 }
 
 #ownpad .double-indent {
-    padding-left: 56px;
+	padding-left: 56px;
 }
 
 input#ownpad_etherpad_host,
@@ -26,5 +26,5 @@ input#ownpad_ethercalc_host,
 input#ownpad_etherpad_apikey,
 input#ownpad_etherpad_cookie_domain
 {
-    width: 300px;
+	width: 300px;
 }

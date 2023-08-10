@@ -24,8 +24,11 @@
     "stylelint:fix": "stylelint src css --fix"
   },
   "dependencies": {
+    "@nextcloud/auth": "^2.1.0",
+    "@nextcloud/axios": "^2.4.0",
     "@nextcloud/logger": "^2.5.0",
-    "@nextcloud/router": "^2.1.2"
+    "@nextcloud/router": "^2.1.2",
+    "jquery": "^3.7.0"
   },
   "browserslist": [
     "extends @nextcloud/browserslist-config"

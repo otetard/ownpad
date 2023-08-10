@@ -9,35 +9,35 @@
 -->
 
 <template>
-    <iframe :src="iframeSrc" />
+	<iframe :src="iframeSrc" />
 </template>
 
 <script>
- import { generateUrl } from '@nextcloud/router'
+import { generateUrl } from '@nextcloud/router'
 
- export default {
-     name: 'Ownpad',
+export default {
+	name: 'Ownpad',
 
-     computed: {
-         iframeSrc() {
-             return generateUrl('/apps/ownpad/?file={file}', {file: this.filename});
-         },
-     },
+	computed: {
+		iframeSrc() {
+			return generateUrl('/apps/ownpad/?file={file}', { file: this.filename })
+		},
+	},
 
-     async mounted() {
-         this.doneLoading()
-         this.$nextTick(function() {
-             this.$el.focus()
-         })
-     },
- }
+	async mounted() {
+		this.doneLoading()
+		this.$nextTick(function() {
+			this.$el.focus()
+		})
+	},
+}
 </script>
 
 <style lang="scss" scoped>
- iframe {
-     position: absolute;
-     top: 0;
-     width: 100%;
-     height: calc(100vh - var(--header-height));
- }
+iframe {
+	position: absolute;
+	top: 0;
+	width: 100%;
+	height: calc(100vh - var(--header-height));
+}
 </style>

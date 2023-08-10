@@ -8,58 +8,59 @@
  * @copyright Olivier Tétard <olivier.tetard@miskin.fr>, 2017
  */
 
-(function (window, document, $) {
-    'use strict';
+import * as $ from 'jquery';
 
-    $(document).ready(function() {
-        var savedMessage = $('#ownpad-saved-message');
+(function(window, document, $) {
+	'use strict'
 
-        var saved = function () {
-            if (savedMessage.is(':visible')) {
-                savedMessage.hide();
-            }
+	$(document).ready(function() {
+		const savedMessage = $('#ownpad-saved-message')
 
-            savedMessage.fadeIn(function () {
-                setTimeout(function () {
-                    savedMessage.fadeOut();
-                }, 5000);
-            });
-        };
+		const saved = function() {
+			if (savedMessage.is(':visible')) {
+				savedMessage.hide()
+			}
 
-        $('#ownpad_settings input').change(function() {
-            var value = $(this).val();
+			savedMessage.fadeIn(function() {
+				setTimeout(function() {
+					savedMessage.fadeOut()
+				}, 5000)
+			})
+		}
 
-            if($(this).attr('type') === 'checkbox') {
-                if (this.checked) {
-                    value = 'yes';
-                } else {
-                    value = 'no';
-                }
-            }
+		$('#ownpad_settings input').change(function() {
+			let value = $(this).val()
 
-            OC.AppConfig.setValue('ownpad', $(this).attr('name'), value);
-            saved();
-        });
+			if ($(this).attr('type') === 'checkbox') {
+				if (this.checked) {
+					value = 'yes'
+				} else {
+					value = 'no'
+				}
+			}
 
-        $('#ownpad_etherpad_enable').change(function() {
-            $("#ownpad_etherpad_settings").toggleClass('hidden', !this.checked);
+			OC.AppConfig.setValue('ownpad', $(this).attr('name'), value)
+			saved()
+		})
 
-            if(this.checked && $("#ownpad_etherpad_useapi").is(":checked")) {
-                $("#ownpad_etherpad_useapi_settings").removeClass('hidden');
-            }
-            else {
-                $("#ownpad_etherpad_useapi_settings").addClass('hidden');
-            }
+		$('#ownpad_etherpad_enable').change(function() {
+			$('#ownpad_etherpad_settings').toggleClass('hidden', !this.checked)
 
-        });
+			if (this.checked && $('#ownpad_etherpad_useapi').is(':checked')) {
+				$('#ownpad_etherpad_useapi_settings').removeClass('hidden')
+			} else {
+				$('#ownpad_etherpad_useapi_settings').addClass('hidden')
+			}
 
-        $('#ownpad_etherpad_useapi').change(function() {
-            $("#ownpad_etherpad_useapi_settings").toggleClass('hidden', !this.checked);
-        });
+		})
 
-        $('#ownpad_ethercalc_enable').change(function() {
-            $("#ownpad_ethercalc_settings").toggleClass('hidden', !this.checked);
-        });
-    });
+		$('#ownpad_etherpad_useapi').change(function() {
+			$('#ownpad_etherpad_useapi_settings').toggleClass('hidden', !this.checked)
+		})
 
-}(window, document, jQuery));
+		$('#ownpad_ethercalc_enable').change(function() {
+			$('#ownpad_ethercalc_settings').toggleClass('hidden', !this.checked)
+		})
+	})
+
+}(window, document, $))
