@@ -56,10 +56,10 @@ stylelint-fix:
 
 # Php linting
 cslint:
-	composer run cs:check
+	php composer.phar run cs:check
 
 cslint-fix:
-	composer run cs:fix
+	php composer.phar run cs:fix
 
 # Cleaning
 clean:
