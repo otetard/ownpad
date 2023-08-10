@@ -11,12 +11,12 @@
 import Ownpad from './views/Ownpad.vue'
 
 OCA.Viewer.registerHandler({
-    id: 'ownpad',
+	id: 'ownpad',
 
-    mimes: [
-        'application/x-ownpad',
-        'application/x-ownpad-calc',
-    ],
+	mimes: [
+		'application/x-ownpad',
+		'application/x-ownpad-calc',
+	],
 
-    component: Ownpad,
-});
+	component: Ownpad,
+})
