@@ -8,6 +8,8 @@
  * @copyright Olivier Tétard <olivier.tetard@miskin.fr>, 2017
  */
 
+import * as $ from 'jquery';
+
 (function(window, document, $) {
 	'use strict'
 
@@ -61,4 +63,4 @@
 		})
 	})
 
-}(window, document, jQuery))
+}(window, document, $))

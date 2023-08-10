@@ -8,6 +8,10 @@
  * @copyright Olivier Tétard <olivier.tetard@miskin.fr>, 2017
  */
 
+import { getCurrentUser } from '@nextcloud/auth'
+import { generateUrl } from '@nextcloud/router'
+import axios from '@nextcloud/axios'
+
 (function(OCA) {
 
 	const FilesOwnpadMenu = function() {
@@ -24,14 +28,13 @@
 		initialize() {
 			const self = this
 
-			if (OC.getCurrentUser().uid !== null) {
-				$.ajax({
-					url: OC.generateUrl('/apps/ownpad/ajax/v1.0/getconfig'),
-				}).done(function(result) {
-					self._etherpadEnabled = result.data.ownpad_etherpad_enable === 'yes'
-					self._etherpadPublicEnabled = result.data.ownpad_etherpad_public_enable === 'yes'
-					self._etherpadAPIEnabled = result.data.ownpad_etherpad_useapi === 'yes'
-					self._ethercalcEnabled = result.data.ownpad_ethercalc_enable === 'yes'
+			if (getCurrentUser().uid !== null) {
+			    axios.get(generateUrl('/apps/ownpad/ajax/v1.0/getconfig')).then(function(result) {
+					const data = result.data.data
+					self._etherpadEnabled = data.ownpad_etherpad_enable === 'yes'
+					self._etherpadPublicEnabled = data.ownpad_etherpad_public_enable === 'yes'
+					self._etherpadAPIEnabled = data.ownpad_etherpad_useapi === 'yes'
+					self._ethercalcEnabled = data.ownpad_ethercalc_enable === 'yes'
 					OC.Plugins.register('OCA.Files.NewFileMenu', self)
 				})
 			}
@@ -84,27 +87,25 @@
 			}
 		},
 
-		_createPad(type, filename, is_protected) {
-			// Default value for `is_protected`.
-			var is_protected = typeof is_protected !== 'undefined' ? is_protected : false
-
-			const self = this
+		_createPad(type, filename, isProtected) {
+			// Default value for `isProtected`.
+			isProtected = typeof isProtected !== 'undefined' ? isProtected : false
 
 			OCA.Files.Files.isFileNameValid(filename)
 			filename = FileList.getUniqueName(filename)
 
-			$.post(
-				OC.generateUrl('/apps/ownpad/ajax/v1.0/newpad'), {
-					dir: OCA.Files.App.currentFileList.getCurrentDirectory(),
-					padname: filename,
-					type,
-					protected: is_protected,
-				},
+		    axios.post(generateUrl('/apps/ownpad/ajax/v1.0/newpad'), {
+				dir: OCA.Files.App.currentFileList.getCurrentDirectory(),
+				padname: filename,
+				type,
+				protected: isProtected,
+		    }).then(
 				function(result) {
-					if (result.status == 'success') {
-						FileList.add(result.data, { animate: true, scrollTo: true })
+					const data = result.data.data
+					if (result.status === 200) {
+						FileList.add(data, { animate: true, scrollTo: true })
 					} else {
-						OC.dialogs.alert(result.data.message, t('core', 'Could not create file'))
+						OC.dialogs.alert(data.message, t('core', 'Could not create file'))
 					}
 				}
 			)
@@ -113,8 +114,8 @@
 
 	// Only initialize the Ownpad menu when user is logged in and
 	// using the “files” app.
-	$(document).ready(function() {
-		if ($('#filesApp').val()) {
+	document.addEventListener('DOMContentLoaded', function() {
+		if (document.getElementById('filesApp').value) {
 			OCA.FilesOwnpadMenu = new FilesOwnpadMenu()
 		}
 	})
