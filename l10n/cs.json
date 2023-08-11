@@ -1,0 +1,8 @@
+{ "translations": {
+    "Share not found" : "Sdílení nenalezeno",
+    "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Neplatný název, znaky '\\', '/', '<', '>', ':', '\"', '|', '?' a '*' nejsou povoleny.",
+    "The target folder has been moved or deleted." : "Cílový adresář byl přesunuta nebo smazán.",
+    "Could not create file" : "Nepodařilo se vytvořit soubor",
+    "Saved" : "Uloženo"
+},"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"
+}

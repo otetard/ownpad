@@ -1,0 +1,7 @@
+{ "translations": {
+    "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Yalnış ad, '\\', '/', '<', '>', ':', '\"', '|', '?' və '*' qəbul edilmir.",
+    "The target folder has been moved or deleted." : "Mənsəbdə olan qovluqun ünvanı dəyişib yada silinib.",
+    "Could not create file" : "Faylı yaratmaq olmur",
+    "Saved" : "Saxlanıldı"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

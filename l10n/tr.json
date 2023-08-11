@@ -1,0 +1,8 @@
+{ "translations": {
+    "Share not found" : "Paylaşım bulunamadı",
+    "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Geçersiz isim. '\\', '/', '<', '>', ':', '\"', '|', '?' ve '*' karakterlerine izin verilmemektedir.",
+    "The target folder has been moved or deleted." : "Hedef klasör taşındı ya da silindi.",
+    "Could not create file" : "Dosya oluşturulamadı",
+    "Saved" : "Kaydedildi"
+},"pluralForm" :"nplurals=2; plural=(n > 1);"
+}
