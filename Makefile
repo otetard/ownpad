@@ -80,6 +80,7 @@ appstore:
 	$(project_directory)/img \
 	$(project_directory)/js \
 	$(project_directory)/lib \
+	$(project_directory)/fonts \
 	$(project_directory)/templates \
 	$(project_directory)/README.md \
 	$(project_directory)/COPYING \

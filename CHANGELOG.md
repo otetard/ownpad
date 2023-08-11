@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+
+- Add `fonts/` directory in the generated `tar.gz` when calling `make appstore`
+
 ## 0.9.0-beta.2 - 2023-08-11
 
 ### Changed
