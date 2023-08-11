@@ -1,147 +1,310 @@
-Ownpad (0.9.0-beta.1):
-* **Enhancement**: Configure MIME type and add icon for Etherpad & Ethercalc documents. This is heavily inspired by [`drawio-nextcloud`][drawio] and [`files_mindmap`][mindmap] Nextcloud applications.
-* **Enhancement**: Add support for shared pad/calc documents.
-* **Enhancement**: Increase the size of random pad/calc names and make the size variable (from 32 to 64 characters).
-* **Fix**: Add white background in pad/calc’s main iframe.
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## 0.9.0-beta.1 - 2023-08-10
+
+### Added
+
+- Configure MIME type and add icon for Etherpad & Ethercalc documents. This is heavily inspired by [`drawio-nextcloud`][drawio] and [`files_mindmap`][mindmap] Nextcloud applications.
+- Add support for shared pad/calc documents.
+- Increase the size of random pad/calc names and make the size variable (from 32 to 64 characters).
 
 [drawio]: https://github.com/jgraph/drawio-nextcloud
 [mindmap]: https://github.com/ACTom/files_mindmap
 
-Ownpad (0.8.1):
-* **Fix**: Reintroduce autoloading of EtherpadLiteClient third-party library (thanks to @e1mo for the feeback!).
+### Fixed
 
-Ownpad (0.8.0):
-* **Enhancement**: Rely on Files viewer to open pad and calc files.
-* **Enhancement**: Add Nextcloud 26, 27 and 28 compatibility.
-* **Refactoring**: Use Webpack to minify Javascript files.
+- Add white background in pad/calc’s main iframe.
 
-Ownpad (0.7.1):
-* **Fix**: Update the way we identify the current directory (don’t rely [on now removed `#dir`](https://github.com/nextcloud/server/pull/33373)).
+## 0.8.1 - 2023-08-08
 
-Ownpad (0.7.0):
-* **Fix**: Add Nextcloud 25 compatibility.
-* **Enhancement**: Improve style of the top bar when opening a pad (thanks to @fenglisch!)
+### Fixed
 
-Ownpad (0.6.18):
-* **Fix**: Add Nextcloud 24 compatibility.
+- Reintroduce autoloading of EtherpadLiteClient third-party library (thanks to @e1mo for the feeback!).
 
-Ownpad (0.6.17):
-* **Fix**: Add Nextcloud 23 compatibility.
+## 0.8.0 - 2023-08-07
 
-Ownpad (0.6.16):
-* **Fix**: Add Nextcloud 21 compatibility.
+### Changed
 
-Ownpad (0.6.15):
-* **Fix**: Add Nextcloud 19 compatibility (no changes; thanks @sim6).
+- Rely on Files viewer to open pad and calc files.
+- Add Nextcloud 26, 27 and 28 compatibility.
+- Use Webpack to minify Javascript files.
 
-Ownpad (0.6.14):
-* **Fix**: Add Nextcloud 17 & 18 compatibility (no changes)
+## 0.7.1 - 2022-11-13
 
-Ownpad (0.6.13):
-* **Fix**: Add Nextcloud 16 compatibility (no changes)
+### Fixed
 
-Ownpad (0.6.12):
-* **Fix**: fix regexp used to enable protected pads by removing trailing slash from EPL hostname.
+- Update the way we identify the current directory (don’t rely [on now removed `#dir`](https://github.com/nextcloud/server/pull/33373)).
 
-Ownpad (0.6.11):
-* **Fix**: fix public pad creation if Etherpad API is not used.
+## 0.7.0 - 2022-11-13
 
-Ownpad (0.6.10):
-* **Enhancement**: ownpad should work fine with Nextcloud 15.
+### Changed
 
-Ownpad (0.6.9):
-* **Enhancement**: use API to create unprotected pads (thanks @m0urs).
-* **Fix**: remove deprecated method `getMediumStrengthGenerator` (thanks @rullzer).
-* **Fix**: only use lower case in pad and calc names to prevent an issue with Ethercalc (thanks @dtygel)
-* **Fix**: update `README.md` to make more explicit that this app is no more than doing links to Etherpad/Ethercalc.
+- Add Nextcloud 25 compatibility.
+- Improve style of the top bar when opening a pad (thanks to @fenglisch!)
 
-Ownpad (0.6.8):
-* **Fix**: update previous fix to let Ownpad be also compatible with NC 13.
+## 0.6.18 - 2022-05-20
 
-Ownpad (0.6.7):
-* **Enhancement**: remove deprecated code calls and let Ownpad be compatible with Nextcloud 14.
+### Changed
 
-Ownpad (0.6.6):
-* **Enhancement**: add option to disable non-protected 'public' pads.
-* **Enhancement**: use proper icons of etherpad-lite and ethercalc.
+- Add Nextcloud 24 compatibility.
 
-Ownpad (0.6.5):
-* **Bugfix**: fix UI with Nextcloud 13 (thanks @frissdiegurke).
-* **Enhancement**: enhance settings page.
+## 0.6.17 - 2022-01-21
 
-Ownpad (0.6.4):
-* **Bugfix**: fix protected pads (thanks @frissdiegurke).
-* **Enhancement**: replace ownCloud by Nextcloud.
+### Changed
 
-Ownpad (0.6.3):
-* **Enhancement**: move application to the `office` section on Nextcloud app store.
-* **Bugfix**: update message displayed when pad/calc URL doesn’t match configuration.
-* **Bugfix**: when applying migration, don’t forget to check version…
+- Add Nextcloud 23 compatibility.
 
-Ownpad (0.6.2):
-* **Enhancement**: make app compatible with Nextcloud 13 (and drop ownCloud support).
-* **Enhancement**: finish code refactoring (`app.php` moved to `Application` class).
-* **Bugfix**: don’t forget to load JavaScript code on the settings page.
+## 0.6.16 - 2021-03-24
 
-Ownpad (0.6.1):
-* **Enhancement**: move internal logic to a new OwnpadService class.
-* **Bugfix**: fix regression introduced in previous version (bb3f3199c44d35b21a45d1ae6dd5524853f401cf).
+### Changed
 
-Ownpad (0.6.0):
-* **Enhancement**: support for Etherpad API (experimental, incomplete and probably not totally secure) which allows to create private pads.
-* **Enhancement**: refactor app to use AppFramework.
-* **Bugfix**: remove deprecated code (thanks @MorrisJobke!).
+- Add Nextcloud 21 compatibility.
 
-Ownpad (0.5.10)
-* **Bugfix**: fix HTML code in template settings (thanks to KTim21).
-* **Bugfix**: change Etherpad/Ethercalc instances hints on the configuration page.
-* **Bugfix**: fix “multisheet support” for Ethercalc.
-* **Bugfix**: fix Ethercalc URL validation.
-* **Bugfix**: fix HTML code in the `noviewer.php` template.
+## 0.6.15 - 2020-09-02
 
-Ownpad (0.5.9)
-* **Enhancement**: check for valid URL in pads/calcs to prevent bad redirections (thanks to Stephan Wiefling).
-* **Enhancement**: make Ownpad compatible with Nextcloud 12.
-* **Enhancement**: update documentation.
+### Changed
 
-Ownpad (0.5.8)
-* **Enhancement**: enable multisheet support for new Ethercalc.
-* **Enhancement**: update Content-Security-Policy rules.
+- Add Nextcloud 19 compatibility (no changes; thanks @sim6).
 
-Ownpad (0.5.6)
-* **Enhancement**: make Ownpad compatible with Nextcloud 11.
-* **Bugfix**: don’t call for Ownpad configuration on public pages (fixes page reload on public pages)
+## 0.6.14 - 2020-01-19
 
-Ownpad (0.5.4)
-* **Bugfix**: fix info.xml format for Nextcloud appstore.
+### Changed
 
-Ownpad (0.5.3)
-* **Enhancement**: add icon for Etherpad in the “+” menu.
-* **Enhancement**: some minor code enhacements.
-* **Bugfix**: fix upgrade code (issue was introduced in 6560a6adf1b5027dfb70c0df6eff527f4d2304f2).
+- Add Nextcloud 17 & 18 compatibility (no changes)
 
-Ownpad (0.5.2)
-* **Enhancement**: don’t display pad/calc if no URL is configured for Ownpad.
-* **Enhancement**: some minor changes (typo, etc.)
-* **Enhancement**: minor changes to the configuration page.
+## 0.6.13 - 2019-05-25
 
-Ownpad (0.5.1)
-* **Bugfix**: disable Ownpad’s mimetypes registration at application level, to prevent breaking all other mimetypes. This requires to manually add mimetypes to ownCloud’s configuration (see README.md).
+### Changed
 
-Ownpad (0.5.0)
-* **Bugfix**: fix portability to ownCloud 9.
+- Add Nextcloud 16 compatibility (no changes)
 
-Ownpad (0.4.0)
-* **Enhancement**: port code to ownCloud 9
+## 0.6.12 - 2019-02-15
 
-Ownpad (0.3.0)
-* **Bugfix**: Add Content-Security-Policy rules in order to allow the pad/calc iframe to be opened (required by ownCloud 8.1).
-* **Bugfix**: Fix the way URL are encoded to make Etherpad happy.
-* **Bugfix**: Fix the pad’s viewer size
+### Fixed
 
-Ownpad (0.2.0)
-* **Enhancement**: New pads/calcs are now handled by a specific AJAX script (`ajax/newpad.php`) that manage the file content.
-* **Enhancement**: Autosave items in configuration page, and add a confirmation message (inspired by the `news` app).
+- Fix regexp used to enable protected pads by removing trailing slash from EPL hostname.
 
-Ownpad (0.1.0)
-* First release
+## 0.6.11 - 2018-12-20
+
+### Fixed
+
+- Fix public pad creation if Etherpad API is not used.
+
+## 0.6.10 - 2018-12-19
+
+### Changed
+
+- Ownpad should work fine with Nextcloud 15.
+
+## 0.6.9 - 2018-12-11
+
+### Added
+
+- Use API to create unprotected pads (thanks @m0urs).
+
+### Changed
+
+- Update `README.md` to make more explicit that this app is no more than doing links to Etherpad/Ethercalc.
+
+### Fixed
+
+- Remove deprecated method `getMediumStrengthGenerator` (thanks @rullzer).
+- Only use lower case in pad and calc names to prevent an issue with Ethercalc (thanks @dtygel)
+
+## 0.6.8 - 2018-08-12
+
+### Fixed
+
+- Update previous fix to let Ownpad be also compatible with NC 13.
+
+## 0.6.7 - 2018-08-11
+
+### Changed
+
+- Remove deprecated code calls and let Ownpad be compatible with Nextcloud 14.
+
+## 0.6.6 - 2018-03-19
+
+### Added
+
+- Add option to disable non-protected 'public' pads.
+
+### Changed
+
+- Use proper icons of etherpad-lite and ethercalc.
+
+## 0.6.5 - 2018-02-12
+
+### Changed
+
+- Enhance settings page.
+
+### Fixed
+
+- Fix UI with Nextcloud 13 (thanks @frissdiegurke).
+
+## 0.6.4 - 2018-01-31
+
+### Changed
+
+- Replace ownCloud by Nextcloud.
+
+### Fixed
+
+Fix protected pads (thanks @frissdiegurke).
+
+## 0.6.3 - 2018-01-30
+
+### Changed
+
+- Move application to the `office` section on Nextcloud app store.
+
+### Fixed
+
+- Update message displayed when pad/calc URL doesn’t match configuration.
+- When applying migration, don’t forget to check version…
+
+## 0.6.2 - 2018-01-17
+
+### Changed
+
+- Make app compatible with Nextcloud 13 (and drop ownCloud support).
+- Finish code refactoring (`app.php` moved to `Application` class).
+
+### Fixed
+
+Don’t forget to load JavaScript code on the settings page.
+
+## 0.6.1 - 2018-01-15
+
+### Changed
+
+- Move internal logic to a new OwnpadService class.
+
+### Fixed
+
+- Fix regression introduced in previous version (bb3f3199c44d35b21a45d1ae6dd5524853f401cf).
+
+## 0.6.0 - 2018-01-14
+
+### Added
+
+- Support for Etherpad API (experimental, incomplete and probably not totally secure) which allows to create private pads.
+
+### Changed
+
+- Refactor app to use AppFramework.
+
+### Fixed
+
+- Remove deprecated code (thanks @MorrisJobke!).
+
+## 0.5.10 - 2017-05-30
+
+### Fixed
+
+- Fix HTML code in template settings (thanks to KTim21).
+- Change Etherpad/Ethercalc instances hints on the configuration page.
+- Fix “multisheet support” for Ethercalc.
+- Fix Ethercalc URL validation.
+- Fix HTML code in the `noviewer.php` template.
+
+## 0.5.9 - 2017-05-23
+
+### Added
+
+- Check for valid URL in pads/calcs to prevent bad redirections (thanks to Stephan Wiefling).
+
+### Changed
+
+- Make Ownpad compatible with Nextcloud 12.
+- Update documentation.
+
+## 0.5.8 - 2017-05-19
+
+### Added
+
+- Enable multisheet support for new Ethercalc.
+
+### Changed
+
+- update Content-Security-Policy rules.
+
+## 0.5.6 - 2016-11-19
+
+### Changed
+
+- make Ownpad compatible with Nextcloud 11.
+
+### Fixed
+
+- Don’t call for Ownpad configuration on public pages (fixes page reload on public pages)
+
+## 0.5.4 - 2016-10-06
+
+### Fixed
+
+- Fix `info.xml` format for Nextcloud appstore.
+
+## 0.5.3 - 2016-09-12
+
+### Added
+
+- Add icon for Etherpad in the “+” menu.
+
+### Changed
+
+- Some minor code enhacements.
+
+### Fixed
+
+- Fix upgrade code (issue was introduced in 6560a6adf1b5027dfb70c0df6eff527f4d2304f2).
+
+## 0.5.2 - 2016-08-02
+
+### Changed
+
+- Don’t display pad/calc if no URL is configured for Ownpad.
+- Some minor changes (typo, etc.)
+- Minor changes to the configuration page.
+
+## 0.5.1 - 2016-07-26
+
+### Fixed
+
+- Disable Ownpad’s mimetypes registration at application level, to prevent breaking all other mimetypes. This requires to manually add mimetypes to ownCloud’s configuration (see README.md).
+
+## 0.5.0 - 2016-03-09
+
+### Changed
+
+- Fix portability to ownCloud 9.
+
+## 0.4.0 - 2015-10-30
+
+### Changed
+
+- Port code to ownCloud 9
+
+## 0.3.0 - 2015-07-07
+
+### Changed
+
+- Add Content-Security-Policy rules in order to allow the pad/calc iframe to be opened (required by ownCloud 8.1).
+
+### Fixed
+
+- Fix the way URL are encoded to make Etherpad happy.
+- Fix the pad’s viewer size
+
+## 0.2.0 - 2015-05-26
+
+### Added
+
+- Autosave items in configuration page, and add a confirmation message (inspired by the `news` app).
+
+### Changed
+
+- New pads/calcs are now handled by a specific AJAX script (`ajax/newpad.php`) that manage the file content.
