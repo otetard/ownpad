@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.9.0-beta.2 - 2023-08-11
+
+### Changed
+
+- Configure and apply linters (PHP, JS, CSS).
+- Configure Transifex translations.
+
 ## 0.9.0-beta.1 - 2023-08-10
 
 ### Added
