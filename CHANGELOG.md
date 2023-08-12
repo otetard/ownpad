@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## 0.9.1
+
 ### Fixed
 
 - Add `3rdparty/` directory in the generated `tar.gz` when calling `make appstore`.
