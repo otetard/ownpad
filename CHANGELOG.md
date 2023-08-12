@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## 0.9.2
+
+### Fixed
+
+- Make `appinfo/info.xml` a valid XML file
+
 ## 0.9.1
 
 ### Fixed
