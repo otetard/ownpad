@@ -53,7 +53,6 @@ class AjaxController extends Controller {
 		$dir = isset($dir) ? '/'.trim($dir, '/\\') : '';
 		$padname = isset($padname) ? trim($padname, '/\\') : '';
 		$type = isset($type) ? trim($type, '/\\') : '';
-		$protected = isset($protected) && $protected === 'true' ? true : false;
 
 		try {
 			$data = $this->service->create($dir, $padname, $type, $protected);

@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix protected pad creation that was was broken since 0.9.0.
+
 ## 0.9.3
 
 ### Fixed
