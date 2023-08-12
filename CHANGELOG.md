@@ -8,14 +8,7 @@ All notable changes to this project will be documented in this file.
 
 - Add `fonts/` directory in the generated `tar.gz` when calling `make appstore`
 
-## 0.9.0-beta.2 - 2023-08-11
-
-### Changed
-
-- Configure and apply linters (PHP, JS, CSS).
-- Configure Transifex translations.
-
-## 0.9.0-beta.1 - 2023-08-10
+## 0.9.0
 
 ### Added
 
@@ -25,6 +18,11 @@ All notable changes to this project will be documented in this file.
 
 [drawio]: https://github.com/jgraph/drawio-nextcloud
 [mindmap]: https://github.com/ACTom/files_mindmap
+
+### Changed
+
+- Configure and apply linters (PHP, JS, CSS).
+- Configure Transifex translations.
 
 ### Fixed
 

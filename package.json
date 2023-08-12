@@ -1,7 +1,7 @@
 {
   "name": "ownpad",
   "description": "Ownpad application for Nextcloud",
-  "version": "0.9.0-beta.2",
+  "version": "0.9.0",
   "author": "Olivier Tétard <olivier.tetard@miskin.fr>",
   "contributors": [],
   "bugs": {
