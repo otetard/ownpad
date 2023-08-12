@@ -4,10 +4,6 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-### Fixed
-
-- Add `fonts/` directory in the generated `tar.gz` when calling `make appstore`
-
 ## 0.9.0
 
 ### Added
@@ -27,6 +23,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 - Add white background in pad/calc’s main iframe.
+- Add `fonts/` directory in the generated `tar.gz` when calling `make appstore`
 
 ## 0.8.1 - 2023-08-08
 
