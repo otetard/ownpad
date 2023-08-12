@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- Add `l10/` directory in the generated `tar.gz` when calling `make appstore`.
+- Add `l10n/` directory in the generated `tar.gz` when calling `make appstore`.
 
 ## 0.9.2
 
