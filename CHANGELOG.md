@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+- Add `l10/` directory in the generated `tar.gz` when calling `make appstore`.
+
 ## 0.9.2
 
 ### Fixed
