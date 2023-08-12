@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## 0.9.4
+
+### Fixed
+
+- Fix protected pad creation that was was broken since 0.9.0.
+- Display the error message returned by the API when creating a new pad.
+
 ## 0.9.3
 
 ### Fixed

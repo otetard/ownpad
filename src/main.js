@@ -99,16 +99,14 @@ import axios from '@nextcloud/axios'
 				padname: filename,
 				type,
 				protected: isProtected,
-		    }).then(
-				function(result) {
-					const data = result.data.data
-					if (result.status === 200) {
-						FileList.add(data, { animate: true, scrollTo: true })
-					} else {
-						OC.dialogs.alert(data.message, t('core', 'Could not create file'))
-					}
-				}
-			)
+		    }).then(function(result) {
+				const data = result.data.data
+				FileList.add(data, { animate: true, scrollTo: true })
+			}
+		    ).catch(function(error) {
+				const data = error.response.data.data
+				OC.dialogs.alert(data.message, t('core', 'Could not create file'))
+			})
 		},
 	}
 

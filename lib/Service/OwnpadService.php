@@ -78,7 +78,7 @@ class OwnpadService {
 						$this->eplInstance->createPad($token);
 					}
 				} catch(Exception $e) {
-					throw new OwnpadException($l10n->t('Unable to communicate with Etherpad API.'));
+					throw new OwnpadException($l10n->t('Unable to communicate with Etherpad API due to the following error: “%s”.', [$e->getMessage()]));
 				}
 			}
 
