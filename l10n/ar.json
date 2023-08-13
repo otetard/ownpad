@@ -1,6 +1,5 @@
 { "translations": {
     "Share not found" : "مشاركة غير موجودة",
-    "Unable to communicate with Etherpad API." : "تعذّر الاتصال بـ API الخاص بـ Etherpad",
     "Incorrect padname." : "اسم الكُرّاس pad غير صحيح",
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "اسم غير صحيح , الرموز  '\\', '/', '<', '>', ':', '\"', '|', '?' و \"*\" غير مسموح استخدامها",
     "The target folder has been moved or deleted." : "المجلد المطلوب قد تم نقله او حذفه ",
@@ -9,8 +8,6 @@
     "You are not allowed to open this pad." : "غير مسموح لك بفتح هذا الكُرّاس pad.",
     "URL in your Etherpad/Ethercalc document does not match the allowed server" : "عنوان URL في كُرّاسك Etherpad/Ethercalc لا يتطابق مع الخادوم المصرح به",
     "Ownpad" : "Ownpad",
-    "\n    Create and open Etherpad and Ethercalc documents.\n  " : "\n    أنشِيءْ و افتَح مستندات Etherpad و Ethercalc.\n  ",
-    "Ownpad is a Nextcloud application that allows to create and open\n    Etherpad and Ethercalc documents.\n\n    This application requires to have access to an instance of\n    Etherpad and/or Ethercalc to work properly." : "Ownpad هو أحد تطبيقات نكست كلاود يسمح بإنشاء و فتح مستندات Etherpad و Ethercalc. \n\nيتطلب هذا التطبيق الوصول إلى خادوم Etherpad و/أو Ethercalc للعمل بشكل صحيح.",
     "Pad" : "كُرّاس نصوص Pad",
     "New pad.pad" : "كُرّاس نصوص جديد pad.pad",
     "Calc" : "كُرّاس حسابات Calc",

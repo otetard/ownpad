@@ -1,6 +1,5 @@
 { "translations": {
     "Share not found" : "Non se atopou a compartición",
-    "Unable to communicate with Etherpad API." : "Non é posíbel comunicar coa API de Etherpad.",
     "Incorrect padname." : "Nome de caderno incorrecto.",
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Nome incorrecto, non se permite «\\», «/», «<», «>», «:», «\"», «|», «?» e «*».",
     "The target folder has been moved or deleted." : "O cartafol de destino foi movido ou eliminado.",
@@ -9,8 +8,6 @@
     "You are not allowed to open this pad." : "Non ten permiso para abrir este caderno.",
     "URL in your Etherpad/Ethercalc document does not match the allowed server" : "O URL do seu documento Etherpad/Ethercalc non coincide co servidor permitido",
     "Ownpad" : "Ownpad",
-    "\n    Create and open Etherpad and Ethercalc documents.\n  " : "\n    Crear e abrir documentos Etherpad e Ethercalc.\n  ",
-    "Ownpad is a Nextcloud application that allows to create and open\n    Etherpad and Ethercalc documents.\n\n    This application requires to have access to an instance of\n    Etherpad and/or Ethercalc to work properly." : "Ownpad é unha aplicación de Nextcloud que permite crear e abrir\n    Documentos Etherpad e Ethercalc.\n\n    Esta aplicación precisa ter acceso a unha instancia de\n    Etherpad e/ou Ethercalc para funcionar correctamente.",
     "Pad" : "Caderno",
     "New pad.pad" : "Novo caderno.pad",
     "Calc" : "Calc",

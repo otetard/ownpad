@@ -2,7 +2,6 @@ OC.L10N.register(
     "ownpad",
     {
     "Share not found" : "Paylaşım bulunamadı",
-    "Unable to communicate with Etherpad API." : "Etherpad API ile iletişim kurulamadı.",
     "Incorrect padname." : "Pad adı geçersiz.",
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Ad geçersiz. '\\', '/', '<', '>', ':', '\"', '|', '?' ve '*' karakterleri kullanılamaz.",
     "The target folder has been moved or deleted." : "Hedef klasör taşındı ya da silindi.",
