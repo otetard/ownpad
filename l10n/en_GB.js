@@ -2,6 +2,7 @@ OC.L10N.register(
     "ownpad",
     {
     "Share not found" : "Share not found",
+    "Unable to communicate with Etherpad API due to the following error: “%s”." : "Unable to communicate with Etherpad API due to the following error: “%s”.",
     "Incorrect padname." : "Incorrect padname.",
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Invalid name: '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed.",
     "The target folder has been moved or deleted." : "The target folder has been moved or deleted.",
@@ -10,6 +11,8 @@ OC.L10N.register(
     "You are not allowed to open this pad." : "You are not allowed to open this pad.",
     "URL in your Etherpad/Ethercalc document does not match the allowed server" : "URL in your Etherpad/Ethercalc document does not match the allowed server",
     "Ownpad" : "Ownpad",
+    "Create and open Etherpad and Ethercalc documents." : "Create and open Etherpad and Ethercalc documents.",
+    "Ownpad is a Nextcloud application that allows to create and open Etherpad and Ethercalc documents.\n\nThis application requires to have access to an instance of <a href=\"https://etherpad.org/\">Etherpad</a> and/or <a href=\"https://ethercalc.net/\">Ethercalc</a> to work properly." : "Ownpad is a Nextcloud application that allows to create and open Etherpad and Ethercalc documents.\n\nThis application requires to have access to an instance of <a href=\"https://etherpad.org/\">Etherpad</a> and/or <a href=\"https://ethercalc.net/\">Ethercalc</a> to work properly.",
     "Pad" : "Pad",
     "New pad.pad" : "New pad.pad",
     "Calc" : "Calc",

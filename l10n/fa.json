@@ -1,5 +1,6 @@
 { "translations": {
     "Share not found" : "اشتراک گذاری یافت نشد",
+    "Unable to communicate with Etherpad API due to the following error: “%s”." : "به دلیل خطای زیر امکان برقراری ارتباط با Etherpad API وجود ندارد:%s",
     "Incorrect padname." : "Incorrect padname.",
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "نام نامعتبر ،  '\\', '/', '<', '>', ':', '\"', '|', '?'  و '*'  مجاز نمی باشند.",
     "The target folder has been moved or deleted." : "پوشه مقصد انتقال یافته یا حذف شده است.",
@@ -8,6 +9,8 @@
     "You are not allowed to open this pad." : "You are not allowed to open this pad.",
     "URL in your Etherpad/Ethercalc document does not match the allowed server" : "URL in your Etherpad/Ethercalc document does not match the allowed server",
     "Ownpad" : "Ownpad",
+    "Create and open Etherpad and Ethercalc documents." : "اسناد Etherpad و Ethercalc را ایجاد و باز کنید.",
+    "Ownpad is a Nextcloud application that allows to create and open Etherpad and Ethercalc documents.\n\nThis application requires to have access to an instance of <a href=\"https://etherpad.org/\">Etherpad</a> and/or <a href=\"https://ethercalc.net/\">Ethercalc</a> to work properly." : "Ownpad یک برنامه Nextcloud است که امکان ایجاد و باز کردن اسناد Etherpad و Ethercalc را فراهم می کند.\n\nاین برنامه نیاز به دسترسی به یک نمونه از Etherpad و/یا Ethercalc دارد تا به درستی کار کند.",
     "Pad" : "Pad",
     "New pad.pad" : "New pad.pad",
     "Calc" : "Calc",

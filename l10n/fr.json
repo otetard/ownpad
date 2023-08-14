@@ -1,5 +1,6 @@
 { "translations": {
     "Share not found" : "Partage non trouvé",
+    "Unable to communicate with Etherpad API due to the following error: “%s”." : "Impossible de communiquer avec l’API d’Etherpad en raison de l’erreur suivante: « %s ».",
     "Incorrect padname." : "Nom de pad incorrect",
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Ce nom n'est pas valide : les caractères '\\', '/', '<', '>', ':', '\"', '|', '?' et '*' ne sont pas autorisés.",
     "The target folder has been moved or deleted." : "Le dossier cible a été déplacé ou supprimé.",
@@ -8,6 +9,8 @@
     "You are not allowed to open this pad." : "Vous n’êtes pas autorisés à ouvrir ce pad.",
     "URL in your Etherpad/Ethercalc document does not match the allowed server" : "L’URL contenue dans votre fichier ne correspond pas avec le serveur autorisé",
     "Ownpad" : "Ownpad",
+    "Create and open Etherpad and Ethercalc documents." : "Créer et ouvrir des documents Etherpad et Etherclac.",
+    "Ownpad is a Nextcloud application that allows to create and open Etherpad and Ethercalc documents.\n\nThis application requires to have access to an instance of <a href=\"https://etherpad.org/\">Etherpad</a> and/or <a href=\"https://ethercalc.net/\">Ethercalc</a> to work properly." : "Ownpad est une application Nextcloud permettant de créer et d’ouvrir des documents Etherpad et Ethercalc.\n\nCette application nécessite de disposer d’un accès à une instance <a href=\"https://etherpad.org/\">Etherpad</a> et/ou <a href=\"https://ethercalc.net/\">Ethercalc</a> pour fonctionner correctement.",
     "Pad" : "Pad",
     "New pad.pad" : "Nouveau pad.pad",
     "Calc" : "Calc",
