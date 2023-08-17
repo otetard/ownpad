@@ -2,6 +2,7 @@ OC.L10N.register(
     "ownpad",
     {
     "Share not found" : "Sdílení nenalezeno",
+    "Unable to communicate with Etherpad API due to the following error: “%s”." : "Nedaří se komunikovat s Etherpad API kvůli následující chybě: „%s“.",
     "Incorrect padname." : "Nesprávný název bloku.",
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Neplatný název, znaky „\\“, „/“, “<“, „>“, „:“, „\"“, „|“, „?“ a „*“ nejsou povoleny.",
     "The target folder has been moved or deleted." : "Cílová složka byla přesunuta nebo smazána.",
@@ -10,6 +11,7 @@ OC.L10N.register(
     "You are not allowed to open this pad." : "Nemáte oprávnění k otevření tohoto bloku.",
     "URL in your Etherpad/Ethercalc document does not match the allowed server" : "URL ve vašem Etherpad/Ethercalc dokumentu se neshoduje s umožněným serverem",
     "Ownpad" : "Ownpad",
+    "Create and open Etherpad and Ethercalc documents." : "Vytvářejte a otevírejte dokumenty Etherpad a Ethercalc.",
     "Pad" : "Blok",
     "New pad.pad" : "Nový blok.pad",
     "Calc" : "Tabulka",
