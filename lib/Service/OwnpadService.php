@@ -29,7 +29,7 @@ class OwnpadService {
 
 	public function __construct(
 		IConfig $config,
-		IUserSession $userSession,
+		IUserSession $userSession
 	) {
 		$this->config = $config;
 		$this->userSession = $userSession;
@@ -44,7 +44,7 @@ class OwnpadService {
 
 	public function create($dir, $padname, $type, $protected) {
 		// Generate a random pad name
-		$token = \OC::$server->getSecureRandom()->generate(rand(32, 64), \OCP\Security\ISecureRandom::CHAR_LOWER.\OCP\Security\ISecureRandom::CHAR_DIGITS);
+		$token = \OC::$server->getSecureRandom()->generate(rand(32, 50), \OCP\Security\ISecureRandom::CHAR_LOWER.\OCP\Security\ISecureRandom::CHAR_DIGITS);
 
 		$l10n = \OC::$server->getL10N('ownpad');
 		$l10n_files = \OC::$server->getL10N('files');
