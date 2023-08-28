@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+- Pad name can’t be longer than 50 chars
+
 ## 0.9.4
 
 ### Fixed
