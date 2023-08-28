@@ -22,7 +22,7 @@ class CSPListener implements IEventListener {
 	private $config;
 
 	public function __construct(
-		IConfig $config,
+		IConfig $config
 	) {
 		$this->config = $config;
 	}

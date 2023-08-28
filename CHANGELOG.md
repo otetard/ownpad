@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- Make code compatible with PHP7.4
 - Pad name can’t be longer than 50 chars
 
 ## 0.9.4
