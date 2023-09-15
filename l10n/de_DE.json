@@ -4,7 +4,7 @@
     "Incorrect padname." : "Falscher Padname.",
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Ungültiger Name, „\\“, „/“, „<“, „>“, „:“, „\"“, „|“, „?“ und „*“ sind nicht zulässig.",
     "The target folder has been moved or deleted." : "Der Zielordner wurde verschoben oder gelöscht.",
-    "The name %s is already used in the folder %s. Please choose a different name." : "Der Name %s wird bereits im Ordner %s verwendet. Bitte wählen Sie einen anderen Namen.",
+    "The name %s is already used in the folder %s. Please choose a different name." : "Der Name %s wird bereits im Ordner %s verwendet. Bitte einen anderen Namen wählen.",
     "Error when creating the file" : "Fehler beim Erstellen der Datei",
     "You are not allowed to open this pad." : "Es ist Ihnen nicht gestattet, dieses Pad zu öffnen.",
     "URL in your Etherpad/Ethercalc document does not match the allowed server" : "Die URL in Ihrem Etherpad/Ethercalc-Dokument stimmt nicht mit dem zulässigen Server überein",
