@@ -10,7 +10,7 @@
     "URL in your Etherpad/Ethercalc document does not match the allowed server" : "Die URL in Ihrem Etherpad/Ethercalc-Dokument stimmt nicht mit dem zulässigen Server überein",
     "Ownpad" : "Ownpad",
     "Create and open Etherpad and Ethercalc documents." : "Erstellen und öffnen von Etherpad- und Ethercalc-Dokumenten.",
-    "Ownpad is a Nextcloud application that allows to create and open Etherpad and Ethercalc documents.\n\nThis application requires to have access to an instance of <a href=\"https://etherpad.org/\">Etherpad</a> and/or <a href=\"https://ethercalc.net/\">Ethercalc</a> to work properly." : "Ownpad ist eine Nextcloud-Anwendung, die das Erstellen und Öffnen von Etherpad- und Ethercalc-Dokumenten ermöglicht\n\nDiese Anwendung erfordert Zugriff auf eine Instanz von<a href=\"https://etherpad.org/\">Etherpad</a> a\nund/oder <a href=\"https://ethercalc.net/\">Ethercalc</a> um zu funktionieren.",
+    "Ownpad is a Nextcloud application that allows to create and open Etherpad and Ethercalc documents.\n\nThis application requires to have access to an instance of <a href=\"https://etherpad.org/\">Etherpad</a> and/or <a href=\"https://ethercalc.net/\">Ethercalc</a> to work properly." : "Ownpad ist eine Nextcloud-Anwendung, die das Erstellen und Öffnen von Etherpad- und Ethercalc-Dokumenten ermöglicht.\n\nDiese Anwendung erfordert Zugriff auf eine Instanz von<a href=\"https://etherpad.org/\">Etherpad</a> a\nund/oder <a href=\"https://ethercalc.net/\">Ethercalc</a> um zu funktionieren.",
     "Pad" : "Pad",
     "New pad.pad" : "Neues pad.pad",
     "Calc" : "Berechnen",
@@ -28,7 +28,7 @@
     "Allow “public” pads" : "„öffentliche“ Pads erlauben",
     "Etherpad Apikey" : "Etherpad Api-Schlüssel",
     "Etherpad cookie domain" : "Etherpad Cookie-Domain",
-    "For example, if you host your Etherpad instance on `pad.example.org` and your Nextcloud instance on `cloud.example.org` you need to configure your cookie to `example.org` domain." : "Wenn Sie z.B. Ihre Etherpad-Instanz auf „pad.example.org“ und Ihre Nextcloud-Instanz auf „cloud.example.org“ hosten, müssen Sie Ihr Cookie für die Domäne „example.org“ konfigurieren.",
+    "For example, if you host your Etherpad instance on `pad.example.org` and your Nextcloud instance on `cloud.example.org` you need to configure your cookie to `example.org` domain." : "Wenn Sie z.B. Ihre Etherpad-Instanz auf `pad.example.org` und Ihre Nextcloud-Instanz auf `cloud.example.org` hosten, müssen Sie Ihr Cookie für die Domäne `example.org` konfigurieren.",
     "Enable Ethercalc" : "Ethercalc aktivieren",
     "Ethercalc Host" : "Ethercalc-Host",
     "Saved" : "Gespeichert"
