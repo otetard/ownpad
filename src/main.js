@@ -11,111 +11,103 @@
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
+import { addNewFileMenuEntry, Permission, File } from '@nextcloud/files'
+import { getUniqueName } from './utils/fileUtils.js'
+import { showSuccess, showError } from '@nextcloud/dialogs'
+import { logger } from './logger.js'
+import { emit } from '@nextcloud/event-bus'
 
-(function(OCA) {
+let etherpadEnabled = false
+let etherpadPublicEnabled = false
+let etherpadAPIEnabled = false
+let ethercalcEnabled = false
 
-	const FilesOwnpadMenu = function() {
-		this.initialize()
-	}
+if (getCurrentUser().uid !== null) {
+	const result = await axios.get(generateUrl('/apps/ownpad/ajax/v1.0/getconfig'))
+	const data = result.data.data
+	etherpadEnabled = data.ownpad_etherpad_enable === 'yes'
+	ethercalcEnabled = data.ownpad_ethercalc_enable === 'yes'
+	etherpadPublicEnabled = data.ownpad_etherpad_public_enable === 'yes'
+	etherpadAPIEnabled = data.ownpad_etherpad_useapi === 'yes'
+}
 
-	FilesOwnpadMenu.prototype = {
-
-		_etherpadEnabled: false,
-		_etherpadPublicEnabled: false,
-		_etherpadAPIEnabled: false,
-		_ethercalcEnabled: false,
-
-		initialize() {
-			const self = this
-
-			if (getCurrentUser().uid !== null) {
-			    axios.get(generateUrl('/apps/ownpad/ajax/v1.0/getconfig')).then(function(result) {
-					const data = result.data.data
-					self._etherpadEnabled = data.ownpad_etherpad_enable === 'yes'
-					self._etherpadPublicEnabled = data.ownpad_etherpad_public_enable === 'yes'
-					self._etherpadAPIEnabled = data.ownpad_etherpad_useapi === 'yes'
-					self._ethercalcEnabled = data.ownpad_ethercalc_enable === 'yes'
-					OC.Plugins.register('OCA.Files.NewFileMenu', self)
-				})
-			}
-		},
-
-		attach(newFileMenu) {
-			const self = this
-
-			if (self._etherpadEnabled === true) {
-				if (self._etherpadPublicEnabled === true || self._etherpadAPIEnabled === false) {
-					newFileMenu.addMenuEntry({
-						id: 'etherpad',
-						displayName: t('ownpad', 'Pad'),
-						templateName: t('ownpad', 'New pad.pad'),
-						iconClass: 'icon-filetype-etherpad',
-						fileType: 'etherpad',
-						actionHandler(filename) {
-							self._createPad('etherpad', filename)
-						},
-					})
-				}
-
-				if (self._etherpadAPIEnabled === true) {
-					const displayName = self._etherpadPublicEnabled === true ? 'Protected Pad' : 'Pad'
-					const templateName = self._etherpadPublicEnabled === true ? 'New protected pad.pad' : 'New pad.pad'
-					newFileMenu.addMenuEntry({
-						id: 'etherpad-api',
-						displayName: t('ownpad', displayName),
-						templateName: t('ownpad', templateName),
-						iconClass: 'icon-filetype-etherpad',
-						fileType: 'etherpad',
-						actionHandler(filename) {
-							self._createPad('etherpad', filename, true)
-						},
-					})
-				}
-			}
-
-			if (self._ethercalcEnabled === true) {
-				newFileMenu.addMenuEntry({
-					id: 'ethercalc',
-					displayName: t('ownpad', 'Calc'),
-					templateName: t('ownpad', 'New calc.calc'),
-					iconClass: 'icon-filetype-ethercalc',
-					fileType: 'ethercalc',
-					actionHandler(filename) {
-						self._createPad('ethercalc', filename)
-					},
-				})
-			}
-		},
-
-		_createPad(type, filename, isProtected) {
-			// Default value for `isProtected`.
-			isProtected = typeof isProtected !== 'undefined' ? isProtected : false
-
-			OCA.Files.Files.isFileNameValid(filename)
-			filename = FileList.getUniqueName(filename)
-
-		    axios.post(generateUrl('/apps/ownpad/ajax/v1.0/newpad'), {
-				dir: OCA.Files.App.currentFileList.getCurrentDirectory(),
-				padname: filename,
-				type,
-				protected: isProtected,
-		    }).then(function(result) {
-				const data = result.data.data
-				FileList.add(data, { animate: true, scrollTo: true })
-			}
-		    ).catch(function(error) {
-				const data = error.response.data.data
-				OC.dialogs.alert(data.message, t('core', 'Could not create file'))
-			})
-		},
-	}
-
-	// Only initialize the Ownpad menu when user is logged in and
-	// using the “files” app.
-	document.addEventListener('DOMContentLoaded', function() {
-		if (document.getElementById('filesApp').value) {
-			OCA.FilesOwnpadMenu = new FilesOwnpadMenu()
-		}
+const createNewOwnpadDocument = async (root, filename, type, isProtected) => {
+	const source = root.source + '/' + filename
+	const response = await axios.post(generateUrl('/apps/ownpad/ajax/v1.0/newpad'), {
+		dir: root.path,
+		padname: filename,
+		type,
+		protected: isProtected,
 	})
 
-})(OCA)
+	return {
+		fileid: parseInt(response.data.data.id),
+		source,
+	}
+}
+
+const addNewOwnpadDocumentHandler = async (context, content, defaultName, type, isProtected) => {
+	const contentNames = content.map((node) => node.basename)
+	const name = getUniqueName(defaultName, contentNames)
+
+	try {
+		const { fileid, source } = await createNewOwnpadDocument(context, name, type, isProtected)
+
+		let mimeType
+		if (type === 'ethercalc') {
+			mimeType = 'application/x-ownpad-calc'
+		} else {
+			mimeType = 'application/x-ownpad'
+		}
+
+		const file = new File({
+			source,
+			id: fileid,
+			mime: mimeType,
+			mtime: new Date(),
+			owner: getCurrentUser()?.uid || null,
+			permissions: Permission.ALL,
+			root: context?.root || '/files/' + getCurrentUser()?.uid,
+		})
+
+		showSuccess(t('ownpad', 'Created new Etherpad document “{name}”', { name }))
+		logger.debug('Created new Etherpad document', { file, source })
+		emit('files:node:created', file)
+		emit('files:node:rename', file)
+	} catch (error) {
+		showError(t('ownpad', 'Error: {error}', { error: error.response.data.data.message }))
+	}
+}
+
+addNewFileMenuEntry({
+	id: 'etherpad',
+	displayName: t('ownpad', 'Pad'),
+	iconClass: 'icon-filetype-etherpad',
+	order: 97,
+	enabled: () => (etherpadEnabled && (etherpadPublicEnabled || !etherpadAPIEnabled)),
+	async handler(context, content) {
+		addNewOwnpadDocumentHandler(context, content, t('ownpad', 'New pad.pad'), 'etherpad', false)
+	},
+})
+
+addNewFileMenuEntry({
+	id: 'etherpad-api',
+	displayName: t('ownpad', 'Protected Pad'),
+	iconClass: 'icon-filetype-etherpad',
+	order: 98,
+	enabled: () => (etherpadEnabled && etherpadAPIEnabled),
+	async handler(context, content) {
+		addNewOwnpadDocumentHandler(context, content, t('ownpad', 'New protected pad.pad'), 'etherpad', true)
+	},
+})
+
+addNewFileMenuEntry({
+	id: 'ethercalc',
+	displayName: t('ownpad', 'Calc'),
+	iconClass: 'icon-filetype-ethercalc',
+	order: 99,
+	enabled: () => ethercalcEnabled,
+	async handler(context, content) {
+		addNewOwnpadDocumentHandler(context, content, t('ownpad', 'New calc.calc'), 'ethercalc', false)
+	},
+})

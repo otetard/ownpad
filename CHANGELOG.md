@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+
+- Add support for Nextcloud 28 and drop support for older versions.
+
 ## 0.9.5
 
 ### Fixed

@@ -37,7 +37,7 @@ class Application extends App implements IBootstrap {
 			LoadAdditionalScriptsEvent::class,
 			function () {
 				Util::addStyle('ownpad', 'ownpad');
-				Util::addScript('ownpad', 'ownpad-main');
+				Util::addInitScript('ownpad', 'ownpad-main');
 			}
 		);
 	}
