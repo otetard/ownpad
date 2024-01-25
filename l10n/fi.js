@@ -4,7 +4,7 @@ OC.L10N.register(
     "Share not found" : "Jakoa ei löytynyt",
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Virheellinen nimi, merkit '\\', '/', '<', '>', ':', '\"', '|', '?' ja '*' eivät ole sallittuja.",
     "The target folder has been moved or deleted." : "Kohdekansio on siirretty tai poistettu.",
-    "Could not create file" : "Tiedoston luominen epäonnistui",
+    "Error: {error}" : "Virhe: {error}",
     "Saved" : "Tallennettu"
 },
 "nplurals=2; plural=(n != 1);");

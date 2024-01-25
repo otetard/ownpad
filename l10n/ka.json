@@ -1,6 +1,6 @@
 { "translations": {
     "Share not found" : "Share not found",
-    "Could not create file" : "Could not create file",
+    "Error: {error}" : "Error: {error}",
     "Saved" : "Saved"
 },"pluralForm" :"nplurals=2; plural=(n!=1);"
 }

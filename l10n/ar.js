@@ -17,7 +17,6 @@ OC.L10N.register(
     "New pad.pad" : "كُرّاس نصوص جديد pad.pad",
     "Calc" : "كُرّاس حسابات Calc",
     "New calc.calc" : "كُرّاس حسابات جديد calc.calc",
-    "Could not create file" : "تعذّر إنشاء الملف",
     "Your Etherpad/Ethercalc document could not be opened, the following error was reported: “%s”." : "تعذّر فتح مستندك Etherpad/Ethercalc. و تمّ الإبلاغ عن الخطأ التالي: “%s”.",
     "Ownpad (collaborative documents)" : "Ownpad (المستندات التعاونية)",
     "This is used to link collaborative documents inside Nextcloud." : "هذا يستعمل لربط المستندات التعاونية في داخل نكست كلاود.",

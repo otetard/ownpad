@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "﻿ಅಮಾನ್ಯವಾದ ಹೆಸರು, '\\', '/', '<', '>', ':', '\"', '|', '?' ಮತ್ತು '*'  ಅನುಮತಿ ಇಲ್ಲ.",
     "The target folder has been moved or deleted." : "ಕೋಶದ ಉದ್ದೇಶಿತ ಸ್ಥಳ ಬದಲಾವಣೆ ಮಾಡಲಾಗಿದೆ ಅಥವಾ ಅಳಿಸಲಾಗಿದೆ.",
-    "Could not create file" : "﻿ಕಡತ ರಚಿಸಲಾಗಲಿಲ್ಲ",
     "Saved" : "﻿ಉಳಿಸಿದ"
 },
 "nplurals=2; plural=(n > 1);");

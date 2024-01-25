@@ -17,7 +17,6 @@ OC.L10N.register(
     "New pad.pad" : "新 pad.pad",
     "Calc" : "Calc",
     "New calc.calc" : "新增 calc.calc",
-    "Could not create file" : "無法建立檔案",
     "Your Etherpad/Ethercalc document could not be opened, the following error was reported: “%s”." : "您的 Etherpad/Ethercalc 文件無法開啟，回報以下錯誤：「%s」。",
     "Ownpad (collaborative documents)" : "Ownpad（協作文件）",
     "This is used to link collaborative documents inside Nextcloud." : "這是 Nextcloud 內部用於連結協作文件的。",
