@@ -16,7 +16,7 @@ This application requires to have access to an instance of <a href="https://ethe
   <category>office</category>
   <bugs>https://github.com/otetard/ownpad/issues</bugs>
   <repository>https://github.com/otetard/ownpad</repository>
-  <screenshot small-thumbnail="https://raw.githubusercontent.com/otetard/ownpad/master/screenshots/1-small.png">https://raw.githubusercontent.com/otetard/ownpad/master/screenshots/1.png</screenshot>
+  <screenshot small-thumbnail="https://raw.githubusercontent.com/otetard/ownpad/main/screenshots/1-small.png">https://raw.githubusercontent.com/otetard/ownpad/main/screenshots/1.png</screenshot>
   <dependencies>
     <nextcloud min-version="28" max-version="28" />
   </dependencies>
