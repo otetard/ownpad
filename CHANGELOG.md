@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+
+- Remove third party dependency `etherpad-lite-client`, talk to
+  Etherpad API directly in Ownpad.
+
 ## 0.10.1
 
 ### Changed

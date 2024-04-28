@@ -11,7 +11,6 @@
 
 namespace OCA\Ownpad\Service;
 
-use EtherpadLite\Client;
 use Exception;
 
 use OCP\IConfig;
@@ -24,8 +23,16 @@ class OwnpadService {
 	/** @var IUserSession */
 	private $userSession;
 
-	/** @var Client */
-	private $eplInstance;
+	private $eplHost;
+
+	private $eplApiKey = "";
+
+	public const EPL_API_VERSION = '1.2.11';
+	public const EPL_CODE_OK = 0;
+	public const EPL_CODE_INVALID_PARAMETERS = 1;
+	public const EPL_CODE_INTERNAL_ERROR = 2;
+	public const EPL_CODE_INVALID_FUNCTION = 3;
+	public const EPL_CODE_INVALID_API_KEY = 4;
 
 	public function __construct(
 		IConfig $config,
@@ -36,9 +43,8 @@ class OwnpadService {
 
 		if($this->config->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no') !== 'no' and
 		   $this->config->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no') !== 'no') {
-			$eplHost = $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', '');
-			$eplApiKey = $this->config->getAppValue('ownpad', 'ownpad_etherpad_apikey', '');
-			$this->eplInstance = new Client($eplApiKey, $eplHost . "/api");
+			$this->eplHost = $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', '') . "/api";
+			$this->eplApiKey = $this->config->getAppValue('ownpad', 'ownpad_etherpad_apikey', '');
 		}
 	}
 
@@ -70,12 +76,12 @@ class OwnpadService {
 				try {
 					if($protected === true) {
 						// Create a protected (group) pad via API
-						$group = $this->eplInstance->createGroup();
-						$groupPad = $this->eplInstance->createGroupPad($group->groupID, $token);
+						$group = $this->etherpadCallApi('createGroup');
+						$groupPad = $this->etherpadCallApi('createGroupPad', ["groupID" => $group->groupID, "padName" => $token]);
 						$padID = $groupPad->padID;
 					} else {
 						// Create a public pad via API
-						$this->eplInstance->createPad($token);
+						$this->etherpadCallApi("createPad", ["padID" => $token]);
 					}
 				} catch(Exception $e) {
 					throw new OwnpadException($l10n->t('Unable to communicate with Etherpad API due to the following error: “%s”.', [$e->getMessage()]));
@@ -149,9 +155,8 @@ class OwnpadService {
 
 			$username = $this->userSession->getUser()->getUID();
 			$displayName = $this->userSession->getUser()->getDisplayName();
-			$author = $this->eplInstance->createAuthorIfNotExistsFor($username, $displayName);
-
-			$session = $this->eplInstance->createSession($groupID, $author->authorID, time() + 3600);
+			$author = $this->etherpadCallApi("createAuthorIfNotExistsFor", ["authorMapper" => $username, "name" => $displayName]);
+			$session = $this->etherpadCallApi('createSession', ["groupID" => $groupID, "authorID" => $author->authorID, "validUntil" => time() + 3600]);
 
 			$cookieDomain = $this->config->getAppValue('ownpad', 'ownpad_etherpad_cookie_domain', '');
 			setcookie('sessionID', $session->sessionID, 0, '/', $cookieDomain, true, false);
@@ -215,5 +220,73 @@ class OwnpadService {
 		}
 
 		return $url;
+	}
+
+
+	/**
+	 * Main entrypoint to call Etherpad API.
+	 *
+	 * This code is heavily inspired from tomnomnom’s PHP Etherpad
+	 * client. Original source code is available here:
+	 * https://github.com/tomnomnom/etherpad-lite-client
+	 */
+	private function etherpadCallApi($function, array $arguments = array(), $method = 'GET') {
+		$arguments["apikey"] = $this->eplApiKey;
+		$arguments = array_map(array($this, "etherpadConvertBools"), $arguments);
+		$arguments = http_build_query($arguments, "", "&");
+		$url = $this->eplHost."/".self::EPL_API_VERSION."/".$function;
+
+		if ($method !== "POST") {
+			$url .= "?".$arguments;
+		}
+
+		$params = array("http" => array("method" => $method, "ignore_errors" => true, "header" => "Content-Type:application/x-www-form-urlencoded"));
+		if ($method === "POST") {
+			$params["http"]["content"] = $arguments;
+		}
+		$context = stream_context_create($params);
+		$fp = fopen($url, "rb", false, $context);
+		$result = $fp ? stream_get_contents($fp) : null;
+
+		if(!$result) {
+			throw new \UnexpectedValueException("Empty or No Response from the server");
+		}
+
+		$result = json_decode($result);
+
+		if ($result === null) {
+			throw new \UnexpectedValueException("JSON response could not be decoded");
+		}
+
+		if (!isset($result->code)) {
+			throw new \RuntimeException("API response has no code");
+		}
+		if (!isset($result->message)) {
+			throw new \RuntimeException("API response has no message");
+		}
+		if (!isset($result->data)) {
+			$result->data = null;
+		}
+
+		switch ($result->code) {
+			case self::EPL_CODE_OK:
+				return $result->data;
+			case self::EPL_CODE_INVALID_PARAMETERS:
+			case self::EPL_CODE_INVALID_API_KEY:
+				throw new \InvalidArgumentException($result->message);
+			case self::EPL_CODE_INTERNAL_ERROR:
+				throw new \RuntimeException($result->message);
+			case self::EPL_CODE_INVALID_FUNCTION:
+				throw new \BadFunctionCallException($result->message);
+			default:
+				throw new \RuntimeException("An unexpected error occurred whilst handling the response");
+		}
+	}
+
+	protected function etherpadConvertBools($candidate) {
+		if (is_bool($candidate)) {
+			return $candidate? "true" : "false";
+		}
+		return $candidate;
 	}
 }
