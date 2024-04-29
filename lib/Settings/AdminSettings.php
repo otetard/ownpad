@@ -12,55 +12,55 @@
 namespace OCA\Ownpad\Settings;
 
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Services\IInitialState;
 use OCP\IConfig;
 use OCP\Settings\ISettings;
 
 class AdminSettings implements ISettings {
-
-	/** @var string */
-	protected $appName;
-
-	/** @var IConfig */
-	protected $config;
-
 	/**
 	 * @param string $appName
 	 * @param IConfig $config
 	 */
-	public function __construct($appName, IConfig $config) {
-		$this->appName = $appName;
-		$this->config = $config;
+	public function __construct(
+		private string $appName,
+		private IConfig $config,
+		private IInitialState $initialState,
+	) {
 	}
 
 	/**
 	 * @return TemplateResponse
 	 */
 	public function getForm() {
-		$ownpad_mimetype_ep_configured = "no";
-		$ownpad_mimetype_ec_configured = "no";
+		$parameters = [
+			'etherpadEnable' => $this->getHumanBooleanConfig('ownpad', 'ownpad_etherpad_enable', false),
+			'etherpadHost' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', ''),
+			'etherpadUseApi' => $this->getHumanBooleanConfig('ownpad', 'ownpad_etherpad_useapi', false),
+			'etherpadPublicEnable' => $this->getHumanBooleanConfig('ownpad', 'ownpad_etherpad_public_enable', ),
+			'etherpadVersion' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_public_enable', '1'),
+			'etherpadEnableOauth' => $this->getHumanBooleanConfig('ownpad', 'ownpad_etherpad_enable_oauth', false),
+			'etherpadApiKey' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_apikey', ''),
+			'etherpadClientId' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_client_id', ''),
+			'etherpadClientSecret' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_client_secret', ''),
+			'etherpadCookieDomain' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_cookie_domain', ''),
+			'ethercalcEnable' => $this->getHumanBooleanConfig('ownpad', 'ownpad_ethercalc_enable', false),
+			'ethercalcHost' => $this->config->getAppValue('ownpad', 'ownpad_ethercalc_host', ''),
+			'mimetypeEpConfigured' => \OC::$server->getMimeTypeDetector()->detectPath("test.pad") === 'application/x-ownpad',
+			'mimetypeEcConfigured' => \OC::$server->getMimeTypeDetector()->detectPath("test.calc") === 'application/x-ownpad-calc',
+		];
+		$this->initialState->provideInitialState('settings', $parameters);
 
-		if(\OC::$server->getMimeTypeDetector()->detectPath("test.pad") === 'application/x-ownpad') {
-			$ownpad_mimetype_ep_configured = "yes";
-		}
-
-		if(\OC::$server->getMimeTypeDetector()->detectPath("test.calc") === 'application/x-ownpad') {
-			$ownpad_mimetype_ec_configured = "yes";
-		}
-
-		return new TemplateResponse($this->appName, 'settings', [
-			'ownpad_etherpad_enable' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no'),
-			'ownpad_etherpad_host' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', ''),
-			'ownpad_etherpad_useapi' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no'),
-			'ownpad_etherpad_public_enable' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_public_enable', 'no'),
-			'ownpad_etherpad_apikey' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_apikey', ''),
-			'ownpad_etherpad_cookie_domain' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_cookie_domain', ''),
-			'ownpad_ethercalc_enable' => $this->config->getAppValue('ownpad', 'ownpad_ethercalc_enable', 'no'),
-			'ownpad_ethercalc_host' => $this->config->getAppValue('ownpad', 'ownpad_ethercalc_host', ''),
-			'ownpad_mimetype_ep_configured' => $ownpad_mimetype_ep_configured,
-			'ownpad_mimetype_ec_configured' => $ownpad_mimetype_ec_configured,
-		], 'blank');
+		\OCP\Util::addScript($this->appName, 'ownpad-settings');
+		return new TemplateResponse($this->appName, 'settings', [], '');
 	}
 
+
+	/**
+	 * Helper function to retrive boolean values from human readable strings ('yes' / 'no')
+	 */
+	private function getHumanBooleanConfig(string $app, string $key, bool $default = false): bool {
+		return $this->config->getAppValue($app, $key, $default ? 'yes' : 'no') === 'yes';
+	}
 
 	/**
 	 * @return string the section ID, e.g. 'sharing'

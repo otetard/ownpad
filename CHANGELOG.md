@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## 0.11.0-beta.1
+
+### Added
+
+- Add support for OAuth2 authentication now that Etherpad 2.x requires
+  it. Keep support for old APIKey authentication. This requires a
+  version strictly upper than 2.0.2.
+
+### Changed
+
+- Remove third party dependency `etherpad-lite-client`, talk to
+  Etherpad API directly in Ownpad.
+- Rewrite settings page to make use of Vue to improve user experience
+  and maintenance.
+
 ## 0.10.1
 
 ### Changed
