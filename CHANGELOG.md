@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## 0.11.0-beta.1
+
 ### Added
 
 - Add support for OAuth2 authentication now that Etherpad 2.x requires
