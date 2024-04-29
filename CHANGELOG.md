@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## 0.11.0-beta.2
+
+### Fixed
+
+- Remove `3rdparty` from the Nextcloud App Store tarball.
+
 ## 0.11.0-beta.1
 
 ### Added

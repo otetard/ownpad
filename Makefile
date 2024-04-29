@@ -82,7 +82,6 @@ appstore:
 	$(project_directory)/lib \
 	$(project_directory)/fonts \
 	$(project_directory)/templates \
-	$(project_directory)/3rdparty \
 	$(project_directory)/l10n \
 	$(project_directory)/README.md \
 	$(project_directory)/COPYING \
