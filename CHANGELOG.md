@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- Add support for OAuth2 authentication now that Etherpad 2.x requires
+  it. Keep support for old APIKey authentication. This requires a
+  version strictly upper than 2.0.2.
+
 ### Changed
 
 - Remove third party dependency `etherpad-lite-client`, talk to

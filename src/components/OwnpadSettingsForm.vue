@@ -40,12 +40,30 @@
 
 					<fieldset v-show="settings.etherpadUseApi" id="ownpad-settings-etherpad-api" class="ownpad__sub-section">
 						<NcCheckboxRadioSwitch type="switch"
+							:checked.sync="settings.etherpadEnableOauth">
+							{{ t('ownpad', 'Enable OAuth2 authentication to communicate with Etherpad (introduced in Etherpad 2)') }}
+						</NcCheckboxRadioSwitch>
+
+						<NcPasswordField v-if="!settings.etherpadEnableOauth"
+							:label="t('ownpad', 'Etherpad Apikey')"
+							:value.sync="settings.etherpadApiKey" />
+
+						<NcNoteCard v-if="settings.etherpadEnableOauth" type="info">
+							{{ t('ownpad', 'In order to enable OAuth2 authentication in Etherpad, you need to configure a dedicated service account. Please refer to the Etherpad documentation to proceed.') }}
+						</NcNoteCard>
+
+						<NcTextField v-if="settings.etherpadEnableOauth"
+							:label="t('ownpad', 'Etherpad authentication Client ID')"
+							:value.sync="settings.etherpadClientId" />
+
+						<NcPasswordField v-if="settings.etherpadEnableOauth"
+							:label="t('ownpad', 'Etherpad authentication Client Secret')"
+							:value.sync="settings.etherpadClientSecret" />
+
+						<NcCheckboxRadioSwitch type="switch"
 							:checked.sync="settings.etherpadPublicEnable">
 							{{ t('ownpad', 'Allow “public” pads') }}
 						</NcCheckboxRadioSwitch>
-
-						<NcPasswordField :label="t('ownpad', 'Etherpad Apikey')"
-							:value.sync="settings.etherpadApiKey" />
 
 						<NcNoteCard type="info">
 							{{ t('ownpad', 'For example, if you host your Etherpad instance on `pad.example.org` and your Nextcloud instance on `cloud.example.org` you need to configure your cookie to `example.org` domain.') }}

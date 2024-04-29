@@ -17,15 +17,13 @@ use OCP\IConfig;
 use OCP\IUserSession;
 
 class OwnpadService {
-	/** @var IConfig */
-	private $config;
-
-	/** @var IUserSession */
-	private $userSession;
-
 	private $eplHost;
+	private $eplHostApi;
 
 	private $eplApiKey = "";
+	private $eplEnableOIDC = false;
+	private $eplClientId = "";
+	private $eplClientSecret = "";
 
 	public const EPL_API_VERSION = '1.2.11';
 	public const EPL_CODE_OK = 0;
@@ -35,16 +33,24 @@ class OwnpadService {
 	public const EPL_CODE_INVALID_API_KEY = 4;
 
 	public function __construct(
-		IConfig $config,
-		IUserSession $userSession
+		private IConfig $config,
+		private IUserSession $userSession
 	) {
 		$this->config = $config;
 		$this->userSession = $userSession;
 
 		if($this->config->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no') !== 'no' and
 		   $this->config->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no') !== 'no') {
-			$this->eplHost = $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', '') . "/api";
-			$this->eplApiKey = $this->config->getAppValue('ownpad', 'ownpad_etherpad_apikey', '');
+			$this->eplHost = $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', '');
+			$this->eplHostApi = $this->eplHost . "/api";
+
+			if ($this->config->getAppValue('ownpad', 'ownpad_etherpad_enable_oauth', 'no') === 'no') {
+				$this->eplApiKey = $this->config->getAppValue('ownpad', 'ownpad_etherpad_apikey', '');
+			} else {
+				$this->eplEnableOIDC = true;
+				$this->eplClientId = $this->config->getAppValue('ownpad', 'ownpad_etherpad_client_id', '');
+				$this->eplClientSecret = $this->config->getAppValue('ownpad', 'ownpad_etherpad_client_secret', '');
+			}
 		}
 	}
 
@@ -137,9 +143,9 @@ class OwnpadService {
 		preg_match('/URL=(.*)$/', $content, $matches);
 		$url = $matches[1];
 
-		$eplHost = $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', '');
-		$eplHost = rtrim($eplHost, '/');
-		$protectedPadRegex = sprintf('/%s\/p\/(g\.\w{16})\\$(.*)$/', preg_quote($eplHost, '/'));
+		$eplHostApi = $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', '');
+		$eplHostApi = rtrim($eplHostApi, '/');
+		$protectedPadRegex = sprintf('/%s\/p\/(g\.\w{16})\\$(.*)$/', preg_quote($eplHostApi, '/'));
 		$match = preg_match($protectedPadRegex, $url, $matches);
 
 		/*
@@ -231,19 +237,25 @@ class OwnpadService {
 	 * https://github.com/tomnomnom/etherpad-lite-client
 	 */
 	private function etherpadCallApi($function, array $arguments = array(), $method = 'GET') {
-		$arguments["apikey"] = $this->eplApiKey;
+		$params = array("http" => array("method" => $method, "ignore_errors" => true, "header" => "Content-Type:application/x-www-form-urlencoded"));
+
+		if ($this->eplEnableOIDC) {
+			$token = $this->getBearerToken();
+			$params["http"]["header"] .= "\r\nAuthorization: Bearer {$token}";
+		} else {
+			$arguments["apikey"] = $this->eplApiKey;
+		}
+
 		$arguments = array_map(array($this, "etherpadConvertBools"), $arguments);
 		$arguments = http_build_query($arguments, "", "&");
-		$url = $this->eplHost."/".self::EPL_API_VERSION."/".$function;
+		$url = $this->eplHostApi."/".self::EPL_API_VERSION."/".$function;
 
 		if ($method !== "POST") {
 			$url .= "?".$arguments;
-		}
-
-		$params = array("http" => array("method" => $method, "ignore_errors" => true, "header" => "Content-Type:application/x-www-form-urlencoded"));
-		if ($method === "POST") {
+		} elseif ($method === "POST") {
 			$params["http"]["content"] = $arguments;
 		}
+
 		$context = stream_context_create($params);
 		$fp = fopen($url, "rb", false, $context);
 		$result = $fp ? stream_get_contents($fp) : null;
@@ -288,5 +300,30 @@ class OwnpadService {
 			return $candidate? "true" : "false";
 		}
 		return $candidate;
+	}
+
+	private function getBearerToken() {
+		$oidcUrl = $this->eplHost . "/oidc/token";
+		$data = [
+			"grant_type" => "client_credentials",
+			"client_id" => $this->eplClientId,
+			"client_secret" => $this->eplClientSecret,
+		];
+		$options = ["http" => ["method" => "POST",
+			"ignore_errors" => true,
+			"header" => "Content-Type:application/x-www-form-urlencoded",
+			"content" => http_build_query($data)
+		]];
+		$context = stream_context_create($options);
+		$result = file_get_contents($oidcUrl, false, $context);
+
+		if ($result === false) {
+			$l10n = \OC::$server->getL10N('ownpad');
+			throw new OwnpadException($l10n->t('Unable to authenticate to Etherpad API'));
+		}
+
+		$result = json_decode($result);
+
+		return $result->access_token;
 	}
 }
