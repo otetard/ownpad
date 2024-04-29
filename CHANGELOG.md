@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 
 - Remove third party dependency `etherpad-lite-client`, talk to
   Etherpad API directly in Ownpad.
+- Rewrite settings page to make use of Vue to improve user experience
+  and maintenance.
 
 ## 0.10.1
 
