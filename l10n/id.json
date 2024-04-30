@@ -1,6 +1,5 @@
 { "translations": {
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Nama tidak valid, karakter '\\', '/', '<', '>', ':', '\"', '|', '?' dan '*' tidak diizinkan.",
-    "The target folder has been moved or deleted." : "Folder tujuan telah dipindahkan atau dihapus.",
-    "Saved" : "Disimpan"
+    "The target folder has been moved or deleted." : "Folder tujuan telah dipindahkan atau dihapus."
 },"pluralForm" :"nplurals=1; plural=0;"
 }

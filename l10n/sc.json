@@ -1,6 +1,5 @@
 { "translations": {
     "Share not found" : "Cumpartzidura no agatada",
-    "Error: {error}" : "Errore: {error}",
-    "Saved" : "Sarvadu"
+    "Error: {error}" : "Errore: {error}"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

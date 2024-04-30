@@ -1,6 +1,5 @@
 { "translations": {
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Vigane nimi, '\\', '/', '<', '>', ':', '\"', '|', '?' ja '*' pole lubatud.",
-    "The target folder has been moved or deleted." : "Sihtkataloog on ümber tõstetud või kustutatud.",
-    "Saved" : "Salvestatud"
+    "The target folder has been moved or deleted." : "Sihtkataloog on ümber tõstetud või kustutatud."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

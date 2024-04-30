@@ -1,6 +1,5 @@
 { "translations": {
     "Share not found" : "Partiment pas trobat",
-    "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Aqueste nom es pas valid : los caractèrs '\\', '/', '<', '>', ':', '\"', '|', '?' e '*' son pas autorizats.",
-    "Saved" : "Enregistrat"
+    "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Aqueste nom es pas valid : los caractèrs '\\', '/', '<', '>', ':', '\"', '|', '?' e '*' son pas autorizats."
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

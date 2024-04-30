@@ -1,5 +1,4 @@
 { "translations": {
-    "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Ongültegen Numm, '\\', '/', '<', '>', ':', '\"', '|', '?' an '*' sinn net erlaabt.",
-    "Saved" : "Gespäichert"
+    "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Ongültegen Numm, '\\', '/', '<', '>', ':', '\"', '|', '?' an '*' sinn net erlaabt."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

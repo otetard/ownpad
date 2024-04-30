@@ -2,7 +2,6 @@ OC.L10N.register(
     "ownpad",
     {
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "﻿ಅಮಾನ್ಯವಾದ ಹೆಸರು, '\\', '/', '<', '>', ':', '\"', '|', '?' ಮತ್ತು '*'  ಅನುಮತಿ ಇಲ್ಲ.",
-    "The target folder has been moved or deleted." : "ಕೋಶದ ಉದ್ದೇಶಿತ ಸ್ಥಳ ಬದಲಾವಣೆ ಮಾಡಲಾಗಿದೆ ಅಥವಾ ಅಳಿಸಲಾಗಿದೆ.",
-    "Saved" : "﻿ಉಳಿಸಿದ"
+    "The target folder has been moved or deleted." : "ಕೋಶದ ಉದ್ದೇಶಿತ ಸ್ಥಳ ಬದಲಾವಣೆ ಮಾಡಲಾಗಿದೆ ಅಥವಾ ಅಳಿಸಲಾಗಿದೆ."
 },
 "nplurals=2; plural=(n > 1);");

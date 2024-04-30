@@ -1,6 +1,5 @@
 { "translations": {
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Emër i pavlefshëm, '\\', '/', '<', '>', ':', '\"', '|', '?' dhe '*' nuk lejohen.",
-    "The target folder has been moved or deleted." : "Dosja vendmbërritje është zhvendosur ose fshirë.",
-    "Saved" : "Ruajtur"
+    "The target folder has been moved or deleted." : "Dosja vendmbërritje është zhvendosur ose fshirë."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

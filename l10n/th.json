@@ -1,6 +1,5 @@
 { "translations": {
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "ชื่อที่ใช้ไม่ถูกต้อง '\\', '/', '<', '>', ':', '\"', '|', '?' และ '*' ไม่ได้รับอนุญาตให้ใช้งาน",
-    "The target folder has been moved or deleted." : "โฟลเดอร์ปลายทางถูกย้ายหรือลบ",
-    "Saved" : "บันทึกแล้ว"
+    "The target folder has been moved or deleted." : "โฟลเดอร์ปลายทางถูกย้ายหรือลบ"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
