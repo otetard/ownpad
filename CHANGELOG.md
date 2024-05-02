@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- Add a new “test etherpad authentication” button in settings.
+
 ## 0.11.0-beta.2
 
 ### Fixed

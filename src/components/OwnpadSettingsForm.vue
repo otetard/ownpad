@@ -35,7 +35,7 @@
 
 					<NcCheckboxRadioSwitch type="switch"
 						:checked.sync="settings.etherpadUseApi">
-						{{ t('ownpad', 'Use Etherpad API (*experimental*)') }}
+						{{ t('ownpad', 'Use Etherpad API') }}
 					</NcCheckboxRadioSwitch>
 
 					<fieldset v-show="settings.etherpadUseApi" id="ownpad-settings-etherpad-api" class="ownpad__sub-section">
@@ -59,6 +59,20 @@
 						<NcPasswordField v-if="settings.etherpadEnableOauth"
 							:label="t('ownpad', 'Etherpad authentication Client Secret')"
 							:value.sync="settings.etherpadClientSecret" />
+
+						<NcButton :aria-label="t('ownpad', 'Test Etherpad authentication')"
+							@click="testEtherpadAuthentication">
+							{{ t('ownpad', 'Test Etherpad authentication') }}
+						</NcButton>
+
+						<NcNoteCard v-if="testTokenResult.status == 'error'"
+							type="error">
+							{{ t('ownpad', 'The following error occurred while trying to authenticate to Etherpad: {message}', {message: testTokenResult.message}) }}
+						</NcNoteCard>
+						<NcNoteCard v-else-if="testTokenResult.status == 'success'"
+							type="success">
+							{{ t('ownpad', 'Authentication to Etherpad succeed!') }}
+						</NcNoteCard>
 
 						<NcCheckboxRadioSwitch type="switch"
 							:checked.sync="settings.etherpadPublicEnable">
@@ -99,10 +113,13 @@ import {
 	NcCheckboxRadioSwitch,
 	NcTextField,
 	NcPasswordField,
+	NcButton,
 } from '@nextcloud/vue'
 import { loadState } from '@nextcloud/initial-state'
 import { defineComponent } from 'vue'
 import { snakeCase } from 'lodash'
+import { generateUrl } from '@nextcloud/router'
+import axios from '@nextcloud/axios'
 
 export default defineComponent({
 	name: 'OwnpadSettingsForm',
@@ -112,11 +129,13 @@ export default defineComponent({
 		NcCheckboxRadioSwitch,
 		NcTextField,
 		NcPasswordField,
+		NcButton,
 	},
 	data() {
-	 return {
-	     settingsData: loadState('ownpad', 'settings'),
-	 }
+	    return {
+			settingsData: loadState('ownpad', 'settings'),
+			testTokenResult: {},
+	    }
 	},
 	computed: {
 		settings() {
@@ -136,6 +155,19 @@ export default defineComponent({
 	},
 	methods: {
 	 t,
+		async testEtherpadAuthentication() {
+			try {
+				await axios.get(
+					generateUrl('/apps/ownpad/ajax/v1.0/testetherpadtoken'),
+				)
+				this.testTokenResult = { status: 'success' }
+			} catch (error) {
+				this.testTokenResult = {
+					status: 'error',
+					message: error.response.data.data.message,
+				}
+			}
+		},
 	},
 })
 </script>

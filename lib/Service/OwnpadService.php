@@ -228,6 +228,14 @@ class OwnpadService {
 		return $url;
 	}
 
+	public function testEtherpadToken() {
+		try {
+			return $this->etherpadCallApi('checkToken');
+		} catch(Exception) {
+			$l10n = \OC::$server->getL10N('ownpad');
+			throw new OwnpadException($l10n->t('Invalid authentication credentials'));
+		}
+	}
 
 	/**
 	 * Main entrypoint to call Etherpad API.
