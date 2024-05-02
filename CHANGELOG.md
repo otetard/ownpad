@@ -4,23 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-### Added
-
-- Add a new “test etherpad authentication” button in settings.
-
-## 0.11.0-beta.2
-
-### Fixed
-
-- Remove `3rdparty` from the Nextcloud App Store tarball.
-
-## 0.11.0-beta.1
+## 0.11.0
 
 ### Added
 
 - Add support for OAuth2 authentication now that Etherpad 2.x requires
   it. Keep support for old APIKey authentication. This requires a
   version strictly upper than 2.0.2.
+- Add a new “test etherpad authentication” button in settings.
 
 ### Changed
 
@@ -28,6 +19,10 @@ All notable changes to this project will be documented in this file.
   Etherpad API directly in Ownpad.
 - Rewrite settings page to make use of Vue to improve user experience
   and maintenance.
+
+### Fixed
+
+- Remove `3rdparty` from the Nextcloud App Store tarball.
 
 ## 0.10.1
 
