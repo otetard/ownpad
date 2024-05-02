@@ -16,14 +16,16 @@ In order to make Ownpad work, go to the configuration panel (Settings /
 Admininstration / Additional Settings) and fill in the necessary data
 within the “Ownpad (collaborative documents)” section.
 
-**Set a Etherpad Host:**
-To be able to process the document, you must configure a Host. [Find more public providers at the Etherpad-Lite wiki](https://github.com/ether/etherpad-lite/wiki/Sites-that-run-Etherpad-Lite)
+**Set a Etherpad Host:** To be able to process the document, you must
+configure a Host. [Find more public providers at the Etherpad-Lite
+wiki](https://github.com/ether/etherpad-lite/wiki/Sites-that-run-Etherpad-Lite)
 
 *Example:*
 * Etherpad Host   https://etherpad.wikimedia.org/
 * Ethercalc Host  https://ethercalc.net/
 
-Note that most browsers will only display the content if both Nextcloud and Etherpad/Ethercalc are served via HTTPS.
+Note that most browsers will only display the content if both
+Nextcloud and Etherpad/Ethercalc are served via HTTPS.
 
 Afterwards, the “pad” and/or “calc” items will be available in the “+”
 menu from the “File” app.
@@ -59,7 +61,12 @@ Then, you should add the following content in the `/config/mimetypemapping.json`
 }
 ```
 
-For the [snap-distribution of Nextcloud](https://github.com/nextcloud/nextcloud-snap) the template file can be found under `/snap/nextcloud/current/htdocs/resources/config/mimetypemapping.dist.json` and the active config-folder by default is `/var/snap/nextcloud/current/nextcloud/config/`.
+For the [snap-distribution of
+Nextcloud](https://github.com/nextcloud/nextcloud-snap) the template
+file can be found under
+`/snap/nextcloud/current/htdocs/resources/config/mimetypemapping.dist.json`
+and the active config-folder by default is
+`/var/snap/nextcloud/current/nextcloud/config/`.
 
 Then you should copy the MIME type icons from Ownpad to the Nextcloud core:
 
@@ -91,19 +98,18 @@ Ownpad. If this is used then the user will simply be prompted to enter
 login credentials by their browser when they try to access a pad from
 within Nextcloud.
 
-### Etherpad-managed auth
+### Etherpad-managed Authentication
 
 Ownpad supports communication with the Etherpad API for access
-restriction (so called *protected pads*). This support is considered
-**experimental** due to work in progress; some features are still
-missing. See the [TODO.md](TODO.md) for details.
+restriction (so called *protected pads*).
 
 Protected pads need to be accessed via Nextcloud in order to gain access
 privileges.
 
-In order for this to work, you’ll need to enter your Etherpad API key
-within the Ownpad settings. You can find your API key in the
-`APIKEY.txt` file of your Etherpad instance.
+In order for this to work, you’ll need to enter your Etherpad API
+credentials (either the API key for Etherpad 1.x or the client
+ID/client secret for Etherpad 2.x). Please refer to the next section
+to find out how to configure Etherpad.
 
 In addition you’ll need to host your Etherpad and Nextcloud instances
 under the same domain. For example, you can host your Etherpad in
@@ -112,14 +118,60 @@ example, you’ll have to set the cookie domain to `example.org` within
 the Ownpad settings.
 
 If you want to create *truly* private pads, you have to dedicate an
-Etherpad instance for Nextcloud **running both with HTTPS**. You will then configure Etherpad to
-restrict pad access via sessions and pad creation via the API.
-For this, you have to adjust your Etherpad configuration file
-(`settings.json`) as following:
+Etherpad instance for Nextcloud **running both with HTTPS**. You will
+then configure Etherpad to restrict pad access via sessions and pad
+creation via the API.  For this, you have to adjust your Etherpad
+configuration file (`settings.json`) as following:
 
+```json
+{
+    # …
     "requireSession" : true,
     "editOnly" : true,
+}
+```
+
+#### Etherpad Authentication
+
+If you are using Etherpad 1.x, then authentication is using a single
+API key secret. You can find your API key in the `APIKEY.txt` file of
+your Etherpad instance. This API key should be put in Ownpad settings.
+
+If you are using Etherpad 2.x (at least 2.0.3 is required), then, you
+should first configure your Etherpad’s `settings.json` file to add a
+new service account. You should give that account admin
+credentials. You should add the following snippet (you should adjust
+`client_id` and `client_secret` to strong values):
+
+```json
+{
+  # …
+  "sso": {
+    # …
+    "clients": [
+      # …
+      {
+        "client_id": "client_id",
+        "redirect_uris": [],
+        "response_types": [],
+        "grant_types": ["client_credentials"],
+        "client_secret": "client_secret",
+        "extraParams": [
+          {
+            "name": "admin",
+            "value": "true"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Then, you should push that secrets in Ownpad configuration after
+having enabled the OAuth2 authentication mode.
 
 ## License
 
-The code is licensed under the AGPLv3 which can be found as the file [COPYING](COPYING) in the source code repository.
+The code is licensed under the AGPLv3 which can be found as the file
+[COPYING](COPYING) in the source code repository.

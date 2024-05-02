@@ -68,4 +68,23 @@ class AjaxController extends Controller {
 			return new JSONResponse($message, Http::STATUS_NOT_FOUND);
 		}
 	}
+
+	/**
+	 * @NoAdminRequired
+	 */
+	public function testetherpadtoken() {
+		try {
+			$this->service->testEtherpadToken();
+			return new JSONResponse([
+				'data' => null,
+				'status' => 'success',
+			]);
+		} catch(OwnpadException $e) {
+			$message = [
+				'data' => ['message' => $e->getMessage()],
+				'status' => 'error',
+			];
+			return new JSONResponse($message, Http::STATUS_FORBIDDEN);
+		}
+	}
 }
