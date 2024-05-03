@@ -21,7 +21,6 @@ OC.L10N.register(
     "Etherpad Host" : "Etherpad 主機",
     "You need to enable Etherpad API if you want to create “protected” pads, that will only be accessible through Nextcloud." : "若您想要建立「受保護」的 pad，您必須啟用 Etherpad API，該 pad 僅能透過 Nextcloud 存取。",
     "You have to host your Etherpad instance in a subdomain or sibbling domain of the one that is used by Nextcloud (due to cookie isolation)." : "您必須將 Etherpad 站台架設在 Nextcloud 使用的子網域或同層級網域中（因為 cookie 隔離）。",
-    "Use Etherpad API (*experimental*)" : "使用 Etherpad API（*實驗性*）",
     "Enable OAuth2 authentication to communicate with Etherpad (introduced in Etherpad 2)" : "啟用 OAuth2 身份驗證以與 Etherpad 通訊（在 Etherpad 2 中引入）",
     "Etherpad Apikey" : "Etherpad API 金鑰",
     "In order to enable OAuth2 authentication in Etherpad, you need to configure a dedicated service account. Please refer to the Etherpad documentation to proceed." : "為了在 Etherpad 中啟用 OAuth2 身份驗證，您必須設定一個專用的服務帳號。請參考 Etherpad 文件以繼續。",

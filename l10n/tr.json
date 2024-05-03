@@ -18,7 +18,6 @@
     "Etherpad Host" : "Etherpad sunucusu",
     "You need to enable Etherpad API if you want to create “protected” pads, that will only be accessible through Nextcloud." : "Yalnızca Nextcloud üzerinden erişilebilen \"korunan\" pad ögeleri oluşturmak istiyorsanız Etherpad API özelliğini etkinleştirmeniz gerekir.",
     "You have to host your Etherpad instance in a subdomain or sibbling domain of the one that is used by Nextcloud (due to cookie isolation)." : "Etherpad kopyanızı, Nextcloud tarafından kullanılan etki alanının bir alt etki alanında ya da kardeş etki alanında barındırmanız gerekir (çerez yalıtımı nedeniyle).",
-    "Use Etherpad API (*experimental*)" : "Etherpad API kullanılsın (*deneysel*)",
     "Etherpad Apikey" : "Etherpad API anahtarı",
     "Allow “public” pads" : "“Herkese açık” pad ögeleri kullanılsın",
     "For example, if you host your Etherpad instance on `pad.example.org` and your Nextcloud instance on `cloud.example.org` you need to configure your cookie to `example.org` domain." : "Örneğin, Etherpad kopyanızı \"pad.ornek.org\" etki alanında ve Nextcloud kopyanızı \"cloud.ornek.org\" etki alanında barındırıyorsanız, çerezinizi \"ornek.org\" etki alanına göre yapılandırmanız gerekir.",

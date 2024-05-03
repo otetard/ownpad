@@ -21,7 +21,6 @@ OC.L10N.register(
     "Etherpad Host" : "Etherpad Host",
     "You need to enable Etherpad API if you want to create “protected” pads, that will only be accessible through Nextcloud." : "You need to enable Etherpad API if you want to create “protected” pads, that will only be accessible through Nextcloud.",
     "You have to host your Etherpad instance in a subdomain or sibbling domain of the one that is used by Nextcloud (due to cookie isolation)." : "You have to host your Etherpad instance in a subdomain or sibbling domain of the one that is used by Nextcloud (due to cookie isolation).",
-    "Use Etherpad API (*experimental*)" : "Use Etherpad API (*experimental*)",
     "Enable OAuth2 authentication to communicate with Etherpad (introduced in Etherpad 2)" : "Enable OAuth2 authentication to communicate with Etherpad (introduced in Etherpad 2)",
     "Etherpad Apikey" : "Etherpad Apikey",
     "In order to enable OAuth2 authentication in Etherpad, you need to configure a dedicated service account. Please refer to the Etherpad documentation to proceed." : "In order to enable OAuth2 authentication in Etherpad, you need to configure a dedicated service account. Please refer to the Etherpad documentation to proceed.",

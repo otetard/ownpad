@@ -18,7 +18,6 @@ OC.L10N.register(
     "Etherpad Host" : "Etherpad kiszolgáló",
     "You need to enable Etherpad API if you want to create “protected” pads, that will only be accessible through Nextcloud." : "Engedélyeznie kell az Etherpad API-t, ha „védett” padokat szeretne létrehozni, amelyek csak a Nextcloudon keresztül lesznek elérhetők.",
     "You have to host your Etherpad instance in a subdomain or sibbling domain of the one that is used by Nextcloud (due to cookie isolation)." : "Az Etherpad-példányt a Nextcloud által használt aldomainben vagy testvértartományban kell tárolnia (a cookie-k elkülönítése miatt).",
-    "Use Etherpad API (*experimental*)" : "Etherpad API használata (*kísérleti*)",
     "Etherpad Apikey" : "Etherpad Apikulcs",
     "Allow “public” pads" : "\"Nyilvános\" padok engedélyezése",
     "For example, if you host your Etherpad instance on `pad.example.org` and your Nextcloud instance on `cloud.example.org` you need to configure your cookie to `example.org` domain." : "Ha például az Etherpad-példányt a \"pad.example.org\", a Nextcloud-példányt pedig a \"cloud.example.org\" helyen tárolja, akkor a cookie-ját az \"example.org\" tartományra kell beállítani.",

@@ -21,7 +21,6 @@ OC.L10N.register(
     "Etherpad Host" : "Etherpad хост",
     "You need to enable Etherpad API if you want to create “protected” pads, that will only be accessible through Nextcloud." : "Ако желите да креирате „заштићене” бележнице којима може да се приступу само кроз Nextcloud, морате да укључите Etherpad API.",
     "You have to host your Etherpad instance in a subdomain or sibbling domain of the one that is used by Nextcloud (due to cookie isolation)." : "Etherpad инстанцу морате да хостујете у поддомену или у братском домену онога који користи Nextcloud (услед изолације колачића)",
-    "Use Etherpad API (*experimental*)" : "Користи Etherpad API (*експериментално*)",
     "Enable OAuth2 authentication to communicate with Etherpad (introduced in Etherpad 2)" : "Укључи OAuth2 проверу идентитета за комуникацију са Etherpad (уведено у Etherpad 2)",
     "Etherpad Apikey" : "Etherpad Api кључ",
     "In order to enable OAuth2 authentication in Etherpad, you need to configure a dedicated service account. Please refer to the Etherpad documentation to proceed." : "Да бисте укључили OAuth2 проверу идентитета у Etherpad, морате да подесите наменски сервисни налог. За наставак, молимо вас да погледате Etherpad документацију.",
