@@ -1,0 +1,28 @@
+{ "translations": {
+    "Share not found" : "No se encontró el elemento compartido",
+    "Unable to communicate with Etherpad API due to the following error: “%s”." : "No fue posible comunicarse con el API de Etherpad debido al siguiente error \"%s\".",
+    "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Nombre inválido, los caracteres \"\\\", \"/\", \"<\", \">\", \":\", \"\", \"|\" \"?\" y \"*\" no están permitidos ",
+    "The target folder has been moved or deleted." : "La carpeta destino fue movida o borrada.",
+    "The name %s is already used in the folder %s. Please choose a different name." : "El nombre %s ya está en uso en la carpeta %s. Por favor, escoja un nombre diferente.",
+    "Error when creating the file" : "Error al crear el archivo",
+    "URL in your Etherpad/Ethercalc document does not match the allowed server" : "La URL en su documento de Etherpad/Ethercalc no coincide con el servidor autorizado",
+    "Invalid authentication credentials" : "Credenciales de autenticación no válidas",
+    "Unable to authenticate to Etherpad API" : "No se ha podido autenticar al API de Etherpad",
+    "Create and open Etherpad and Ethercalc documents." : "Crear y abrir documentos de Etherpad y Ethercalc.",
+    "This is used to link collaborative documents inside Nextcloud." : "Esto se usa para enlazar documentos colaborativos dentro de Nextcloud.",
+    "Enable Etherpad" : "Habilitar Etherpad",
+    "Etherpad Host" : "Host Etherpad",
+    "You need to enable Etherpad API if you want to create “protected” pads, that will only be accessible through Nextcloud." : "Si desea crear pads \"protegidos\", los cuales serán accesibles solamente a través de Nextcloud, es necesario que habilite el API Etherpad.",
+    "You have to host your Etherpad instance in a subdomain or sibbling domain of the one that is used by Nextcloud (due to cookie isolation)." : "Debe alojar su instancia de Etherpad en un subdominio o dominio hermano al que está siendo utilizado por Nextcloud (debido al aislamiento de cookies).",
+    "Use Etherpad API" : "Usar el API de Etherpad",
+    "Enable OAuth2 authentication to communicate with Etherpad (introduced in Etherpad 2)" : "Habilitar autenticación OAuth2 para comunicarse con Etherpad (introducido en Etherpad 2)",
+    "Etherpad Apikey" : "Apikey de Etherpad",
+    "Etherpad authentication Client ID" : "Client ID de autenticación de Etherpad",
+    "Etherpad authentication Client Secret" : "Client Secret de autenticación de Etherpad",
+    "Test Etherpad authentication" : "Probar la autenticación de Etherpad",
+    "Allow “public” pads" : "Permitir pads \"públicos\"",
+    "Enable Ethercalc" : "Habilitar Ethercalc",
+    "Ethercalc Host" : "Host Ethercalc",
+    "Error: {error}" : "Error: {error}"
+},"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
+}
