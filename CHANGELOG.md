@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## 0.12.0
+
+### Changed
+
+- Add support for Nextcloud 30 (no changes).
+
 ## 0.11.0
 
 ### Added
