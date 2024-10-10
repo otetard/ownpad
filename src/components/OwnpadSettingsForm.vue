@@ -71,7 +71,7 @@
 						</NcNoteCard>
 						<NcNoteCard v-else-if="testTokenResult.status == 'success'"
 							type="success">
-							{{ t('ownpad', 'Authentication to Etherpad succeed!') }}
+							{{ t('ownpad', 'Authentication to Etherpad successful!') }}
 						</NcNoteCard>
 
 						<NcCheckboxRadioSwitch type="switch"
