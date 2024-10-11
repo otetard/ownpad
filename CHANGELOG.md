@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+
+- Improved grammar (thanks @rakekniven).
+
 ## 0.12.0
 
 ### Changed
