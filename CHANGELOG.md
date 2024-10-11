@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+
+- Improved grammar (thanks @rakekniven).
+- Update NPM dependencies.
+
 ## 0.12.0
 
 ### Changed
