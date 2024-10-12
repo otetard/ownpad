@@ -30,7 +30,6 @@ OC.L10N.register(
     "Etherpad authentication Client Secret" : "Etherpad kimlik doğrulama istemci parolası",
     "Test Etherpad authentication" : "Etherpad kimlik doğrulamasını sına",
     "The following error occurred while trying to authenticate to Etherpad: {message}" : "Etherpad kimliği doğrulanırken şu sorun çıktı: {message}",
-    "Authentication to Etherpad succeed!" : "Etherpad kimliği doğrulandı!",
     "Allow “public” pads" : "“Herkese açık” pad ögeleri kullanılsın",
     "For example, if you host your Etherpad instance on `pad.example.org` and your Nextcloud instance on `cloud.example.org` you need to configure your cookie to `example.org` domain." : "Örneğin, Etherpad kopyanızı \"pad.ornek.org\" etki alanında ve Nextcloud kopyanızı \"cloud.ornek.org\" etki alanında barındırıyorsanız, çerezinizi \"ornek.org\" etki alanına göre yapılandırmanız gerekir.",
     "Etherpad cookie domain" : "Etherpad çerezi etki alanı",

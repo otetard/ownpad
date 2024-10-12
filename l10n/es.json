@@ -28,7 +28,6 @@
     "Etherpad authentication Client Secret" : "Secreto de cliente para autenticación Etherpad",
     "Test Etherpad authentication" : "Probar autenticación Etherpad",
     "The following error occurred while trying to authenticate to Etherpad: {message}" : "Ocurrió el siguiente error mientras se intentaba autenticar a Etherpad: {message}",
-    "Authentication to Etherpad succeed!" : "¡La autenticación a Etherpad fue exitosa!",
     "Allow “public” pads" : "Permitir pads \"públicos\"",
     "For example, if you host your Etherpad instance on `pad.example.org` and your Nextcloud instance on `cloud.example.org` you need to configure your cookie to `example.org` domain." : "Por ejemplo, si aloja su instancia Etherpad en `pad.ejemplo.org`y su instancia Nexcloud en `cloud.ejemplo.org` debe configurar su cookie al dominio `ejemplo.org`.",
     "Etherpad cookie domain" : "Dominio para cookies Etherpad",

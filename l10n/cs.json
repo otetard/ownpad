@@ -26,6 +26,8 @@
     "Error: {error}" : "Chyba: {error}",
     "Pad" : "Blok",
     "New pad.pad" : "Nový blok.pad",
+    "Protected Pad" : "Chráněný pad",
+    "New protected pad.pad" : "Nový chráněný pad.pad",
     "Calc" : "Tabulka",
     "New calc.calc" : "Nová tabulka.calc",
     "Your Etherpad/Ethercalc document could not be opened, the following error was reported: “%s”." : "Váš Etherpad/Ethercalc dokument se nepodařilo otevřít, hlášena byla následující chyba: „%s“."

@@ -30,7 +30,6 @@ OC.L10N.register(
     "Etherpad authentication Client Secret" : "Etherpad authentication Client Secret",
     "Test Etherpad authentication" : "Test Etherpad authentication",
     "The following error occurred while trying to authenticate to Etherpad: {message}" : "The following error occurred while trying to authenticate to Etherpad: {message}",
-    "Authentication to Etherpad succeed!" : "Authentication to Etherpad succeed!",
     "Allow “public” pads" : "Allow “public” pads",
     "For example, if you host your Etherpad instance on `pad.example.org` and your Nextcloud instance on `cloud.example.org` you need to configure your cookie to `example.org` domain." : "For example, if you host your Etherpad instance on `pad.example.org` and your Nextcloud instance on `cloud.example.org` you need to configure your cookie to `example.org` domain.",
     "Etherpad cookie domain" : "Etherpad cookie domain",

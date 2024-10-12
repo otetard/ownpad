@@ -28,7 +28,6 @@
     "Etherpad authentication Client Secret" : "Etherpad 驗證客戶端祕密",
     "Test Etherpad authentication" : "測試 Etherpad 驗證",
     "The following error occurred while trying to authenticate to Etherpad: {message}" : "嘗試驗證 Etherpad 時發生以下錯誤：{message}",
-    "Authentication to Etherpad succeed!" : "驗證 Etherpad 成功！",
     "Allow “public” pads" : "允許「公開」pad",
     "For example, if you host your Etherpad instance on `pad.example.org` and your Nextcloud instance on `cloud.example.org` you need to configure your cookie to `example.org` domain." : "舉例來說，若您將 Etherpad 站台架設在「pad.example.org」，而您的 Nextcloud 站台是在「cloud.example.org」，則您必須將 cookie 設定為「example.org」網域。",
     "Etherpad cookie domain" : "Etherpad cookie 網域",

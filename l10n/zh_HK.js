@@ -30,7 +30,6 @@ OC.L10N.register(
     "Etherpad authentication Client Secret" : "Etherpad 驗證客戶端密鑰",
     "Test Etherpad authentication" : "測試 Etherpad 驗證",
     "The following error occurred while trying to authenticate to Etherpad: {message}" : "在嘗試驗證到 Etherpad 時發生以下錯誤：{message}",
-    "Authentication to Etherpad succeed!" : "成功驗證到 Etherpad！",
     "Allow “public” pads" : "允許「公開」pad",
     "For example, if you host your Etherpad instance on `pad.example.org` and your Nextcloud instance on `cloud.example.org` you need to configure your cookie to `example.org` domain." : "例如，如果您將 Etherpad 實例託管在“pad.example.org”上，將 Nextcloud 實例託管在“cloud.example.org”上，則需要將 cookie 配置為“example.org”域。",
     "Etherpad cookie domain" : "Etherpad cookie 域名",

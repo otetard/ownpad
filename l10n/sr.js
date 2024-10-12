@@ -30,7 +30,6 @@ OC.L10N.register(
     "Etherpad authentication Client Secret" : "Тајна клијента за Etherpad проверу идентитета",
     "Test Etherpad authentication" : "Тестирање Etherpad аутентификације",
     "The following error occurred while trying to authenticate to Etherpad: {message}" : "Дошло је до следеће грешке приликом покушаја потврде идентитета за Etherpad: {message}",
-    "Authentication to Etherpad succeed!" : "Успела је потрврда идентитета за Etherpad!",
     "Allow “public” pads" : "Дозволи „јавне” бележнице",
     "For example, if you host your Etherpad instance on `pad.example.org` and your Nextcloud instance on `cloud.example.org` you need to configure your cookie to `example.org` domain." : "На пример, ско Etherpad инстанцу хостујете на `pad.example.org` а Nextcloud инстанцу на `cloud.example.org`, колачић морате да конфигуришете на `example.org` домен.",
     "Etherpad cookie domain" : "Домен Etherpad колачића",
