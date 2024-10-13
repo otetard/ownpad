@@ -28,6 +28,7 @@
     "Etherpad authentication Client Secret" : "Segredo do cliente para a autenticación en Etherpad",
     "Test Etherpad authentication" : "Proba de autenticación en Etherpad",
     "The following error occurred while trying to authenticate to Etherpad: {message}" : "Produciuse o seguinte erro ao tentar autenticarse en Etherpad: {message}",
+    "Authentication to Etherpad successful!" : "Autenticación correcta en Etherpad!",
     "Allow “public” pads" : "Permitir cadernos «públicos»",
     "For example, if you host your Etherpad instance on `pad.example.org` and your Nextcloud instance on `cloud.example.org` you need to configure your cookie to `example.org` domain." : "Por exemplo, se aloxa a súa instancia Etherpad en `pad.exemplo.org` e a súa instancia Nextcloud en `cloud.exemplo.org`, debe configurar a súa cookie para o dominio `exemplo.org`.",
     "Etherpad cookie domain" : "Dominio da cookie de Etherpad",

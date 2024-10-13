@@ -30,6 +30,7 @@ OC.L10N.register(
     "Etherpad authentication Client Secret" : "سر عميل مصادقة Etherpad",
     "Test Etherpad authentication" : "إختبار مصادقة Etherpad",
     "The following error occurred while trying to authenticate to Etherpad: {message}" : "حدث الخطأ التالي عند محاولة المصادقة عبر  Etherpad ـ : {message}",
+    "Authentication to Etherpad successful!" : "تصديق الدخول لتطبيق \"إيثرباد\" Etherpad تمّ بنجاحٍ!",
     "Allow “public” pads" : "السماح بالكراسات pads العمومية \"public\"",
     "For example, if you host your Etherpad instance on `pad.example.org` and your Nextcloud instance on `cloud.example.org` you need to configure your cookie to `example.org` domain." : "على سبيل المثال، إذا كنت تستضيف خادوم Etherpad الخاص بك على `pad.example.org` و خادوم نكست كلاود الخاص بك على`cloud.example.org`، فأنت بحاجة إلى تكوين ملف تعريف الارتباط الخاص بك إلى النطاق `example.org`.",
     "Etherpad cookie domain" : "نطاق ملفات تعريف الارتباط cookie لـ Etherpad",
