@@ -28,6 +28,7 @@
     "Etherpad authentication Client Secret" : "Etherpad fíordheimhnithe Cliant Rúnda",
     "Test Etherpad authentication" : "Fíordheimhniú Etherpad a thástáil",
     "The following error occurred while trying to authenticate to Etherpad: {message}" : "Tharla an earráid seo a leanas agus iarracht á déanamh fíordheimhniú chuig Etherpad: {message}",
+    "Authentication to Etherpad successful!" : "Fíordheimhniú go Etherpad rathúil!",
     "Allow “public” pads" : "Ceadaigh pillíní “poiblí”.",
     "For example, if you host your Etherpad instance on `pad.example.org` and your Nextcloud instance on `cloud.example.org` you need to configure your cookie to `example.org` domain." : "Mar shampla, má dhéanann tú óstáil ar do shampla Etherpad ar `pad.example.org` agus do shampla Nextcloud ar `cloud.example.org` ní mór duit do fhianán a chumrú chuig fearann ​​`example.org`.",
     "Etherpad cookie domain" : "Fearann ​​​​fianán etherpad",
