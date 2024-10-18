@@ -10,7 +10,7 @@ OC.L10N.register(
     "Error when creating the file" : "خطأ في إنشاء الملف",
     "You are not allowed to open this pad." : "غير مسموح لك بفتح هذا الكُرّاس pad.",
     "URL in your Etherpad/Ethercalc document does not match the allowed server" : "عنوان URL في كُرّاسك Etherpad/Ethercalc لا يتطابق مع الخادم المصرح به",
-    "Invalid authentication credentials" : "حيثيات الدخول غير صحيحة",
+    "Invalid authentication credentials" : "بيانات تسجيل الدخول غير صحيحة",
     "Unable to authenticate to Etherpad API" : "تعذّرت المصادقة مع واجهة التطبيق Etherpad",
     "Ownpad" : "Ownpad",
     "Create and open Etherpad and Ethercalc documents." : "تعذّر فتح مستندات Etherpad و Ethercalc.",
