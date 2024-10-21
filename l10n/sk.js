@@ -1,7 +1,7 @@
 OC.L10N.register(
     "ownpad",
     {
-    "Share not found" : "Sprístupnenie sa nenašlo",
+    "Share not found" : "Zdieľanie sa nenašlo",
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Nesprávne meno, '\\', '/', '<', '>', ':', '\"', '|', '?' a '*' nie sú povolené hodnoty.",
     "The target folder has been moved or deleted." : "Cieľový priečinok bol premiestnený alebo odstránený.",
     "Error: {error}" : "Chyba: {error}"
