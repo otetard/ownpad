@@ -20,7 +20,7 @@ OC.L10N.register(
     "Ownpad is not correctly configured, you should update your configuration. Please refer to the documentation for more information." : "Ownpad doğru yapılandırılmamış. Yapılandırmanızı güncellemelisiniz. Ayrıntılı bilgi almak için lütfen belgelere bakın.",
     "Enable Etherpad" : "Etherpad kullanılsın",
     "Etherpad Host" : "Etherpad sunucusu",
-    "You need to enable Etherpad API if you want to create “protected” pads, that will only be accessible through Nextcloud." : "Yalnızca Nextcloud üzerinden erişilebilen \"korunan\" pad ögeleri oluşturmak istiyorsanız Etherpad API özelliğini etkinleştirmeniz gerekir.",
+    "You need to enable Etherpad API if you want to create “protected” pads, that will only be accessible through Nextcloud." : "Yalnızca Nextcloud üzerinden erişilebilen \"korunan\" pad ögeleri oluşturmak istiyorsanız Etherpad API özelliğini kullanıma almanız gerekir.",
     "You have to host your Etherpad instance in a subdomain or sibbling domain of the one that is used by Nextcloud (due to cookie isolation)." : "Etherpad kopyanızı, Nextcloud tarafından kullanılan etki alanının bir alt etki alanında ya da kardeş etki alanında barındırmanız gerekir (çerez yalıtımı nedeniyle).",
     "Use Etherpad API" : "Etherpad API kullanılsın",
     "Enable OAuth2 authentication to communicate with Etherpad (introduced in Etherpad 2)" : "Etherpad ile iletişim kurmak için OAuth2 kimlik doğrulamasını kullanın (Etherpad 2 ile sunulmuştur)",
