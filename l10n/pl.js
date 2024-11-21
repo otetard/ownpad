@@ -3,7 +3,7 @@ OC.L10N.register(
     {
     "Share not found" : "Nie znaleziono udostępnienia",
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Nieprawidłowa nazwa. Znaki '\\', '/', '<', '>', ':', '\"', '|', '?' oraz '*' są niedozwolone.",
-    "The target folder has been moved or deleted." : "Folder docelowy został przeniesiony lub usunięty",
+    "The target folder has been moved or deleted." : "Katalog docelowy został przeniesiony lub usunięty",
     "This is used to link collaborative documents inside Nextcloud." : "Służy do łączenia dokumentów tworzony we współpracy w ramach Nextcloud.",
     "Error: {error}" : "Błąd: {error}"
 },
