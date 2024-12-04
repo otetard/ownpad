@@ -2,11 +2,19 @@ OC.L10N.register(
     "ownpad",
     {
     "Share not found" : "Partekatzea ez da aurkitu",
+    "Incorrect padname." : "Pad-izen baliogabea.",
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "IZen aliogabea, '\\', '/', '<', '>', ':', '\"', '|', '?' eta '*' ez daude baimenduta.",
     "The target folder has been moved or deleted." : "Jatorrizko karpeta mugitu edo ezabatu da.",
     "Ownpad" : "Ownpad",
+    "Enable Etherpad" : "Gaitu Etherpad",
+    "Etherpad Host" : "Etherpad ostalaria",
+    "Etherpad Apikey" : "Etherpad Api gakoa",
+    "Enable Ethercalc" : "Gaitu Ethercalc",
+    "Ethercalc Host" : "Ethercalc ostalaria",
     "Error: {error}" : "Errorea: {error}",
     "Pad" : "Pad",
-    "Calc" : "Calc"
+    "New pad.pad" : "pad.pad berria",
+    "Calc" : "Calc",
+    "New calc.calc" : "calc.calc berria"
 },
 "nplurals=2; plural=(n != 1);");
