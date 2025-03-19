@@ -1,7 +1,7 @@
 OC.L10N.register(
     "ownpad",
     {
-    "Share not found" : "Общий доступ не найден",
+    "Share not found" : "Ресурс с общим доступом не найден",
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Неправильное имя, символы '\\', '/', '<', '>', ':', '\"', '|', '?' и '*' недопустимы.",
     "The target folder has been moved or deleted." : "Целевой каталог был перемещен или удален.",
     "Error: {error}" : "Ошибка: {error}"
