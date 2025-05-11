@@ -1,7 +1,7 @@
 {
   "name": "ownpad",
   "description": "Ownpad application for Nextcloud",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "author": "Olivier Tétard <olivier.tetard@miskin.fr>",
   "contributors": [],
   "bugs": {
@@ -26,13 +26,13 @@
   "dependencies": {
     "@nextcloud/auth": "^2.1.0",
     "@nextcloud/axios": "^2.4.0",
-    "@nextcloud/dialogs": "^4.2.3",
+    "@nextcloud/dialogs": "^6.2.0",
     "@nextcloud/event-bus": "^3.1.0",
-    "@nextcloud/files": "^3.1.0",
+    "@nextcloud/files": "^3.10.2",
     "@nextcloud/initial-state": "^2.2.0",
-    "@nextcloud/logger": "^2.7.0",
-    "@nextcloud/router": "^2.1.2",
-    "@nextcloud/vue": "^8.11.2",
+    "@nextcloud/logger": "^3.0.2",
+    "@nextcloud/router": "^3.0.1",
+    "@nextcloud/vue": "^8.26.1",
     "jquery": "^3.7.0",
     "lodash": "^4.17.21",
     "vue": "^2.7.16"
@@ -41,8 +41,8 @@
     "extends @nextcloud/browserslist-config"
   ],
   "engines": {
-    "node": "^16.0.0",
-    "npm": "^7.0.0 || ^8.0.0"
+    "node": "^20.0.0",
+    "npm": "^10.0.0"
   },
   "devDependencies": {
     "@nextcloud/babel-config": "^1.0.0",
