@@ -28,7 +28,7 @@ jobs:
         uses: SMillerDev/nextcloud-actions/setup-nextcloud@main
         with:
           cron: false
-          version: stable28
+          version: stable31
           database-type: sqlite
 
       - name: Prime app build

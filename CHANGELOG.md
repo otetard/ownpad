@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 - Improved grammar (thanks @rakekniven).
 - Update NPM dependencies.
+- Add support for Nextcloud 31 (no changes).
 
 ## 0.12.0
 
