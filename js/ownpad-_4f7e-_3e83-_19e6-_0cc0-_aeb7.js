@@ -1,1 +1,0 @@
-(self.webpackChunkownpad=self.webpackChunkownpad||[]).push([["_4f7e-_3e83-_19e6-_0cc0-_aeb7"],{42634:()=>{},63779:()=>{},77199:()=>{},59169:()=>{},86833:()=>{}}]);
