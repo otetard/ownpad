@@ -8,7 +8,7 @@ OC.L10N.register(
     "The target folder has been moved or deleted." : "Одредишна фасцикла је премештена или обрисана.",
     "The name %s is already used in the folder %s. Please choose a different name." : "Назив %s се већ користи у директоријуму %s. Молимо вас да изаберете неко друго име.",
     "Error when creating the file" : "Грешка приликом креирања фајла",
-    "You are not allowed to open this pad." : "Није вам дозвољено да отворите овау бележницу.",
+    "You are not allowed to open this pad." : "Није вам дозвољено да отворите ову бележницу.",
     "URL in your Etherpad/Ethercalc document does not match the allowed server" : "URL у вашем Etherpad/Ethercalc документу се не подудара са дозвољеним сервером",
     "Invalid authentication credentials" : "Неисправни подаци за потврду идентитета",
     "Unable to authenticate to Etherpad API" : "Неуспешна провера идентитета за Etherpad API",
