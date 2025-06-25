@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Share not found" : "Partilha não encontrada",
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Nome inválido, os carateres '\\', '/', '<', '>', ':', '\"', '|', '?' e '*' não são permitidos.",
-    "The target folder has been moved or deleted." : "A pasta de destino foi movida ou eliminada."
+    "The target folder has been moved or deleted." : "A pasta de destino foi movida ou eliminada.",
+    "Error: {error}" : "Error: {error}"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
