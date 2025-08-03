@@ -22,7 +22,7 @@
     "You have to host your Etherpad instance in a subdomain or sibbling domain of the one that is used by Nextcloud (due to cookie isolation)." : "Debe alojar su instancia de Etherpad en un subdominio o dominio hermano al que está siendo utilizado por Nextcloud (debido al aislamiento de cookies).",
     "Use Etherpad API" : "Utilizar el API de Etherpad",
     "Enable OAuth2 authentication to communicate with Etherpad (introduced in Etherpad 2)" : "Habilitar autenticación OAuth2 para comunicarse con Etherpad (introducido en Etherpad 2)",
-    "Etherpad Apikey" : "Apikey Etherpad",
+    "Etherpad Apikey" : "Clave API de Etherpad",
     "In order to enable OAuth2 authentication in Etherpad, you need to configure a dedicated service account. Please refer to the Etherpad documentation to proceed." : "De manera de habilitar la autenticación OAuth2 en Etherpad, necesita configurar una cuenta de servicio dedicada. Por favor, refiérase a la documentación de Etherpad para proceder.",
     "Etherpad authentication Client ID" : "ID de cliente para autenticación Etherpad",
     "Etherpad authentication Client Secret" : "Secreto de cliente para autenticación Etherpad",
