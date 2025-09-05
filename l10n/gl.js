@@ -8,7 +8,7 @@ OC.L10N.register(
     "The target folder has been moved or deleted." : "O cartafol de destino foi movido ou eliminado.",
     "The name %s is already used in the folder %s. Please choose a different name." : "O nome %s xa se utiliza no cartafol %s. Escolla outro nome.",
     "Error when creating the file" : "Produciuse un erro ao crear o ficheiro",
-    "You are not allowed to open this pad." : "Non ten permiso para abrir este caderno.",
+    "You are not allowed to open this pad." : "Vde. non ten permiso para abrir este caderno.",
     "URL in your Etherpad/Ethercalc document does not match the allowed server" : "O URL do seu documento Etherpad/Ethercalc non coincide co servidor permitido",
     "Invalid authentication credentials" : "Credenciais de autenticación incorrectas",
     "Unable to authenticate to Etherpad API" : "Non é posíbel autenticar na API de Etherpad.",
