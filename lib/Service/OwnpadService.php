@@ -313,6 +313,7 @@ class OwnpadService {
 	private function getBearerToken() {
 		$oidcUrl = $this->eplHost . "/oidc/token";
 		$data = [
+			"resource" => $this->eplHost . "/oidc/resource",
 			"grant_type" => "client_credentials",
 			"client_id" => $this->eplClientId,
 			"client_secret" => $this->eplClientSecret,
