@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+
+- Update some NPM dependencies.
+
 ### Fixed
 
 - Add resource indicator URI to Etherpad calls to get bearer token
