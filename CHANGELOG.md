@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+- Add resource indicator URI to Etherpad calls to get bearer token
+  (thanks @ryzom!).
+
 ## 0.13.0
 
 ### Changed
