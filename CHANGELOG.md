@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## 0.13.1
+
 ### Changed
 
 - Update some NPM dependencies.
