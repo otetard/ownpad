@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## 0.13.1
+
+### Changed
+
+- Update some NPM dependencies.
+
+### Fixed
+
+- Add resource indicator URI to Etherpad calls to get bearer token
+  (thanks @ryzom!).
+
 ## 0.13.0
 
 ### Changed
