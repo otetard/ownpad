@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## 0.13.2
+
+### Changed
+
+- Rebuilt version due to a build issue.
+
 ## 0.13.1
 
 ### Changed
