@@ -2,8 +2,18 @@ OC.L10N.register(
     "ownpad",
     {
     "Share not found" : "未找到共享",
+    "Unable to communicate with Etherpad API due to the following error: “%s”." : "由于以下错误，无法与Etherpad API通信：“%s\"。",
+    "Incorrect padname." : "pad名不正确。",
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "无效名称，'\\', '/', '<', '>', ':', '\"', '|', '?' 和 '*' 不被允许使用。",
     "The target folder has been moved or deleted." : "目标文件夹已被移动或删除.",
+    "The name %s is already used in the folder %s. Please choose a different name." : "该名称%s已在文件夹%s中使用。请选择其他名称。",
+    "Error when creating the file" : "创建文件时出错",
+    "You are not allowed to open this pad." : "您不允许打开此pad。",
+    "URL in your Etherpad/Ethercalc document does not match the allowed server" : "Etherpad/Ethercalc文档中的URL与允许的服务器不匹配",
+    "Invalid authentication credentials" : "身份验证凭据无效",
+    "Unable to authenticate to Etherpad API" : "无法验证到Etherpad API",
+    "Ownpad is a Nextcloud application that allows to create and open Etherpad and Ethercalc documents.\n\nThis application requires to have access to an instance of <a href=\"https://etherpad.org/\">Etherpad</a> and/or <a href=\"https://ethercalc.net/\">Ethercalc</a> to work properly." : "Ownpad是一个Nextcloud应用程序，允许创建和打开Etherpad和Ethercalc文档。\n此应用程序需要访问<a href=\"https://etherpad.org/\">Etherpad</a>和/或<a href=\"https://ethercalc.net/\">Ethercalc</a>的实例才能正常工作。",
+    "Ownpad is not correctly configured, you should update your configuration. Please refer to the documentation for more information." : "Ownpad配置不正确，您应该更新配置。有关需要更多信息，请参阅文档。",
     "Error: {error}" : "错误：{error}"
 },
 "nplurals=1; plural=0;");
