@@ -9,7 +9,7 @@ OC.L10N.register(
     "The name %s is already used in the folder %s. Please choose a different name." : "Ім'я %s вже використовується у теці %s. Будь ласка, виберіть інше ім'я.",
     "Error when creating the file" : "Помилка при створенні файлу",
     "You are not allowed to open this pad." : "Ви не маєте права відкривати цей блокнот.",
-    "URL in your Etherpad/Ethercalc document does not match the allowed server" : "URL-адреса в документі Etherpad/Ethercalc не відповідає дозволеному серверу",
+    "URL in your Etherpad/Ethercalc document does not match the allowed server" : "Адреса посилання в документі Etherpad/Ethercalc не відповідає дозволеній сервером",
     "Invalid authentication credentials" : "Неправильні облікові дані для автентифікації",
     "Unable to authenticate to Etherpad API" : "Не вдається авторизуватися в API Etherpad",
     "Ownpad" : "Ownpad",
