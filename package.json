@@ -34,7 +34,7 @@
     "@nextcloud/router": "^3.0.1",
     "@nextcloud/vue": "^8.26.1",
     "jquery": "^3.7.0",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "vue": "^2.7.16"
   },
   "browserslist": [
