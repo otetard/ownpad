@@ -2,11 +2,11 @@ OC.L10N.register(
     "ownpad",
     {
     "Share not found" : "ھەمبەھىر تېپىلمىدى",
-    "Unable to communicate with Etherpad API due to the following error: “%s”." : "تۆۋەندىكى خاتالىق سەۋەبىدىن Etherpad API بىلەن ئالاقە قىلالمىدى: «% s».",
+    "Unable to communicate with Etherpad API due to the following error: “%s”." : "تۆۋەندىكى خاتالىق سەۋەبىدىن Etherpad API بىلەن ئالاقە قىلالمىدى: «%s».",
     "Incorrect padname." : "خاتا ئىسىم.",
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "ئىناۋەتسىز ئىسىم ، '\\', '/', '<', '>', ':', '' ',' | ','? ' ۋە '*' رۇخسەت قىلىنمايدۇ.",
     "The target folder has been moved or deleted." : "نىشان ھۆججەت قىسقۇچ يۆتكەلدى ياكى ئۆچۈرۈلدى.",
-    "The name %s is already used in the folder %s. Please choose a different name." : "% S دېگەن نام ئاللىقاچان% s ھۆججەت قىسقۇچىدا ئىشلىتىلگەن. باشقا ئىسىمنى تاللاڭ.",
+    "The name %s is already used in the folder %s. Please choose a different name." : "%s دېگەن نام ئاللىقاچان %s ھۆججەت قىسقۇچىدا ئىشلىتىلگەن. باشقا ئىسىمنى تاللاڭ.",
     "Error when creating the file" : "ھۆججەت قۇرغاندا خاتالىق",
     "You are not allowed to open this pad." : "بۇ تاختىنى ئېچىشىڭىزغا رۇخسەت قىلىنمايدۇ.",
     "URL in your Etherpad/Ethercalc document does not match the allowed server" : "Etherpad / Ethercalc ھۆججىتىڭىزدىكى URL رۇخسەت قىلىنغان مۇلازىمېتىرغا ماس كەلمەيدۇ",
@@ -44,6 +44,6 @@ OC.L10N.register(
     "New protected pad.pad" : "يېڭى قوغدىلىدىغان pad.pad",
     "Calc" : "Calc",
     "New calc.calc" : "يېڭى calc.calc",
-    "Your Etherpad/Ethercalc document could not be opened, the following error was reported: “%s”." : "Etherpad / Ethercalc ھۆججىتىڭىزنى ئاچقىلى بولمىدى ، تۆۋەندىكى خاتالىق دوكلات قىلىندى: «% s»."
+    "Your Etherpad/Ethercalc document could not be opened, the following error was reported: “%s”." : "Etherpad / Ethercalc ھۆججىتىڭىزنى ئاچقىلى بولمىدى ، تۆۋەندىكى خاتالىق دوكلات قىلىندى: «%s»."
 },
 "nplurals=2; plural=(n != 1);");
