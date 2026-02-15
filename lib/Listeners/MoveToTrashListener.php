@@ -22,9 +22,6 @@ class MoveToTrashListener implements IEventListener {
 	}
 
 	public function handle(Event $event): void {
-		if (!$this->ownpadService->isDeleteOnTrashEnabled()) {
-			return;
-		}
 		if (!method_exists($event, 'getNode')) {
 			return;
 		}
@@ -45,12 +42,9 @@ class MoveToTrashListener implements IEventListener {
 			return;
 		}
 
-		if (!$this->ownpadService->isDeleteOnTrashEnabled()) {
-			$this->ownpadService->deletePadUrlForFileId($fileId);
-			return;
+		if ($this->ownpadService->isDeleteOnTrashEnabled()) {
+			$this->ownpadService->deletePadFromUrl($url);
 		}
-
-		$this->ownpadService->deletePadFromUrl($url);
 		$this->ownpadService->deletePadUrlForFileId($fileId);
 	}
 }
