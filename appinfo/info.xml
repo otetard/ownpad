@@ -7,7 +7,7 @@
   <description><![CDATA[Ownpad is a Nextcloud application that allows to create and open Etherpad and Ethercalc documents.
 
 This application requires to have access to an instance of <a href="https://etherpad.org/">Etherpad</a> and/or <a href="https://ethercalc.net/">Ethercalc</a> to work properly.]]></description>
-  <version>0.13.2.4</version>
+  <version>0.13.3</version>
   <licence>agpl</licence>
   <author mail="olivier.tetard@miskin.fr">Olivier Tétard</author>
   <documentation>

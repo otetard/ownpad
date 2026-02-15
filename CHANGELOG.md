@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## 0.13.3
+
+### Changed
+
+- Mark app as compatible with Nextcloud 32.
+- Improve public-share opening flow for pad files in viewer/public contexts.
+
 ## 0.13.2
 
 ### Changed
