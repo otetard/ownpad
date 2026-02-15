@@ -19,8 +19,8 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IRequest;
-use OCP\IUserSession;
 use OCP\IURLGenerator;
+use OCP\IUserSession;
 
 class DisplayController extends Controller {
 
