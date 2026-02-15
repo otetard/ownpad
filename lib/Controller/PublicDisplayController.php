@@ -19,6 +19,7 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\Constants;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\NotFoundException;
@@ -111,7 +112,9 @@ class PublicDisplayController extends Controller {
 		];
 
 		try {
-			$params['url'] = $this->ownpadService->parseOwnpadContent($file, $content, true, (string)$token);
+			$permissions = (int)$share->getPermissions();
+			$readOnly = ($permissions & Constants::PERMISSION_UPDATE) === 0;
+			$params['url'] = $this->ownpadService->parseOwnpadContent($file, $content, true, (string)$token, $readOnly);
 			return new TemplateResponse($this->appName, 'viewer', $params, 'blank');
 		} catch(OwnpadException $e) {
 			$params["error"] = $e->getMessage();

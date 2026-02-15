@@ -137,18 +137,19 @@ class OwnpadService {
 		throw new OwnpadException($l10n_files->t('Error when creating the file'));
 	}
 
-	public function parseOwnpadContent($file, $content, bool $publicMode = false, string $publicShareToken = '') {
+	public function parseOwnpadContent($file, $content, bool $publicMode = false, string $publicShareToken = '', bool $readOnly = false) {
 		$l10n = \OC::$server->getL10N('ownpad');
 
 		if (preg_match('/URL=(.*)$/', (string)$content, $matches) !== 1 || !isset($matches[1])) {
 			throw new OwnpadException($l10n->t('Cannot parse URL from the selected pad file.'));
 		}
-		$url = $matches[1];
+		$url = trim($matches[1]);
+		$decodedUrl = urldecode($url);
 
 		$eplHostApi = $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', '');
 		$eplHostApi = rtrim($eplHostApi, '/');
 		$protectedPadRegex = sprintf('/%s\/p\/(g\.\w{16})\\$([^\/]+)$/', preg_quote($eplHostApi, '/'));
-		$match = preg_match($protectedPadRegex, $url, $matches);
+		$match = preg_match($protectedPadRegex, $decodedUrl, $matches);
 
 		/*
 		 * We are facing a “protected” pad. Call for Etherpad API to
@@ -183,6 +184,15 @@ class OwnpadService {
 
 			$cookieDomain = $this->config->getAppValue('ownpad', 'ownpad_etherpad_cookie_domain', '');
 			setcookie('sessionID', $session->sessionID, 0, '/', $cookieDomain, true, false);
+
+			if ($readOnly) {
+				$url = $this->getReadOnlyPadUrl($padID);
+			}
+		} elseif ($readOnly) {
+			$padRegex = sprintf('/^%s\/p\/([^\/]+)$/', preg_quote($eplHostApi, '/'));
+			if (preg_match($padRegex, $decodedUrl, $matches) === 1 && isset($matches[1])) {
+				$url = $this->getReadOnlyPadUrl($matches[1]);
+			}
 		}
 
 		/*
@@ -243,6 +253,27 @@ class OwnpadService {
 		}
 
 		return $url;
+	}
+
+	private function getReadOnlyPadUrl(string $padID): string {
+		$l10n = \OC::$server->getL10N('ownpad');
+
+		if ($this->config->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no') === 'no') {
+			throw new OwnpadException($l10n->t('Read-only share mode requires Etherpad API support.'));
+		}
+
+		try {
+			$readOnly = $this->etherpadCallApi('getReadOnlyID', ['padID' => $padID]);
+		} catch (Exception $e) {
+			throw new OwnpadException($l10n->t('Unable to switch to read-only mode due to the following error: “%s”.', [$e->getMessage()]));
+		}
+
+		if (!isset($readOnly->readOnlyID) || !is_string($readOnly->readOnlyID) || $readOnly->readOnlyID === '') {
+			throw new OwnpadException($l10n->t('Unable to switch to read-only mode because Etherpad did not return a read-only ID.'));
+		}
+
+		$host = rtrim($this->config->getAppValue('ownpad', 'ownpad_etherpad_host', ''), '/');
+		return sprintf('%s/p/%s', $host, $readOnly->readOnlyID);
 	}
 
 	public function testEtherpadToken() {
