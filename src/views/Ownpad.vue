@@ -19,45 +19,56 @@ export default {
 	name: 'Ownpad',
 
 	computed: {
-		sourceName() {
+		sourcePath() {
 			const rawSource = typeof this.source === 'string' ? this.source.trim() : ''
-			let sourceName = ''
+			let sourcePath = ''
 
 			if (rawSource !== '') {
 				if (/^https?:\/\//i.test(rawSource)) {
 					try {
 						const parsed = new URL(rawSource)
-						sourceName = decodeURIComponent(parsed.pathname.split('/').pop() || '')
+						const path = parsed.pathname || ''
+						const publicDavMatch = path.match(/\/public\.php\/dav\/files\/[^/]+\/(.+)$/)
+						const remoteDavMatch = path.match(/\/remote\.php\/dav\/files\/[^/]+\/(.+)$/)
+
+						if (publicDavMatch && publicDavMatch[1]) {
+							sourcePath = decodeURIComponent(publicDavMatch[1])
+						} else if (remoteDavMatch && remoteDavMatch[1]) {
+							sourcePath = decodeURIComponent(remoteDavMatch[1])
+						} else {
+							sourcePath = decodeURIComponent(path.split('/').pop() || '')
+						}
 					} catch (e) {
-						sourceName = ''
+						sourcePath = ''
 					}
 				} else {
 					try {
-						sourceName = decodeURIComponent(rawSource.split('/').pop() || '')
+						sourcePath = decodeURIComponent(rawSource)
 					} catch (e) {
-						sourceName = rawSource.split('/').pop() || ''
+						sourcePath = rawSource
 					}
 				}
 			}
 
-			return sourceName === '/' ? '' : sourceName
+			sourcePath = sourcePath.replace(/^\/+/, '')
+			return sourcePath === '/' ? '' : sourcePath
 		},
 
 		iframeSrc() {
 			const publicMatch = window.location.pathname.match(/\/s\/([^/]+)/)
 			if (publicMatch && publicMatch[1]) {
 				const token = publicMatch[1]
-				const file = (this.basename || this.filename || this.sourceName || '') === '/'
+				const file = (this.filename || this.sourcePath || this.basename || '') === '/'
 					? ''
-					: (this.basename || this.filename || this.sourceName || '')
+					: (this.filename || this.sourcePath || this.basename || '')
 				const publicUrl = generateUrl('/apps/ownpad/public/{token}', { token })
 				return file ? `${publicUrl}?file=${encodeURIComponent(file)}` : publicUrl
 			}
 
 			// For authenticated/internal opens we must prefer filename to keep directory context.
-			const file = (this.filename || this.basename || this.sourceName || '/') === '/'
+			const file = (this.filename || this.sourcePath || this.basename || '/') === '/'
 				? '/'
-				: (this.filename || this.basename || this.sourceName || '/')
+				: (this.filename || this.sourcePath || this.basename || '/')
 			return generateUrl('/apps/ownpad/?file={file}', {
 				file,
 			})

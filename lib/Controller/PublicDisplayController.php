@@ -79,17 +79,7 @@ class PublicDisplayController extends Controller {
 
 		if ($node instanceof Folder) {
 			$fileParam = $this->request->getParam('file', '');
-			$fileParam = is_string($fileParam) ? trim($fileParam) : '';
-			$fileParam = urldecode($fileParam);
-			$fileParam = ltrim($fileParam, '/');
-
-			// In some viewer contexts, "file" can be a DAV URL. Keep only its basename.
-			if (preg_match('#^https?://#i', $fileParam)) {
-				$path = parse_url($fileParam, PHP_URL_PATH);
-				if (is_string($path)) {
-					$fileParam = basename($path);
-				}
-			}
+			$fileParam = is_string($fileParam) ? $this->normalizeFileParam($fileParam, (string)$token) : '';
 
 			if ($fileParam === '') {
 				return new TemplateResponse($this->appName, 'noviewer', [
@@ -128,5 +118,49 @@ class PublicDisplayController extends Controller {
 			return new TemplateResponse($this->appName, 'noviewer', $params, 'blank');
 		}
 
+	}
+
+	private function normalizeFileParam(string $fileParam, string $token): string {
+		$fileParam = trim($fileParam);
+		$fileParam = urldecode($fileParam);
+
+		if (preg_match('#^https?://#i', $fileParam)) {
+			$path = parse_url($fileParam, PHP_URL_PATH);
+			$path = is_string($path) ? urldecode($path) : '';
+
+			if (preg_match('#/public\.php/dav/files/([^/]+)/(.+)$#', $path, $publicMatch)) {
+				// Keep path relative to share root and only trust matching tokens.
+				if ($publicMatch[1] === $token) {
+					$fileParam = $publicMatch[2];
+				} else {
+					$fileParam = '';
+				}
+			} elseif (preg_match('#/remote\.php/dav/files/[^/]+/(.+)$#', $path, $remoteMatch)) {
+				$fileParam = $remoteMatch[1];
+			} else {
+				$fileParam = ltrim($path, '/');
+			}
+		}
+
+		$fileParam = str_replace('\\', '/', $fileParam);
+		$fileParam = ltrim($fileParam, '/');
+
+		if ($fileParam === '') {
+			return '';
+		}
+
+		$segments = explode('/', $fileParam);
+		$safeSegments = [];
+		foreach ($segments as $segment) {
+			if ($segment === '' || $segment === '.') {
+				continue;
+			}
+			if ($segment === '..') {
+				return '';
+			}
+			$safeSegments[] = $segment;
+		}
+
+		return implode('/', $safeSegments);
 	}
 }
