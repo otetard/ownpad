@@ -88,7 +88,9 @@
 							:value.sync="settings.etherpadCookieDomain" />
 					</fieldset>
 
-					<NcCheckboxRadioSwitch v-show="settings.etherpadUseApi" type="switch"
+					<NcCheckboxRadioSwitch
+						v-show="settings.etherpadUseApi"
+						type="switch"
 						:checked.sync="settings.deleteOnTrash">
 						{{ t('ownpad', 'Delete Etherpad pads when moved to trash') }}
 					</NcCheckboxRadioSwitch>
