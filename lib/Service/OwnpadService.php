@@ -131,6 +131,9 @@ class OwnpadService {
 
 		if(\OC\Files\Filesystem::file_put_contents($target, $content)) {
 			$meta = \OC\Files\Filesystem::getFileInfo($target);
+			if ($meta) {
+				$this->storePadUrlForFileId((int)$meta->getId(), $url);
+			}
 			return \OCA\Files\Helper::formatFileInfo($meta);
 		}
 
@@ -237,6 +240,62 @@ class OwnpadService {
 		}
 	}
 
+	public function deletePadFromUrl(string $url): void {
+		if (!$this->isDeleteOnTrashEnabled()) {
+			return;
+		}
+		if ($this->config->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no') === 'no') {
+			return;
+		}
+		if ($this->config->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no') === 'no') {
+			return;
+		}
+
+		$host = rtrim($this->config->getAppValue('ownpad', 'ownpad_etherpad_host', ''), '/');
+		if ($host === '') {
+			return;
+		}
+
+		$url = trim($url);
+		$pattern = '#^' . preg_quote($host, '#') . '/p/([^/]+)$#';
+		if (!preg_match($pattern, $url, $matches)) {
+			return;
+		}
+
+		$padId = $matches[1];
+		try {
+			$this->etherpadCallApi('deletePad', ['padID' => $padId]);
+		} catch (Exception) {
+			// Best-effort cleanup. If it fails, do not block trash deletion.
+		}
+	}
+
+	public function storePadUrlForFileId(int $fileId, string $url): void {
+		if ($fileId <= 0 || $url === '') {
+			return;
+		}
+		$this->config->setAppValue('ownpad', 'pad_url_' . $fileId, $url);
+	}
+
+	public function getPadUrlForFileId(int $fileId): ?string {
+		if ($fileId <= 0) {
+			return null;
+		}
+		$value = $this->config->getAppValue('ownpad', 'pad_url_' . $fileId, '');
+		return $value === '' ? null : $value;
+	}
+
+	public function deletePadUrlForFileId(int $fileId): void {
+		if ($fileId <= 0) {
+			return;
+		}
+		$this->config->deleteAppValue('ownpad', 'pad_url_' . $fileId);
+	}
+
+	public function isDeleteOnTrashEnabled(): bool {
+		return $this->config->getAppValue('ownpad', 'ownpad_delete_on_trash', 'no') === 'yes';
+	}
+
 	/**
 	 * Main entrypoint to call Etherpad API.
 	 *
@@ -309,6 +368,7 @@ class OwnpadService {
 		}
 		return $candidate;
 	}
+
 
 	private function getBearerToken() {
 		$oidcUrl = $this->eplHost . "/oidc/token";

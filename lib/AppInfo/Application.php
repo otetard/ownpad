@@ -46,6 +46,10 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(LoadViewer::class, LoadViewerListener::class);
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, LoadPublicViewerListener::class);
 		$context->registerEventListener(AddContentSecurityPolicyEvent::class, CSPListener::class);
+
+		if (class_exists('OCA\\Files_Trashbin\\Events\\MoveToTrashEvent')) {
+			$context->registerEventListener('OCA\\Files_Trashbin\\Events\\MoveToTrashEvent', \OCA\Ownpad\Listeners\MoveToTrashListener::class);
+		}
 	}
 
 	public function boot(IBootContext $context): void {
