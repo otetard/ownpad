@@ -257,6 +257,12 @@ class OwnpadService {
 
 	private function getReadOnlyPadUrl(string $padID): string {
 		$l10n = \OC::$server->getL10N('ownpad');
+		$host = rtrim($this->config->getAppValue('ownpad', 'ownpad_etherpad_host', ''), '/');
+
+		// Already a read-only pad ID: no API conversion needed.
+		if (strpos($padID, 'r.') === 0) {
+			return sprintf('%s/p/%s', $host, $padID);
+		}
 
 		if ($this->config->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no') === 'no') {
 			throw new OwnpadException($l10n->t('Read-only share mode requires Etherpad API support.'));
@@ -272,7 +278,6 @@ class OwnpadService {
 			throw new OwnpadException($l10n->t('Unable to switch to read-only mode because Etherpad did not return a read-only ID.'));
 		}
 
-		$host = rtrim($this->config->getAppValue('ownpad', 'ownpad_etherpad_host', ''), '/');
 		return sprintf('%s/p/%s', $host, $readOnly->readOnlyID);
 	}
 
