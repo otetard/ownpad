@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 - Mark app as compatible with Nextcloud 32.
-- Improve public-share opening flow for pad files in viewer/public contexts.
+- Improve Nextcloud file share handling for .pad files so opening shared pads (including from shared folders/subfolders) works more reliably.
 
 ## 0.13.2
 
