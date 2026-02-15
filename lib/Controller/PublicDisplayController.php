@@ -16,8 +16,11 @@ use OCA\Ownpad\Service\OwnpadService;
 
 use OCP\App\IAppManager;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Files\Folder;
+use OCP\Files\File;
 use OCP\Files\NotFoundException;
 use OCP\IConfig;
 use OCP\IRequest;
@@ -69,17 +72,47 @@ class PublicDisplayController extends Controller {
 		try {
 			$share = $this->shareManager->getShareByToken($token);
 		} catch (ShareNotFound $e) {
-			return new DataResponse(['message' => $this->l->t('Share not found'), Http::STATUS_NOT_FOUND]);
+			return new DataResponse(['message' => 'Share not found'], Http::STATUS_NOT_FOUND);
 		}
 
 		try {
 			$node = $share->getNode();
 		} catch (NotFoundException $e) {
-			return new DataResponse(['message' => $this->l->t('Share not found'), Http::STATUS_NOT_FOUND]);
+			return new DataResponse(['message' => 'Share not found'], Http::STATUS_NOT_FOUND);
 		}
 
 		if ($node instanceof Folder) {
-			return;
+			$fileParam = $this->request->getParam('file', '');
+			$fileParam = is_string($fileParam) ? trim($fileParam) : '';
+			$fileParam = urldecode($fileParam);
+			$fileParam = ltrim($fileParam, '/');
+
+			// In NC32 viewer, "file" can be a DAV URL. Keep only its basename.
+			if (preg_match('#^https?://#i', $fileParam)) {
+				$path = parse_url($fileParam, PHP_URL_PATH);
+				if (is_string($path)) {
+					$fileParam = basename($path);
+				}
+			}
+
+			if ($fileParam === '') {
+				return new TemplateResponse($this->appName, 'noviewer', [
+					'urlGenerator' => $this->urlGenerator,
+					'ownpad_version' => $this->appManager->getAppVersion('ownpad'),
+					'title' => '',
+					'error' => 'No pad file selected.',
+				], 'blank');
+			}
+
+			try {
+				$node = $node->get($fileParam);
+			} catch (NotFoundException $e) {
+				return new DataResponse(['message' => 'Share not found'], Http::STATUS_NOT_FOUND);
+			}
+		}
+
+		if (!($node instanceof File)) {
+			return new DataResponse(['message' => 'Share not found'], Http::STATUS_NOT_FOUND);
 		}
 
 		$content = $node->getContent();
