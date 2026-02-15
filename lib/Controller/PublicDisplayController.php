@@ -22,7 +22,6 @@ use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Files\Folder;
 use OCP\Files\File;
 use OCP\Files\NotFoundException;
-use OCP\IConfig;
 use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\Share\Exceptions\ShareNotFound;
@@ -32,9 +31,6 @@ class PublicDisplayController extends Controller {
 
 	/** @var IURLGenerator */
 	private $urlGenerator;
-
-	/** @var IConfig */
-	private $config;
 
 	/** @var IAppManager */
 	private $appManager;
@@ -87,7 +83,7 @@ class PublicDisplayController extends Controller {
 			$fileParam = urldecode($fileParam);
 			$fileParam = ltrim($fileParam, '/');
 
-			// In NC32 viewer, "file" can be a DAV URL. Keep only its basename.
+			// In some viewer contexts, "file" can be a DAV URL. Keep only its basename.
 			if (preg_match('#^https?://#i', $fileParam)) {
 				$path = parse_url($fileParam, PHP_URL_PATH);
 				if (is_string($path)) {
@@ -125,7 +121,7 @@ class PublicDisplayController extends Controller {
 		];
 
 		try {
-			$params['url'] = $this->ownpadService->parseOwnpadContent($file, $content, true);
+			$params['url'] = $this->ownpadService->parseOwnpadContent($file, $content, true, (string)$token);
 			return new TemplateResponse($this->appName, 'viewer', $params, 'blank');
 		} catch(OwnpadException $e) {
 			$params["error"] = $e->getMessage();

@@ -19,7 +19,7 @@ export default {
 	name: 'Ownpad',
 
 	computed: {
-		resolvedFile() {
+		sourceName() {
 			const rawSource = typeof this.source === 'string' ? this.source.trim() : ''
 			let sourceName = ''
 
@@ -32,25 +32,34 @@ export default {
 						sourceName = ''
 					}
 				} else {
-					sourceName = decodeURIComponent(rawSource.split('/').pop() || '')
+					try {
+						sourceName = decodeURIComponent(rawSource.split('/').pop() || '')
+					} catch (e) {
+						sourceName = rawSource.split('/').pop() || ''
+					}
 				}
 			}
 
-			const selected = this.basename || this.filename || sourceName || ''
-			return selected === '/' ? '' : selected
+			return sourceName === '/' ? '' : sourceName
 		},
 
 		iframeSrc() {
 			const publicMatch = window.location.pathname.match(/\/s\/([^/]+)/)
 			if (publicMatch && publicMatch[1]) {
 				const token = publicMatch[1]
-				const file = this.resolvedFile
+				const file = (this.basename || this.filename || this.sourceName || '') === '/'
+					? ''
+					: (this.basename || this.filename || this.sourceName || '')
 				const publicUrl = generateUrl('/apps/ownpad/public/{token}', { token })
 				return file ? `${publicUrl}?file=${encodeURIComponent(file)}` : publicUrl
 			}
 
+			// For authenticated/internal opens we must prefer filename to keep directory context.
+			const file = (this.filename || this.basename || this.sourceName || '/') === '/'
+				? '/'
+				: (this.filename || this.basename || this.sourceName || '/')
 			return generateUrl('/apps/ownpad/?file={file}', {
-				file: this.resolvedFile || '/',
+				file,
 			})
 		},
 	},

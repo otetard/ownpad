@@ -65,7 +65,7 @@ class DisplayController extends Controller {
 	public function showPad($file) {
 		$normalizedFile = is_string($file) ? trim($file) : '';
 
-		// NC32 viewer may pass DAV URLs instead of filesystem paths.
+		// Viewer may pass DAV URLs instead of filesystem paths.
 		if (preg_match('#^https?://#i', $normalizedFile)) {
 			$parsedPath = parse_url($normalizedFile, PHP_URL_PATH);
 			$parsedPath = is_string($parsedPath) ? urldecode($parsedPath) : '';
