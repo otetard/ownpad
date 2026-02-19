@@ -4,8 +4,6 @@
  *
  * This file is licensed under the Affero General Public License
  * version 3 or later. See the COPYING file.
- *
- * @copyright
  */
 
 namespace OCA\Ownpad\Listeners;
@@ -31,8 +29,10 @@ class MoveToTrashListener implements IEventListener {
 			return;
 		}
 
-		$name = $node->getName();
-		if (!str_ends_with(strtolower($name), '.pad')) {
+		$name = strtolower($node->getName());
+		$isPad = str_ends_with($name, '.pad');
+		$isCalc = str_ends_with($name, '.calc');
+		if (!$isPad && !$isCalc) {
 			return;
 		}
 
@@ -42,9 +42,9 @@ class MoveToTrashListener implements IEventListener {
 			return;
 		}
 
-		if ($this->ownpadService->isDeleteOnTrashEnabled()) {
+		if ($isPad && $this->ownpadService->isDeleteOnTrashEnabled()) {
 			$this->ownpadService->deletePadFromUrl($url, $fileId);
+			$this->ownpadService->deletePadUrlForFileId($fileId);
 		}
-		$this->ownpadService->deletePadUrlForFileId($fileId);
 	}
 }

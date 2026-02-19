@@ -12,9 +12,9 @@
 namespace OCA\Ownpad\Service;
 
 use Exception;
+use Psr\Log\LoggerInterface;
 
 use OCP\IConfig;
-use OCP\ILogger;
 use OCP\IUserSession;
 
 class OwnpadService {
@@ -36,7 +36,7 @@ class OwnpadService {
 	public function __construct(
 		private IConfig $config,
 		private IUserSession $userSession,
-		private ILogger $logger
+		private LoggerInterface $logger
 	) {
 		$this->config = $config;
 		$this->userSession = $userSession;
