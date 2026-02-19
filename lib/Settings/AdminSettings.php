@@ -67,9 +67,9 @@ class AdminSettings implements ISettings {
 	 * Helper function to retrieve the legacy token policy.
 	 */
 	private function getLegacyTokenMode(): string {
-		$mode = strtolower($this->config->getAppValue('ownpad', 'ownpad_legacy_token_mode', 'unprotected'));
+		$mode = strtolower($this->config->getAppValue('ownpad', 'ownpad_legacy_token_mode', 'all'));
 		if (!in_array($mode, ['none', 'unprotected', 'all'], true)) {
-			return 'unprotected';
+			return 'all';
 		}
 
 		return $mode;

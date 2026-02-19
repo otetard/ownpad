@@ -12,10 +12,10 @@
 namespace OCA\Ownpad\Service;
 
 use Exception;
+use Psr\Log\LoggerInterface;
 
 use OCP\Files\FileInfo;
 use OCP\IConfig;
-use OCP\ILogger;
 use OCP\IUserSession;
 use OCP\Security\ISecureRandom;
 
@@ -44,7 +44,7 @@ class OwnpadService {
 		private IUserSession $userSession,
 		private ISecureRandom $secureRandom,
 		private PadBindingService $padBindingService,
-		private ILogger $logger,
+		private LoggerInterface $logger,
 	) {
 		$this->config = $config;
 		$this->userSession = $userSession;
@@ -250,29 +250,7 @@ class OwnpadService {
 			$host = \OC::$server->getConfig()->getAppValue('ownpad', 'ownpad_etherpad_host', false);
 		}
 
-		if(substr($host, -1, 1) !== '/') {
-			$host .= '/';
-		}
-
-		// Escape all RegEx-Characters
-		$hostreg = preg_quote($host, '/');
-
-		// Final Regex-String
-		if($fileending === "calc") {
-			/*
-			 * Ethercalc documents with “multisheet” support starts
-			 * with a `=`.
-			 */
-			$regex = "/^".$hostreg."=?[^\/]+$/";
-		} elseif($fileending === "pad") {
-			/*
-			 * Etherpad documents can contain special characters, for
-			 * “protected pads” for example.
-			 */
-			$regex = "/^".$hostreg."p\/[^\/]+$/";
-		}
-
-		if (preg_match($regex, $url) !== 1) {
+		if (!$this->isAllowedOwnpadUrl((string)$url, (string)$host, (string)$fileending)) {
 			throw new OwnpadException($l10n->t('URL in your Etherpad/Ethercalc document does not match the allowed server'));
 		}
 
@@ -484,7 +462,7 @@ class OwnpadService {
 	}
 
 	private function canOpenLegacyWithoutToken(bool $isProtectedPad): bool {
-		$mode = strtolower((string)$this->config->getAppValue('ownpad', 'ownpad_legacy_token_mode', self::LEGACY_MODE_UNPROTECTED));
+		$mode = strtolower((string)$this->config->getAppValue('ownpad', 'ownpad_legacy_token_mode', self::LEGACY_MODE_ALL));
 
 		return match ($mode) {
 			self::LEGACY_MODE_ALL => true,
@@ -528,18 +506,71 @@ class OwnpadService {
 	}
 
 	private function extractPadIdFromUrl(string $url, string $baseUrl): ?string {
-		$prefix = rtrim($baseUrl, '/') . '/p/';
-		if (!str_starts_with($url, $prefix)) {
+		if (!$this->isAllowedOwnpadUrl($url, $baseUrl, 'pad')) {
 			return null;
 		}
 
-		$padId = substr($url, strlen($prefix));
+		$urlPath = parse_url($url, PHP_URL_PATH);
+		if (!is_string($urlPath) || $urlPath === '') {
+			return null;
+		}
+
+		$configuredPath = parse_url($baseUrl, PHP_URL_PATH);
+		$configuredPath = is_string($configuredPath) ? rtrim($configuredPath, '/') : '';
+
+		$prefixPath = $configuredPath . '/p/';
+		if (!str_starts_with($urlPath, $prefixPath)) {
+			return null;
+		}
+
+		$padId = substr($urlPath, strlen($prefixPath));
 		if ($padId === false || $padId === '') {
 			return null;
 		}
 
-		$padId = explode('?', $padId, 2)[0];
 		return rawurldecode($padId);
+	}
+
+	private function isAllowedOwnpadUrl(string $url, string $configuredHost, string $fileEnding): bool {
+		$configured = parse_url(rtrim($configuredHost, '/'));
+		$actual = parse_url($url);
+		if ($configured === false || $actual === false) {
+			return false;
+		}
+
+		$configuredScheme = strtolower((string)($configured['scheme'] ?? ''));
+		$actualScheme = strtolower((string)($actual['scheme'] ?? ''));
+		$configuredHostName = strtolower((string)($configured['host'] ?? ''));
+		$actualHostName = strtolower((string)($actual['host'] ?? ''));
+
+		if ($configuredScheme === '' || $configuredHostName === '') {
+			return false;
+		}
+		if ($configuredScheme !== $actualScheme || $configuredHostName !== $actualHostName) {
+			return false;
+		}
+		if ($this->normalizeUrlPort($configuredScheme, $configured['port'] ?? null) !== $this->normalizeUrlPort($actualScheme, $actual['port'] ?? null)) {
+			return false;
+		}
+
+		$configuredPath = isset($configured['path']) ? rtrim((string)$configured['path'], '/') : '';
+		$actualPath = (string)($actual['path'] ?? '');
+		if ($fileEnding === 'calc') {
+			return preg_match('/^' . preg_quote($configuredPath . '/', '/') . '=?[^\/]+$/', $actualPath) === 1;
+		}
+		if ($fileEnding === 'pad') {
+			return preg_match('/^' . preg_quote($configuredPath . '/p/', '/') . '[^\/]+$/', $actualPath) === 1;
+		}
+
+		return false;
+	}
+
+	private function normalizeUrlPort(string $scheme, mixed $port): int {
+		if (is_int($port)) {
+			return $port;
+		}
+
+		return $scheme === 'https' ? 443 : 80;
 	}
 
 	protected function etherpadConvertBools($candidate) {
