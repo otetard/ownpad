@@ -12,10 +12,10 @@
 namespace OCA\Ownpad\Service;
 
 use Exception;
-use Psr\Log\LoggerInterface;
 
 use OCP\IConfig;
 use OCP\IUserSession;
+use Psr\Log\LoggerInterface;
 
 class OwnpadService {
 	private $eplHost;
