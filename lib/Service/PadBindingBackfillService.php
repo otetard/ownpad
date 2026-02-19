@@ -27,7 +27,7 @@ class PadBindingBackfillService {
 	}
 
 	/**
-	 * @return array<string, int>
+	 * @return array<string, mixed>
 	 */
 	public function run(bool $dryRun = true, ?int $limit = null): array {
 		$summary = [
@@ -38,8 +38,11 @@ class PadBindingBackfillService {
 			'conflicts' => 0,
 			'errors' => 0,
 		];
+		$conflictDetails = [];
 
 		$seenFileIds = [];
+		$reservedByFileId = [];
+		$reservedByPad = [];
 		$processed = 0;
 
 		$qb = $this->db->getQueryBuilder();
@@ -68,11 +71,15 @@ class PadBindingBackfillService {
 				}
 
 				$summary['scanned']++;
-				$status = $this->processFile($node, $dryRun);
+				$result = $this->processFile($node, $dryRun, $reservedByFileId, $reservedByPad);
+				$status = $result['status'];
 				if (isset($summary[$status])) {
 					$summary[$status]++;
 				} else {
 					$summary['errors']++;
+				}
+				if ($status === 'conflicts' && isset($result['detail']) && count($conflictDetails) < 200) {
+					$conflictDetails[] = $result['detail'];
 				}
 
 				$processed++;
@@ -83,14 +90,19 @@ class PadBindingBackfillService {
 		}
 		$result->closeCursor();
 
+		$summary['conflict_details'] = $conflictDetails;
 		return $summary;
 	}
 
-	private function processFile(File $file, bool $dryRun): string {
+	/**
+	 * @return array{status: string, detail?: array<string, mixed>}
+	 */
+	private function processFile(File $file, bool $dryRun, array &$reservedByFileId, array &$reservedByPad): array {
 		$path = (string)$file->getPath();
 		if (str_contains($path, '/files_trashbin/')) {
-			return 'skipped';
+			return ['status' => 'skipped'];
 		}
+		$fileId = $file->getId();
 
 		try {
 			$content = $file->getContent();
@@ -100,36 +112,71 @@ class PadBindingBackfillService {
 				'fileId' => $file->getId(),
 				'exception' => $e,
 			]);
-			return 'errors';
+			return ['status' => 'errors'];
 		}
 
 		$url = $this->extractShortcutValue((string)$content, 'URL');
 		if ($url === null || $url === '') {
-			return 'skipped';
+			return ['status' => 'skipped'];
 		}
 
 		$baseUrl = rtrim((string)$this->config->getAppValue('ownpad', 'ownpad_etherpad_host', ''), '/');
 		if (!$this->isAllowedOwnpadUrl($url, $baseUrl, 'pad')) {
-			return 'skipped';
+			return ['status' => 'skipped'];
 		}
 
 		$padId = $this->extractPadIdFromUrl($url, $baseUrl);
 		if ($padId === null || $padId === '') {
-			return 'skipped';
+			return ['status' => 'skipped'];
 		}
 
-		$fileId = $file->getId();
+		$padKey = $baseUrl . "\n" . $padId;
+
+		$existingReservedByFile = $reservedByFileId[$fileId] ?? null;
+		if ($existingReservedByFile !== null) {
+			if ($existingReservedByFile === $padKey) {
+				return ['status' => 'already_bound'];
+			}
+			return $this->conflictResult('file_already_reserved_to_another_pad', $fileId, $path, $baseUrl, $padId);
+		}
+
 		$binding = $this->padBindingService->findActiveByFileId($fileId);
 		if ($binding !== null) {
 			if ((string)$binding['pad_id'] === $padId && (string)$binding['base_url'] === $baseUrl) {
-				return 'already_bound';
+				$this->reserveBinding($fileId, $padKey, $reservedByFileId, $reservedByPad);
+				return ['status' => 'already_bound'];
 			}
-			return 'conflicts';
+			return $this->conflictResult(
+				'file_already_bound_to_another_pad',
+				$fileId,
+				$path,
+				$baseUrl,
+				$padId,
+				isset($binding['file_id']) ? (int)$binding['file_id'] : null
+			);
 		}
 
 		$existingPadBinding = $this->padBindingService->findActiveByPad($baseUrl, $padId);
 		if ($existingPadBinding !== null && (int)$existingPadBinding['file_id'] !== $fileId) {
-			return 'conflicts';
+			return $this->conflictResult(
+				'pad_already_bound_to_other_file',
+				$fileId,
+				$path,
+				$baseUrl,
+				$padId,
+				(int)$existingPadBinding['file_id']
+			);
+		}
+		$existingReservedByPad = $reservedByPad[$padKey] ?? null;
+		if ($existingReservedByPad !== null && $existingReservedByPad !== $fileId) {
+			return $this->conflictResult(
+				'duplicate_in_current_run',
+				$fileId,
+				$path,
+				$baseUrl,
+				$padId,
+				(int)$existingReservedByPad
+			);
 		}
 
 		$originToken = $this->extractShortcutValue((string)$content, 'OwnpadToken');
@@ -146,13 +193,14 @@ class PadBindingBackfillService {
 						'fileId' => $fileId,
 						'exception' => $e,
 					]);
-					return 'errors';
+					return ['status' => 'errors'];
 				}
 			}
 		}
 
 		if ($dryRun) {
-			return 'created';
+			$this->reserveBinding($fileId, $padKey, $reservedByFileId, $reservedByPad);
+			return ['status' => 'created'];
 		}
 
 		$ownerUid = $file->getOwner()?->getUID();
@@ -179,13 +227,37 @@ class PadBindingBackfillService {
 			if ($raceBinding !== null
 				&& (string)$raceBinding['pad_id'] === $padId
 				&& (string)$raceBinding['base_url'] === $baseUrl) {
-				return 'already_bound';
+				$this->reserveBinding($fileId, $padKey, $reservedByFileId, $reservedByPad);
+				return ['status' => 'already_bound'];
 			}
 
-			return 'errors';
+			return ['status' => 'errors'];
 		}
 
-		return 'created';
+		$this->reserveBinding($fileId, $padKey, $reservedByFileId, $reservedByPad);
+		return ['status' => 'created'];
+	}
+
+	private function reserveBinding(int $fileId, string $padKey, array &$reservedByFileId, array &$reservedByPad): void {
+		$reservedByFileId[$fileId] = $padKey;
+		$reservedByPad[$padKey] = $fileId;
+	}
+
+	/**
+	 * @return array{status: string, detail: array<string, mixed>}
+	 */
+	private function conflictResult(string $reason, int $fileId, string $path, string $baseUrl, string $padId, ?int $conflictFileId = null): array {
+		return [
+			'status' => 'conflicts',
+			'detail' => [
+				'reason' => $reason,
+				'file_id' => $fileId,
+				'path' => $path,
+				'base_url' => $baseUrl,
+				'pad_id' => $padId,
+				'conflict_file_id' => $conflictFileId,
+			],
+		];
 	}
 
 	private function extractShortcutValue(string $content, string $key): ?string {

@@ -71,6 +71,24 @@ class BackfillPadBindings extends Command {
 			$io->success('Backfill finished.');
 		}
 
+		$conflicts = is_array($summary['conflict_details'] ?? null) ? $summary['conflict_details'] : [];
+		if ($conflicts !== []) {
+			$io->newLine();
+			$io->section('Conflicts');
+
+			$rows = [];
+			foreach ($conflicts as $conflict) {
+				$rows[] = [
+					(string)($conflict['file_id'] ?? ''),
+					(string)($conflict['conflict_file_id'] ?? ''),
+					(string)($conflict['reason'] ?? ''),
+					(string)($conflict['pad_id'] ?? ''),
+					(string)($conflict['path'] ?? ''),
+				];
+			}
+			$io->table(['file_id', 'conflict_file_id', 'reason', 'pad_id', 'path'], $rows);
+		}
+
 		return self::SUCCESS;
 	}
 }

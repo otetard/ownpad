@@ -146,6 +146,21 @@
 						<NcNoteCard v-else-if="backfillResult.status === 'error'" type="error">
 							{{ t('ownpad', 'Backfill failed: {message}', { message: backfillResult.message }) }}
 						</NcNoteCard>
+						<NcNoteCard v-if="backfillResult.status === 'success' && backfillResult.summary.conflict_details && backfillResult.summary.conflict_details.length > 0" type="warning">
+							<strong>{{ t('ownpad', 'Detected conflicts') }}</strong>
+							<ul class="ownpad__conflict-list">
+								<li v-for="(conflict, idx) in backfillResult.summary.conflict_details"
+									:key="`${conflict.file_id}-${idx}`">
+									{{ t('ownpad', 'File {fileId} ({path}) conflicts on pad {padId} ({reason}){conflictFile}', {
+										fileId: conflict.file_id,
+										path: conflict.path,
+										padId: conflict.pad_id,
+										reason: conflict.reason,
+										conflictFile: conflict.conflict_file_id ? ` with file ${conflict.conflict_file_id}` : '',
+									}) }}
+								</li>
+							</ul>
+						</NcNoteCard>
 					</div>
 				</fieldset>
 			</div>
@@ -315,6 +330,10 @@ export default defineComponent({
 		display: flex;
 		flex-wrap: wrap;
 		gap: 8px;
+	}
+
+	&__conflict-list {
+		margin: 8px 0 0 16px;
 	}
 }
 </style>
