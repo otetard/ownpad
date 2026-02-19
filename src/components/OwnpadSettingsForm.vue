@@ -114,6 +114,39 @@
 					<NcNoteCard type="warning">
 						{{ t('ownpad', 'Legacy mode should only be used during migration. Protected pads without token are blocked unless you explicitly allow all legacy pads.') }}
 					</NcNoteCard>
+
+					<div class="ownpad__sub-section ownpad__backfill">
+						<div class="ownpad__legacy-token-label">
+							{{ t('ownpad', 'Backfill legacy pad bindings') }}
+						</div>
+						<NcNoteCard type="info">
+							{{ t('ownpad', 'Existing .pad files are not imported automatically. Use this action to scan and backfill mappings into the database.') }}
+						</NcNoteCard>
+						<div class="ownpad__actions">
+							<NcButton :disabled="backfillRunning"
+								@click="runBackfill(true)">
+								{{ t('ownpad', 'Dry run backfill') }}
+							</NcButton>
+							<NcButton :disabled="backfillRunning"
+								type="primary"
+								@click="runBackfill(false)">
+								{{ t('ownpad', 'Run backfill now') }}
+							</NcButton>
+						</div>
+						<NcNoteCard v-if="backfillResult.status === 'success'" type="success">
+							{{ t('ownpad', 'Backfill finished. Scanned: {scanned}, Created: {created}, Already bound: {alreadyBound}, Skipped: {skipped}, Conflicts: {conflicts}, Errors: {errors}', {
+								scanned: backfillResult.summary.scanned,
+								created: backfillResult.summary.created,
+								alreadyBound: backfillResult.summary.already_bound,
+								skipped: backfillResult.summary.skipped,
+								conflicts: backfillResult.summary.conflicts,
+								errors: backfillResult.summary.errors,
+							}) }}
+						</NcNoteCard>
+						<NcNoteCard v-else-if="backfillResult.status === 'error'" type="error">
+							{{ t('ownpad', 'Backfill failed: {message}', { message: backfillResult.message }) }}
+						</NcNoteCard>
+					</div>
 				</fieldset>
 			</div>
 
@@ -162,6 +195,8 @@ export default defineComponent({
 	    return {
 			settingsData: loadState('ownpad', 'settings'),
 			testTokenResult: {},
+			backfillResult: {},
+			backfillRunning: false,
 	    }
 	},
 	computed: {
@@ -198,6 +233,27 @@ export default defineComponent({
 					status: 'error',
 					message: error.response.data.data.message,
 				}
+			}
+		},
+		async runBackfill(dryRun) {
+			this.backfillRunning = true
+			this.backfillResult = {}
+			try {
+				const response = await axios.post(
+					generateUrl('/apps/ownpad/ajax/v1.0/backfillbindings'),
+					{ dryRun },
+				)
+				this.backfillResult = {
+					status: 'success',
+					summary: response.data.data.summary,
+				}
+			} catch (error) {
+				this.backfillResult = {
+					status: 'error',
+					message: error?.response?.data?.data?.message || this.t('ownpad', 'Unexpected error'),
+				}
+			} finally {
+				this.backfillRunning = false
 			}
 		},
 	},
@@ -249,6 +305,16 @@ export default defineComponent({
 
 	&__legacy-token-mode {
 		margin-inline-start: 14px;
+	}
+
+	&__backfill {
+		margin-block-start: 10px;
+	}
+
+	&__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
 	}
 }
 </style>

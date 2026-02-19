@@ -18,15 +18,20 @@ use \OCP\IRequest;
 
 use OCA\Ownpad\Service\OwnpadException;
 use OCA\Ownpad\Service\OwnpadService;
+use OCA\Ownpad\Service\PadBindingBackfillService;
 
 class AjaxController extends Controller {
 
 	/** @var OwnpadService */
 	private $service;
 
-	public function __construct($appName, IRequest $request, OwnpadService $service) {
+	/** @var PadBindingBackfillService */
+	private $backfillService;
+
+	public function __construct($appName, IRequest $request, OwnpadService $service, PadBindingBackfillService $backfillService) {
 		parent::__construct($appName, $request);
 		$this->service = $service;
+		$this->backfillService = $backfillService;
 	}
 
 	/**
@@ -85,6 +90,31 @@ class AjaxController extends Controller {
 				'status' => 'error',
 			];
 			return new JSONResponse($message, Http::STATUS_FORBIDDEN);
+		}
+	}
+
+	/**
+	 * @AdminRequired
+	 */
+	public function backfillbindings($dryRun = true) {
+		try {
+			$normalizedDryRun = filter_var($dryRun, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+			if ($normalizedDryRun === null) {
+				$normalizedDryRun = true;
+			}
+
+			$summary = $this->backfillService->run($normalizedDryRun, null);
+			return new JSONResponse([
+				'data' => [
+					'summary' => $summary,
+				],
+				'status' => 'success',
+			]);
+		} catch (\Throwable $e) {
+			return new JSONResponse([
+				'data' => ['message' => $e->getMessage()],
+				'status' => 'error',
+			], Http::STATUS_INTERNAL_SERVER_ERROR);
 		}
 	}
 }

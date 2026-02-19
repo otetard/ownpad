@@ -33,5 +33,8 @@ This application requires to have access to an instance of <a href="https://ethe
   <settings>
     <admin>OCA\Ownpad\Settings\AdminSettings</admin>
   </settings>
+  <commands>
+    <command>OCA\Ownpad\Command\BackfillPadBindings</command>
+  </commands>
   <ocsid>174679</ocsid>
 </info>
