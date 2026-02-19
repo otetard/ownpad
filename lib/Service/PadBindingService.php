@@ -37,7 +37,7 @@ class PadBindingService {
 				'origin_token' => $qb->createNamedParameter($originToken),
 				'created_by_uid' => $qb->createNamedParameter($createdByUid),
 				'owner_uid' => $qb->createNamedParameter($ownerUid),
-				'is_protected' => $qb->createNamedParameter($isProtected, IQueryBuilder::PARAM_BOOL),
+				'is_protected' => $qb->createNamedParameter($isProtected ? 1 : 0, IQueryBuilder::PARAM_INT),
 				'created_at' => $qb->createNamedParameter(time(), IQueryBuilder::PARAM_INT),
 				'updated_at' => $qb->createNamedParameter(time(), IQueryBuilder::PARAM_INT),
 			]);

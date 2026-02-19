@@ -56,9 +56,10 @@ class Version013300Date20260219090000 extends SimpleMigrationStep {
 			'notnull' => false,
 			'length' => 64,
 		]);
-		$table->addColumn('is_protected', 'boolean', [
+		$table->addColumn('is_protected', 'smallint', [
 			'notnull' => true,
-			'default' => false,
+			'default' => 0,
+			'unsigned' => true,
 		]);
 		$table->addColumn('created_at', 'integer', [
 			'notnull' => true,
