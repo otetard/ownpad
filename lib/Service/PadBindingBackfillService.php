@@ -39,6 +39,7 @@ class PadBindingBackfillService {
 			'errors' => 0,
 		];
 		$conflictDetails = [];
+		$skippedDetails = [];
 
 		$seenFileIds = [];
 		$processed = 0;
@@ -61,6 +62,14 @@ class PadBindingBackfillService {
 			$nodes = $this->rootFolder->getById($fileId);
 			if ($nodes === []) {
 				$summary['skipped']++;
+				if (count($skippedDetails) < 200) {
+					$skippedDetails[] = [
+						'reason' => 'file_not_found',
+						'file_id' => $fileId,
+						'path' => null,
+						'file_link' => '/apps/files/?fileid=' . $fileId,
+					];
+				}
 				continue;
 			}
 
@@ -135,10 +144,57 @@ class PadBindingBackfillService {
 			if ($status === 'conflicts' && is_array($detail) && count($conflictDetails) < 200) {
 				$conflictDetails[] = $detail;
 			}
+			if ($status === 'skipped' && is_array($detail) && count($skippedDetails) < 200) {
+				$skippedDetails[] = $detail;
+			}
 		}
 
 		$summary['conflict_details'] = $conflictDetails;
+		$summary['conflict_groups'] = $this->groupConflictDetails($conflictDetails);
+		$summary['skipped_details'] = $skippedDetails;
 		return $summary;
+	}
+
+	/**
+	 * @return array{status: string, detail?: array<string, mixed>, message?: string}
+	 */
+	public function markFileAsValid(int $fileId): array {
+		$file = $this->findPadFileById($fileId);
+		if (!($file instanceof File)) {
+			return [
+				'status' => 'error',
+				'message' => 'Pad file not found',
+			];
+		}
+
+		$inspection = $this->inspectFile($file);
+		$status = (string)$inspection['status'];
+		if ($status === 'create_candidate') {
+			$result = $this->applyCandidate($inspection, false);
+			if (($result['status'] ?? null) === 'created' || ($result['status'] ?? null) === 'already_bound') {
+				return [
+					'status' => 'success',
+					'detail' => $result['detail'] ?? null,
+				];
+			}
+			return $result;
+		}
+
+		if ($status === 'already_bound') {
+			return ['status' => 'success'];
+		}
+
+		if ($status === 'conflicts') {
+			return [
+				'status' => 'conflicts',
+				'detail' => $inspection['detail'] ?? null,
+			];
+		}
+
+		return [
+			'status' => 'error',
+			'message' => 'File cannot be marked as valid in current state',
+		];
 	}
 
 	/**
@@ -147,7 +203,7 @@ class PadBindingBackfillService {
 	private function inspectFile(File $file): array {
 		$path = (string)$file->getPath();
 		if (str_contains($path, '/files_trashbin/')) {
-			return ['status' => 'skipped'];
+			return $this->skippedResult('trashbin_file', $file->getId(), $path);
 		}
 		$fileId = $file->getId();
 
@@ -164,17 +220,17 @@ class PadBindingBackfillService {
 
 		$url = $this->extractShortcutValue((string)$content, 'URL');
 		if ($url === null || $url === '') {
-			return ['status' => 'skipped'];
+			return $this->skippedResult('missing_url', $fileId, $path);
 		}
 
 		$baseUrl = rtrim((string)$this->config->getAppValue('ownpad', 'ownpad_etherpad_host', ''), '/');
 		if (!$this->isAllowedOwnpadUrl($url, $baseUrl, 'pad')) {
-			return ['status' => 'skipped'];
+			return $this->skippedResult('invalid_host_or_url', $fileId, $path);
 		}
 
 		$padId = $this->extractPadIdFromUrl($url, $baseUrl);
 		if ($padId === null || $padId === '') {
-			return ['status' => 'skipped'];
+			return $this->skippedResult('invalid_pad_url', $fileId, $path);
 		}
 
 		$binding = $this->padBindingService->findActiveByFileId($fileId);
@@ -333,6 +389,62 @@ class PadBindingBackfillService {
 			'file_link' => '/apps/files/?fileid=' . $fileId,
 			'conflict_file_link' => $conflictFileId !== null ? '/apps/files/?fileid=' . $conflictFileId : null,
 		];
+	}
+
+	/**
+	 * @return array{status: string, detail: array<string, mixed>}
+	 */
+	private function skippedResult(string $reason, int $fileId, ?string $path): array {
+		return [
+			'status' => 'skipped',
+			'detail' => [
+				'reason' => $reason,
+				'file_id' => $fileId,
+				'path' => $path,
+				'file_link' => '/apps/files/?fileid=' . $fileId,
+			],
+		];
+	}
+
+	/**
+	 * @param array<int, array<string, mixed>> $conflictDetails
+	 * @return array<int, array<string, mixed>>
+	 */
+	private function groupConflictDetails(array $conflictDetails): array {
+		$groups = [];
+		foreach ($conflictDetails as $detail) {
+			$baseUrl = (string)($detail['base_url'] ?? '');
+			$padId = (string)($detail['pad_id'] ?? '');
+			$key = $baseUrl . "\n" . $padId;
+			if (!isset($groups[$key])) {
+				$groups[$key] = [
+					'base_url' => $baseUrl,
+					'pad_id' => $padId,
+					'items' => [],
+				];
+			}
+			$groups[$key]['items'][] = $detail;
+		}
+
+		return array_values($groups);
+	}
+
+	private function findPadFileById(int $fileId): ?File {
+		$nodes = $this->rootFolder->getById($fileId);
+		foreach ($nodes as $node) {
+			if (!($node instanceof File)) {
+				continue;
+			}
+			if (str_contains((string)$node->getPath(), '/files_trashbin/')) {
+				continue;
+			}
+			if (strtolower((string)pathinfo((string)$node->getName(), PATHINFO_EXTENSION)) !== 'pad') {
+				continue;
+			}
+			return $node;
+		}
+
+		return null;
 	}
 
 	private function extractShortcutValue(string $content, string $key): ?string {

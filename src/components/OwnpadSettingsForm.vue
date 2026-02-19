@@ -146,31 +146,66 @@
 						<NcNoteCard v-else-if="backfillResult.status === 'error'" type="error">
 							{{ t('ownpad', 'Backfill failed: {message}', { message: backfillResult.message }) }}
 						</NcNoteCard>
-						<NcNoteCard v-if="backfillResult.status === 'success' && backfillResult.summary.conflict_details && backfillResult.summary.conflict_details.length > 0" type="warning">
+						<NcNoteCard v-if="backfillResult.status === 'success' && conflictGroups.length > 0" type="warning">
 							<strong>{{ t('ownpad', 'Detected conflicts') }}</strong>
+							<div class="ownpad__conflict-groups">
+								<div v-for="(group, gIdx) in conflictGroups" :key="`group-${gIdx}`" class="ownpad__conflict-group">
+									<div class="ownpad__conflict-group-header">
+										{{ t('ownpad', 'Pad {padId} on {baseUrl}', { padId: group.pad_id, baseUrl: group.base_url }) }}
+									</div>
+									<ul class="ownpad__conflict-list">
+										<li v-for="(conflict, idx) in group.items"
+											:key="`${group.pad_id}-${conflict.file_id}-${idx}`">
+											<div>
+												{{ t('ownpad', 'File {fileId} ({path}) ({reason}){conflictFile}', {
+													fileId: conflict.file_id,
+													path: conflict.path,
+													reason: conflict.reason,
+													conflictFile: conflict.conflict_file_id ? ` with file ${conflict.conflict_file_id}` : '',
+												}) }}
+											</div>
+											<div class="ownpad__conflict-actions">
+												<a class="button-vue button-vue--size-normal button-vue--primary"
+													:href="absoluteFileLink(conflict.file_link)"
+													target="_blank"
+													rel="noopener noreferrer">
+													{{ t('ownpad', 'Show in files') }}
+												</a>
+												<NcButton :disabled="backfillRunning || backfillActionFileId === conflict.file_id"
+													@click="markConflictAsValid(conflict)">
+													{{ t('ownpad', 'Mark as valid') }}
+												</NcButton>
+												<button type="button"
+													class="button-vue button-vue--size-small button-vue--text-only ownpad__small-action"
+													:disabled="backfillRunning || backfillActionFileId === conflict.file_id || !conflict.conflict_file_id"
+													@click="createAliasNote(conflict)">
+													{{ t('ownpad', 'Create alias note') }}
+												</button>
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</NcNoteCard>
+						<NcNoteCard v-if="backfillResult.status === 'success' && skippedDetails.length > 0" type="info">
+							<strong>{{ t('ownpad', 'Skipped files') }}</strong>
 							<ul class="ownpad__conflict-list">
-								<li v-for="(conflict, idx) in backfillResult.summary.conflict_details"
-									:key="`${conflict.file_id}-${idx}`">
+								<li v-for="(item, idx) in skippedDetails"
+									:key="`skipped-${item.file_id}-${idx}`">
 									<div>
-										{{ t('ownpad', 'File {fileId} ({path}) conflicts on pad {padId} ({reason}){conflictFile}', {
-										fileId: conflict.file_id,
-										path: conflict.path,
-										padId: conflict.pad_id,
-										reason: conflict.reason,
-										conflictFile: conflict.conflict_file_id ? ` with file ${conflict.conflict_file_id}` : '',
+										{{ t('ownpad', 'File {fileId} ({path}) skipped: {reason}', {
+											fileId: item.file_id,
+											path: item.path || 'n/a',
+											reason: item.reason,
 										}) }}
 									</div>
-									<div class="ownpad__conflict-actions">
-										<a class="button-vue button-vue--size-normal button-vue--text-only"
-											:href="absoluteFileLink(conflict.file_link)"
+									<div v-if="item.file_link" class="ownpad__conflict-actions">
+										<a class="button-vue button-vue--size-small button-vue--text-only"
+											:href="absoluteFileLink(item.file_link)"
 											target="_blank"
 											rel="noopener noreferrer">
 											{{ t('ownpad', 'Show in files') }}
 										</a>
-										<NcButton :disabled="backfillRunning || backfillActionFileId === conflict.file_id"
-											@click="trashConflictFile(conflict)">
-											{{ t('ownpad', 'Move .pad to trash') }}
-										</NcButton>
 									</div>
 								</li>
 							</ul>
@@ -244,6 +279,18 @@ export default defineComponent({
 		 },
 	     })
 	 },
+		conflictGroups() {
+			if (this.backfillResult.status !== 'success') {
+				return []
+			}
+			return this.backfillResult?.summary?.conflict_groups || []
+		},
+		skippedDetails() {
+			if (this.backfillResult.status !== 'success') {
+				return []
+			}
+			return this.backfillResult?.summary?.skipped_details || []
+		},
 	},
 	methods: {
 	 t,
@@ -293,15 +340,35 @@ export default defineComponent({
 			const base = window.location.origin + generateUrl('/')
 			return new URL(path.replace(/^\//, ''), base).toString()
 		},
-		async trashConflictFile(conflict) {
+		async markConflictAsValid(conflict) {
 			if (!conflict || !conflict.file_id) {
 				return
 			}
 			this.backfillActionFileId = conflict.file_id
 			try {
 				await axios.post(
-					generateUrl('/apps/ownpad/ajax/v1.0/backfilltrashfile'),
+					generateUrl('/apps/ownpad/ajax/v1.0/backfillmarkvalid'),
 					{ fileId: conflict.file_id },
+				)
+				await this.runBackfill(true)
+			} catch (error) {
+				this.backfillResult = {
+					status: 'error',
+					message: error?.response?.data?.data?.message || this.t('ownpad', 'Unexpected error'),
+				}
+			} finally {
+				this.backfillActionFileId = null
+			}
+		},
+		async createAliasNote(conflict) {
+			if (!conflict || !conflict.file_id || !conflict.conflict_file_id) {
+				return
+			}
+			this.backfillActionFileId = conflict.file_id
+			try {
+				await axios.post(
+					generateUrl('/apps/ownpad/ajax/v1.0/backfillcreatealias'),
+					{ fileId: conflict.file_id, targetFileId: conflict.conflict_file_id },
 				)
 				await this.runBackfill(true)
 			} catch (error) {
@@ -382,6 +449,28 @@ export default defineComponent({
 		display: flex;
 		gap: 8px;
 		margin-top: 4px;
+		align-items: center;
+	}
+
+	&__conflict-groups {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	&__conflict-group {
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		padding: 8px;
+	}
+
+	&__conflict-group-header {
+		font-weight: 600;
+		margin-bottom: 6px;
+	}
+
+	&__small-action {
+		opacity: 0.9;
 	}
 }
 </style>

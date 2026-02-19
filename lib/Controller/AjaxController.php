@@ -123,11 +123,50 @@ class AjaxController extends Controller {
 	/**
 	 * @AdminRequired
 	 */
-	public function backfilltrashfile($fileId) {
+	public function backfillmarkvalid($fileId) {
 		$fileId = (int)$fileId;
 		if ($fileId <= 0) {
 			return new JSONResponse([
 				'data' => ['message' => 'Invalid file id'],
+				'status' => 'error',
+			], Http::STATUS_BAD_REQUEST);
+		}
+
+		$result = $this->backfillService->markFileAsValid($fileId);
+		if (($result['status'] ?? null) === 'success') {
+			return new JSONResponse([
+				'data' => ['fileId' => $fileId],
+				'status' => 'success',
+			]);
+		}
+		if (($result['status'] ?? null) === 'conflicts') {
+			return new JSONResponse([
+				'data' => ['message' => 'Conflict while marking file as valid'],
+				'status' => 'error',
+			], Http::STATUS_CONFLICT);
+		}
+
+		return new JSONResponse([
+			'data' => ['message' => (string)($result['message'] ?? 'Unable to mark file as valid')],
+			'status' => 'error',
+		], Http::STATUS_BAD_REQUEST);
+	}
+
+	/**
+	 * @AdminRequired
+	 */
+	public function backfillcreatealias($fileId, $targetFileId) {
+		$fileId = (int)$fileId;
+		$targetFileId = (int)$targetFileId;
+		if ($fileId <= 0) {
+			return new JSONResponse([
+				'data' => ['message' => 'Invalid file id'],
+				'status' => 'error',
+			], Http::STATUS_BAD_REQUEST);
+		}
+		if ($targetFileId <= 0) {
+			return new JSONResponse([
+				'data' => ['message' => 'Invalid target file id'],
 				'status' => 'error',
 			], Http::STATUS_BAD_REQUEST);
 		}
@@ -145,7 +184,25 @@ class AjaxController extends Controller {
 			}
 
 			try {
-				$node->delete();
+				$name = (string)$node->getName();
+				$baseName = preg_replace('/\.pad$/i', '', $name);
+				$targetName = $baseName . '-alias.md';
+				$parentPath = rtrim((string)$node->getParent()->getPath(), '/');
+				$targetPath = $parentPath . '/' . $targetName;
+
+				$i = 1;
+				while ($node->getRoot()->nodeExists($targetPath)) {
+					$targetName = $baseName . '-alias-' . $i . '.md';
+					$targetPath = $parentPath . '/' . $targetName;
+					$i++;
+				}
+
+				$aliasUrl = \OC::$server->getURLGenerator()->getAbsoluteURL('/f/' . $targetFileId);
+				$content = "# Ownpad alias\n\n";
+				$content .= "This file was replaced by an existing pad link.\n\n";
+				$content .= "Open target file: " . $aliasUrl . "\n";
+				$node->putContent($content);
+				$node->move($targetPath);
 			} catch (\Throwable $e) {
 				return new JSONResponse([
 					'data' => ['message' => $e->getMessage()],
@@ -160,7 +217,7 @@ class AjaxController extends Controller {
 		}
 
 		return new JSONResponse([
-			'data' => ['message' => 'Pad file not found'],
+			'data' => ['message' => 'Pad file not found or alias could not be created'],
 			'status' => 'error',
 		], Http::STATUS_NOT_FOUND);
 	}
