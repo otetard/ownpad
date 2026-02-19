@@ -87,6 +87,33 @@
 							placeholder="example.org"
 							:value.sync="settings.etherpadCookieDomain" />
 					</fieldset>
+
+					<div class="ownpad__sub-section ownpad__legacy-token-mode">
+						<div class="ownpad__legacy-token-label">
+							{{ t('ownpad', 'Legacy pad handling without token') }}
+						</div>
+						<NcCheckboxRadioSwitch type="radio"
+							name="ownpad-legacy-token-mode"
+							:checked="settings.legacyTokenMode === 'none'"
+							@update:checked="onLegacyModeChange('none', $event)">
+							{{ t('ownpad', 'Deny all legacy pads (strict)') }}
+						</NcCheckboxRadioSwitch>
+						<NcCheckboxRadioSwitch type="radio"
+							name="ownpad-legacy-token-mode"
+							:checked="settings.legacyTokenMode === 'unprotected'"
+							@update:checked="onLegacyModeChange('unprotected', $event)">
+							{{ t('ownpad', 'Allow only unprotected legacy pads (recommended)') }}
+						</NcCheckboxRadioSwitch>
+						<NcCheckboxRadioSwitch type="radio"
+							name="ownpad-legacy-token-mode"
+							:checked="settings.legacyTokenMode === 'all'"
+							@update:checked="onLegacyModeChange('all', $event)">
+							{{ t('ownpad', 'Allow all legacy pads (temporary migration mode)') }}
+						</NcCheckboxRadioSwitch>
+					</div>
+					<NcNoteCard type="warning">
+						{{ t('ownpad', 'Legacy mode should only be used during migration. Protected pads without token are blocked unless you explicitly allow all legacy pads.') }}
+					</NcNoteCard>
 				</fieldset>
 			</div>
 
@@ -155,6 +182,11 @@ export default defineComponent({
 	},
 	methods: {
 	 t,
+		onLegacyModeChange(mode, checked) {
+			if (checked) {
+				this.settings.legacyTokenMode = mode
+			}
+		},
 		async testEtherpadAuthentication() {
 			try {
 				await axios.get(
@@ -209,6 +241,14 @@ export default defineComponent({
 		:deep(.v-select.select) {
 			width: 100%;
 		}
+	}
+
+	&__legacy-token-label {
+		font-weight: 500;
+	}
+
+	&__legacy-token-mode {
+		margin-inline-start: 14px;
 	}
 }
 </style>
