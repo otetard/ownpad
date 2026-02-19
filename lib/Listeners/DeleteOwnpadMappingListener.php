@@ -30,7 +30,7 @@ class DeleteOwnpadMappingListener implements IEventListener {
 		}
 
 		$name = strtolower($node->getName());
-		if (!str_ends_with($name, '.pad') && !str_ends_with($name, '.calc')) {
+		if (!str_ends_with($name, '.pad')) {
 			return;
 		}
 

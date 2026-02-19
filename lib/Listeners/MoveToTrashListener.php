@@ -30,9 +30,7 @@ class MoveToTrashListener implements IEventListener {
 		}
 
 		$name = strtolower($node->getName());
-		$isPad = str_ends_with($name, '.pad');
-		$isCalc = str_ends_with($name, '.calc');
-		if (!$isPad && !$isCalc) {
+		if (!str_ends_with($name, '.pad')) {
 			return;
 		}
 
@@ -42,7 +40,7 @@ class MoveToTrashListener implements IEventListener {
 			return;
 		}
 
-		if ($isPad && $this->ownpadService->isDeleteOnTrashEnabled()) {
+		if ($this->ownpadService->isDeleteOnTrashEnabled()) {
 			$this->ownpadService->deletePadFromUrl($url, $fileId);
 			$this->ownpadService->deletePadUrlForFileId($fileId);
 		}
