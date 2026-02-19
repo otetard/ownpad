@@ -19,6 +19,8 @@ use \OCP\IRequest;
 use OCA\Ownpad\Service\OwnpadException;
 use OCA\Ownpad\Service\OwnpadService;
 use OCA\Ownpad\Service\PadBindingBackfillService;
+use OCP\Files\File;
+use OCP\Files\IRootFolder;
 
 class AjaxController extends Controller {
 
@@ -28,7 +30,7 @@ class AjaxController extends Controller {
 	/** @var PadBindingBackfillService */
 	private $backfillService;
 
-	public function __construct($appName, IRequest $request, OwnpadService $service, PadBindingBackfillService $backfillService) {
+	public function __construct($appName, IRequest $request, OwnpadService $service, PadBindingBackfillService $backfillService, private IRootFolder $rootFolder) {
 		parent::__construct($appName, $request);
 		$this->service = $service;
 		$this->backfillService = $backfillService;
@@ -116,5 +118,50 @@ class AjaxController extends Controller {
 				'status' => 'error',
 			], Http::STATUS_INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	/**
+	 * @AdminRequired
+	 */
+	public function backfilltrashfile($fileId) {
+		$fileId = (int)$fileId;
+		if ($fileId <= 0) {
+			return new JSONResponse([
+				'data' => ['message' => 'Invalid file id'],
+				'status' => 'error',
+			], Http::STATUS_BAD_REQUEST);
+		}
+
+		$nodes = $this->rootFolder->getById($fileId);
+		foreach ($nodes as $node) {
+			if (!($node instanceof File)) {
+				continue;
+			}
+			if (str_contains((string)$node->getPath(), '/files_trashbin/')) {
+				continue;
+			}
+			if (strtolower((string)pathinfo((string)$node->getName(), PATHINFO_EXTENSION)) !== 'pad') {
+				continue;
+			}
+
+			try {
+				$node->delete();
+			} catch (\Throwable $e) {
+				return new JSONResponse([
+					'data' => ['message' => $e->getMessage()],
+					'status' => 'error',
+				], Http::STATUS_INTERNAL_SERVER_ERROR);
+			}
+
+			return new JSONResponse([
+				'data' => ['fileId' => $fileId],
+				'status' => 'success',
+			]);
+		}
+
+		return new JSONResponse([
+			'data' => ['message' => 'Pad file not found'],
+			'status' => 'error',
+		], Http::STATUS_NOT_FOUND);
 	}
 }

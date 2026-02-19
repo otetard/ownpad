@@ -151,13 +151,27 @@
 							<ul class="ownpad__conflict-list">
 								<li v-for="(conflict, idx) in backfillResult.summary.conflict_details"
 									:key="`${conflict.file_id}-${idx}`">
-									{{ t('ownpad', 'File {fileId} ({path}) conflicts on pad {padId} ({reason}){conflictFile}', {
+									<div>
+										{{ t('ownpad', 'File {fileId} ({path}) conflicts on pad {padId} ({reason}){conflictFile}', {
 										fileId: conflict.file_id,
 										path: conflict.path,
 										padId: conflict.pad_id,
 										reason: conflict.reason,
 										conflictFile: conflict.conflict_file_id ? ` with file ${conflict.conflict_file_id}` : '',
-									}) }}
+										}) }}
+									</div>
+									<div class="ownpad__conflict-actions">
+										<a class="button-vue button-vue--size-normal button-vue--text-only"
+											:href="absoluteFileLink(conflict.file_link)"
+											target="_blank"
+											rel="noopener noreferrer">
+											{{ t('ownpad', 'Show in files') }}
+										</a>
+										<NcButton :disabled="backfillRunning || backfillActionFileId === conflict.file_id"
+											@click="trashConflictFile(conflict)">
+											{{ t('ownpad', 'Move .pad to trash') }}
+										</NcButton>
+									</div>
 								</li>
 							</ul>
 						</NcNoteCard>
@@ -212,6 +226,7 @@ export default defineComponent({
 			testTokenResult: {},
 			backfillResult: {},
 			backfillRunning: false,
+			backfillActionFileId: null,
 	    }
 	},
 	computed: {
@@ -269,6 +284,33 @@ export default defineComponent({
 				}
 			} finally {
 				this.backfillRunning = false
+			}
+		},
+		absoluteFileLink(path) {
+			if (!path || typeof path !== 'string') {
+				return '#'
+			}
+			const base = window.location.origin + generateUrl('/')
+			return new URL(path.replace(/^\//, ''), base).toString()
+		},
+		async trashConflictFile(conflict) {
+			if (!conflict || !conflict.file_id) {
+				return
+			}
+			this.backfillActionFileId = conflict.file_id
+			try {
+				await axios.post(
+					generateUrl('/apps/ownpad/ajax/v1.0/backfilltrashfile'),
+					{ fileId: conflict.file_id },
+				)
+				await this.runBackfill(true)
+			} catch (error) {
+				this.backfillResult = {
+					status: 'error',
+					message: error?.response?.data?.data?.message || this.t('ownpad', 'Unexpected error'),
+				}
+			} finally {
+				this.backfillActionFileId = null
 			}
 		},
 	},
@@ -334,6 +376,12 @@ export default defineComponent({
 
 	&__conflict-list {
 		margin: 8px 0 0 16px;
+	}
+
+	&__conflict-actions {
+		display: flex;
+		gap: 8px;
+		margin-top: 4px;
 	}
 }
 </style>

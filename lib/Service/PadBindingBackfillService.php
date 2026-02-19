@@ -41,9 +41,8 @@ class PadBindingBackfillService {
 		$conflictDetails = [];
 
 		$seenFileIds = [];
-		$reservedByFileId = [];
-		$reservedByPad = [];
 		$processed = 0;
+		$inspections = [];
 
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('fileid')
@@ -71,16 +70,7 @@ class PadBindingBackfillService {
 				}
 
 				$summary['scanned']++;
-				$fileResult = $this->processFile($node, $dryRun, $reservedByFileId, $reservedByPad);
-				$status = $fileResult['status'];
-				if (isset($summary[$status])) {
-					$summary[$status]++;
-				} else {
-					$summary['errors']++;
-				}
-				if ($status === 'conflicts' && isset($fileResult['detail']) && count($conflictDetails) < 200) {
-					$conflictDetails[] = $fileResult['detail'];
-				}
+				$inspections[] = $this->inspectFile($node);
 
 				$processed++;
 				if ($limit !== null && $processed >= $limit) {
@@ -90,6 +80,63 @@ class PadBindingBackfillService {
 		}
 		$result->closeCursor();
 
+		$candidateByPadKey = [];
+		foreach ($inspections as $inspection) {
+			if (($inspection['status'] ?? null) !== 'create_candidate') {
+				continue;
+			}
+			$padKey = (string)$inspection['pad_key'];
+			$candidateByPadKey[$padKey] ??= [];
+			$candidateByPadKey[$padKey][] = (int)$inspection['file_id'];
+		}
+
+		$duplicatePadKeys = [];
+		foreach ($candidateByPadKey as $padKey => $fileIds) {
+			if (count($fileIds) > 1) {
+				$duplicatePadKeys[$padKey] = $fileIds;
+			}
+		}
+
+		foreach ($inspections as $inspection) {
+			$status = (string)$inspection['status'];
+			$detail = $inspection['detail'] ?? null;
+
+			if ($status === 'create_candidate') {
+				$padKey = (string)$inspection['pad_key'];
+				if (isset($duplicatePadKeys[$padKey])) {
+					$status = 'conflicts';
+					$otherFileId = null;
+					foreach ($duplicatePadKeys[$padKey] as $candidateFileId) {
+						if ($candidateFileId !== (int)$inspection['file_id']) {
+							$otherFileId = $candidateFileId;
+							break;
+						}
+					}
+					$detail = $this->conflictDetail(
+						'duplicate_in_current_run',
+						(int)$inspection['file_id'],
+						(string)$inspection['path'],
+						(string)$inspection['base_url'],
+						(string)$inspection['pad_id'],
+						$otherFileId
+					);
+				} else {
+					$applyResult = $this->applyCandidate($inspection, $dryRun);
+					$status = (string)$applyResult['status'];
+					$detail = $applyResult['detail'] ?? null;
+				}
+			}
+
+			if (isset($summary[$status])) {
+				$summary[$status]++;
+			} else {
+				$summary['errors']++;
+			}
+			if ($status === 'conflicts' && is_array($detail) && count($conflictDetails) < 200) {
+				$conflictDetails[] = $detail;
+			}
+		}
+
 		$summary['conflict_details'] = $conflictDetails;
 		return $summary;
 	}
@@ -97,7 +144,7 @@ class PadBindingBackfillService {
 	/**
 	 * @return array{status: string, detail?: array<string, mixed>}
 	 */
-	private function processFile(File $file, bool $dryRun, array &$reservedByFileId, array &$reservedByPad): array {
+	private function inspectFile(File $file): array {
 		$path = (string)$file->getPath();
 		if (str_contains($path, '/files_trashbin/')) {
 			return ['status' => 'skipped'];
@@ -130,20 +177,9 @@ class PadBindingBackfillService {
 			return ['status' => 'skipped'];
 		}
 
-		$padKey = $baseUrl . "\n" . $padId;
-
-		$existingReservedByFile = $reservedByFileId[$fileId] ?? null;
-		if ($existingReservedByFile !== null) {
-			if ($existingReservedByFile === $padKey) {
-				return ['status' => 'already_bound'];
-			}
-			return $this->conflictResult('file_already_reserved_to_another_pad', $fileId, $path, $baseUrl, $padId);
-		}
-
 		$binding = $this->padBindingService->findActiveByFileId($fileId);
 		if ($binding !== null) {
 			if ((string)$binding['pad_id'] === $padId && (string)$binding['base_url'] === $baseUrl) {
-				$this->reserveBinding($fileId, $padKey, $reservedByFileId, $reservedByPad);
 				return ['status' => 'already_bound'];
 			}
 			return $this->conflictResult(
@@ -167,40 +203,75 @@ class PadBindingBackfillService {
 				(int)$existingPadBinding['file_id']
 			);
 		}
-		$existingReservedByPad = $reservedByPad[$padKey] ?? null;
-		if ($existingReservedByPad !== null && $existingReservedByPad !== $fileId) {
-			return $this->conflictResult(
-				'duplicate_in_current_run',
-				$fileId,
-				$path,
-				$baseUrl,
-				$padId,
-				(int)$existingReservedByPad
-			);
-		}
 
 		$originToken = $this->extractShortcutValue((string)$content, 'OwnpadToken');
-		if ($originToken === null || $originToken === '') {
+		$missingToken = $originToken === null || $originToken === '';
+		if ($missingToken) {
 			$originToken = $this->secureRandom->generate(64, ISecureRandom::CHAR_LOWER . ISecureRandom::CHAR_DIGITS);
 			$content = $this->appendShortcutField((string)$content, 'OwnpadToken', $originToken);
-
-			if (!$dryRun) {
-				try {
-					$file->putContent($content);
-				} catch (\Throwable $e) {
-					$this->logger->warning('Unable to persist OwnpadToken while backfilling mapping', [
-						'app' => 'ownpad',
-						'fileId' => $fileId,
-						'exception' => $e,
-					]);
-					return ['status' => 'errors'];
-				}
-			}
 		}
 
+		return [
+			'status' => 'create_candidate',
+			'file_id' => $fileId,
+			'path' => $path,
+			'base_url' => $baseUrl,
+			'pad_id' => $padId,
+			'pad_key' => $baseUrl . "\n" . $padId,
+			'origin_token' => $originToken,
+			'updated_content' => $content,
+			'missing_token' => $missingToken,
+		];
+	}
+
+	/**
+	 * @return array{status: string, detail: array<string, mixed>}
+	 */
+	private function conflictResult(string $reason, int $fileId, string $path, string $baseUrl, string $padId, ?int $conflictFileId = null): array {
+		return [
+			'status' => 'conflicts',
+			'detail' => $this->conflictDetail($reason, $fileId, $path, $baseUrl, $padId, $conflictFileId),
+		];
+	}
+
+	/**
+	 * @param array<string, mixed> $inspection
+	 * @return array{status: string, detail?: array<string, mixed>}
+	 */
+	private function applyCandidate(array $inspection, bool $dryRun): array {
+		$fileId = (int)$inspection['file_id'];
+		$path = (string)$inspection['path'];
+		$baseUrl = (string)$inspection['base_url'];
+		$padId = (string)$inspection['pad_id'];
+		$originToken = (string)$inspection['origin_token'];
+
 		if ($dryRun) {
-			$this->reserveBinding($fileId, $padKey, $reservedByFileId, $reservedByPad);
 			return ['status' => 'created'];
+		}
+
+		$nodes = $this->rootFolder->getById($fileId);
+		$file = null;
+		foreach ($nodes as $node) {
+			if ($node instanceof File) {
+				$file = $node;
+				break;
+			}
+		}
+		if (!($file instanceof File)) {
+			return ['status' => 'errors'];
+		}
+
+		if ((bool)$inspection['missing_token'] === true) {
+			try {
+				$file->putContent((string)$inspection['updated_content']);
+			} catch (\Throwable $e) {
+				$this->logger->warning('Unable to persist OwnpadToken while backfilling mapping', [
+					'app' => 'ownpad',
+					'fileId' => $fileId,
+					'exception' => $e,
+				]);
+				return ['status' => 'errors'];
+			}
 		}
 
 		$ownerUid = $file->getOwner()?->getUID();
@@ -223,40 +294,44 @@ class PadBindingBackfillService {
 				'exception' => $e,
 			]);
 
+			$existingPadBinding = $this->padBindingService->findActiveByPad($baseUrl, $padId);
+			if ($existingPadBinding !== null && (int)$existingPadBinding['file_id'] !== $fileId) {
+				return $this->conflictResult(
+					'pad_already_bound_to_other_file',
+					$fileId,
+					$path,
+					$baseUrl,
+					$padId,
+					(int)$existingPadBinding['file_id']
+				);
+			}
+
 			$raceBinding = $this->padBindingService->findActiveByFileId($fileId);
 			if ($raceBinding !== null
 				&& (string)$raceBinding['pad_id'] === $padId
 				&& (string)$raceBinding['base_url'] === $baseUrl) {
-				$this->reserveBinding($fileId, $padKey, $reservedByFileId, $reservedByPad);
 				return ['status' => 'already_bound'];
 			}
 
 			return ['status' => 'errors'];
 		}
 
-		$this->reserveBinding($fileId, $padKey, $reservedByFileId, $reservedByPad);
 		return ['status' => 'created'];
 	}
 
-	private function reserveBinding(int $fileId, string $padKey, array &$reservedByFileId, array &$reservedByPad): void {
-		$reservedByFileId[$fileId] = $padKey;
-		$reservedByPad[$padKey] = $fileId;
-	}
-
 	/**
-	 * @return array{status: string, detail: array<string, mixed>}
+	 * @return array<string, mixed>
 	 */
-	private function conflictResult(string $reason, int $fileId, string $path, string $baseUrl, string $padId, ?int $conflictFileId = null): array {
+	private function conflictDetail(string $reason, int $fileId, string $path, string $baseUrl, string $padId, ?int $conflictFileId = null): array {
 		return [
-			'status' => 'conflicts',
-			'detail' => [
-				'reason' => $reason,
-				'file_id' => $fileId,
-				'path' => $path,
-				'base_url' => $baseUrl,
-				'pad_id' => $padId,
-				'conflict_file_id' => $conflictFileId,
-			],
+			'reason' => $reason,
+			'file_id' => $fileId,
+			'path' => $path,
+			'base_url' => $baseUrl,
+			'pad_id' => $padId,
+			'conflict_file_id' => $conflictFileId,
+			'file_link' => '/apps/files/?fileid=' . $fileId,
+			'conflict_file_link' => $conflictFileId !== null ? '/apps/files/?fileid=' . $conflictFileId : null,
 		];
 	}
 
