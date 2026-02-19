@@ -157,8 +157,14 @@
 							<p>
 								{{ t('ownpad', 'Use the radio choice per group to select the file that should become the valid mapping, then apply all selections once.') }}
 							</p>
+							<p>
+								{{ t('ownpad', 'Showing {shown} of {total} conflict groups.', {
+									shown: visibleConflictGroups.length,
+									total: conflictGroups.length,
+								}) }}
+							</p>
 							<div class="ownpad__conflict-groups">
-								<div v-for="(group, gIdx) in conflictGroups" :key="`group-${gIdx}`" class="ownpad__conflict-group">
+								<div v-for="(group, gIdx) in visibleConflictGroups" :key="`group-${gIdx}`" class="ownpad__conflict-group">
 									<div class="ownpad__conflict-group-header">
 										{{ t('ownpad', 'Pad {padId} on {baseUrl}', { padId: group.pad_id, baseUrl: group.base_url }) }}
 									</div>
@@ -196,17 +202,28 @@
 													rel="noopener noreferrer">
 													{{ t('ownpad', 'Show in files') }}
 												</a>
-												<button v-if="canCreateAlias(conflict)"
-													type="button"
-													class="button-vue button-vue--size-small button-vue--text-only ownpad__small-action"
-													:disabled="backfillRunning || backfillActionFileId === conflict.file_id || backfillActionApplying"
-													@click="createAliasNote(conflict)">
-													{{ t('ownpad', 'Create alias note') }}
-												</button>
+												<div v-if="canCreateAlias(conflict)" class="ownpad__conflict-checkbox">
+													<input
+														:id="`ownpad-alias-${groupKey(group)}-${conflict.file_id}`"
+														type="checkbox"
+														:checked="isAliasSelected(conflict)"
+														:disabled="backfillRunning || backfillActionApplying"
+														@change="toggleAliasSelection(conflict, $event.target.checked)">
+													<label :for="`ownpad-alias-${groupKey(group)}-${conflict.file_id}`">
+														{{ t('ownpad', 'Queue alias note') }}
+													</label>
+												</div>
 											</div>
 										</li>
 									</ul>
 								</div>
+							</div>
+							<div v-if="hasMoreConflictGroups" class="ownpad__actions ownpad__conflict-apply">
+								<NcButton
+									:disabled="backfillRunning || backfillActionApplying"
+									@click="loadMoreConflictGroups">
+									{{ t('ownpad', 'Show more conflict groups') }}
+								</NcButton>
 							</div>
 							<div class="ownpad__actions ownpad__conflict-apply">
 								<NcButton
@@ -214,6 +231,11 @@
 									type="primary"
 									@click="applySelectedConflicts">
 									{{ t('ownpad', 'Apply selected as valid') }}
+								</NcButton>
+								<NcButton
+									:disabled="backfillRunning || backfillActionApplying || selectedAliasCount === 0"
+									@click="applySelectedAliasNotes">
+									{{ t('ownpad', 'Create selected alias notes') }}
 								</NcButton>
 							</div>
 						</NcNoteCard>
@@ -291,10 +313,12 @@ export default defineComponent({
 			testTokenResult: {},
 			backfillResult: {},
 			backfillRunning: false,
-			backfillActionFileId: null,
 			backfillActionApplying: false,
 			backfillActionError: '',
 			conflictSelections: {},
+			aliasSelections: {},
+			conflictGroupBatchSize: 20,
+			conflictGroupPage: 1,
 	    }
 	},
 	computed: {
@@ -318,6 +342,12 @@ export default defineComponent({
 			}
 			return this.backfillResult?.summary?.conflict_groups || []
 		},
+		visibleConflictGroups() {
+			return this.conflictGroups.slice(0, this.conflictGroupPage * this.conflictGroupBatchSize)
+		},
+		hasMoreConflictGroups() {
+			return this.visibleConflictGroups.length < this.conflictGroups.length
+		},
 		skippedDetails() {
 			if (this.backfillResult.status !== 'success') {
 				return []
@@ -326,6 +356,9 @@ export default defineComponent({
 		},
 		selectedConflictCount() {
 			return Object.values(this.conflictSelections).filter((fileId) => Number(fileId) > 0).length
+		},
+		selectedAliasCount() {
+			return Object.keys(this.aliasSelections).length
 		},
 	},
 	methods: {
@@ -353,6 +386,8 @@ export default defineComponent({
 			this.backfillResult = {}
 			this.backfillActionError = ''
 			this.conflictSelections = {}
+			this.aliasSelections = {}
+			this.conflictGroupPage = 1
 			try {
 				const response = await axios.post(
 					generateUrl('/apps/ownpad/ajax/v1.0/backfillbindings'),
@@ -404,6 +439,36 @@ export default defineComponent({
 				&& conflict.reason === 'pad_already_bound_to_other_file'
 				&& !!conflict.conflict_file_id
 		},
+		isAliasSelected(conflict) {
+			return !!this.aliasSelections[String(conflict?.file_id || '')]
+		},
+		toggleAliasSelection(conflict, checked) {
+			if (!this.canCreateAlias(conflict)) {
+				return
+			}
+			const key = String(conflict.file_id)
+			if (checked) {
+				this.aliasSelections = {
+					...this.aliasSelections,
+					[key]: Number(conflict.conflict_file_id),
+				}
+				return
+			}
+			const next = { ...this.aliasSelections }
+			delete next[key]
+			this.aliasSelections = next
+		},
+		loadMoreConflictGroups() {
+			this.conflictGroupPage += 1
+		},
+		async processInBatches(items, batchSize, processItem) {
+			for (let i = 0; i < items.length; i += batchSize) {
+				const batch = items.slice(i, i + batchSize)
+				for (const item of batch) {
+					await processItem(item)
+				}
+			}
+		},
 		conflictReasonLabel(reason) {
 			if (reason === 'duplicate_in_current_run') {
 				return this.t('ownpad', 'duplicate found during this backfill run')
@@ -424,12 +489,12 @@ export default defineComponent({
 			this.backfillActionApplying = true
 			this.backfillActionError = ''
 			try {
-				for (const fileId of selectedFileIds) {
+				await this.processInBatches(selectedFileIds, 20, async (fileId) => {
 					await axios.post(
 						generateUrl('/apps/ownpad/ajax/v1.0/backfillmarkvalid'),
 						{ fileId },
 					)
-				}
+				})
 				await this.runBackfill(true)
 			} catch (error) {
 				this.backfillActionError = error?.response?.data?.data?.message || this.t('ownpad', 'Unexpected error while applying selected mappings')
@@ -437,22 +502,31 @@ export default defineComponent({
 				this.backfillActionApplying = false
 			}
 		},
-		async createAliasNote(conflict) {
-			if (!conflict || !conflict.file_id || !conflict.conflict_file_id) {
+		async applySelectedAliasNotes() {
+			const selectedAliasEntries = Object.entries(this.aliasSelections)
+				.map(([fileId, targetFileId]) => ({
+					fileId: Number(fileId),
+					targetFileId: Number(targetFileId),
+				}))
+				.filter((item) => item.fileId > 0 && item.targetFileId > 0)
+			if (selectedAliasEntries.length === 0) {
 				return
 			}
-			this.backfillActionFileId = conflict.file_id
+
+			this.backfillActionApplying = true
 			this.backfillActionError = ''
 			try {
-				await axios.post(
-					generateUrl('/apps/ownpad/ajax/v1.0/backfillcreatealias'),
-					{ fileId: conflict.file_id, targetFileId: conflict.conflict_file_id },
-				)
+				await this.processInBatches(selectedAliasEntries, 20, async (item) => {
+					await axios.post(
+						generateUrl('/apps/ownpad/ajax/v1.0/backfillcreatealias'),
+						{ fileId: item.fileId, targetFileId: item.targetFileId },
+					)
+				})
 				await this.runBackfill(true)
 			} catch (error) {
-				this.backfillActionError = error?.response?.data?.data?.message || this.t('ownpad', 'Unexpected error')
+				this.backfillActionError = error?.response?.data?.data?.message || this.t('ownpad', 'Unexpected error while creating alias notes')
 			} finally {
-				this.backfillActionFileId = null
+				this.backfillActionApplying = false
 			}
 		},
 	},
@@ -532,6 +606,12 @@ export default defineComponent({
 		align-items: center;
 		gap: 6px;
 		margin-bottom: 4px;
+	}
+
+	&__conflict-checkbox {
+		display: flex;
+		align-items: center;
+		gap: 6px;
 	}
 
 	&__conflict-groups {
