@@ -34,6 +34,7 @@ class Version013300Date20260219090000 extends SimpleMigrationStep {
 		]);
 		$table->addColumn('file_id', 'integer', [
 			'notnull' => true,
+			'unsigned' => true,
 		]);
 		$table->addColumn('pad_id', 'string', [
 			'notnull' => true,

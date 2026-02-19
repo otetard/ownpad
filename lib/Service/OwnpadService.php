@@ -157,11 +157,16 @@ class OwnpadService {
 				try {
 					$createdByUid = $this->userSession->getUser()?->getUID();
 					$ownerUid = $meta->getOwner()?->getUID() ?? $createdByUid;
+					$baseUrl = rtrim((string)$host, '/');
+					$padId = $this->extractPadIdFromUrl((string)$url, $baseUrl);
+					if ($padId === null || $padId === '') {
+						throw new OwnpadException($l10n->t('Invalid Etherpad URL in pad file.'));
+					}
 
 					$this->padBindingService->create(
 						$meta->getId(),
-						(string)substr($url, strlen(rtrim($host, '/') . '/p/')),
-						rtrim((string)$host, '/'),
+						$padId,
+						$baseUrl,
 						$originToken,
 						$createdByUid,
 						$ownerUid,
@@ -250,9 +255,7 @@ class OwnpadService {
 		}
 
 		// Escape all RegEx-Characters
-		$hostreg = preg_quote($host);
-		// Escape all Slashes in URL to use in RegEx
-		$hostreg = preg_replace("/\//", "\\/", $host);
+		$hostreg = preg_quote($host, '/');
 
 		// Final Regex-String
 		if($fileending === "calc") {
