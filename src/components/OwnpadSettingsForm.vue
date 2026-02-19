@@ -133,6 +133,9 @@
 								{{ t('ownpad', 'Run backfill now') }}
 							</NcButton>
 						</div>
+						<NcNoteCard v-if="backfillActionError" type="error">
+							{{ backfillActionError }}
+						</NcNoteCard>
 						<NcNoteCard v-if="backfillResult.status === 'success'" type="success">
 							{{ t('ownpad', 'Backfill finished. Scanned: {scanned}, Created: {created}, Already bound: {alreadyBound}, Skipped: {skipped}, Conflicts: {conflicts}, Errors: {errors}', {
 								scanned: backfillResult.summary.scanned,
@@ -171,7 +174,7 @@
 													rel="noopener noreferrer">
 													{{ t('ownpad', 'Show in files') }}
 												</a>
-												<NcButton :disabled="backfillRunning || backfillActionFileId === conflict.file_id"
+												<NcButton :disabled="backfillRunning || backfillActionFileId === conflict.file_id || !canMarkAsValid(conflict)"
 													@click="markConflictAsValid(conflict)">
 													{{ t('ownpad', 'Mark as valid') }}
 												</NcButton>
@@ -262,6 +265,7 @@ export default defineComponent({
 			backfillResult: {},
 			backfillRunning: false,
 			backfillActionFileId: null,
+			backfillActionError: '',
 	    }
 	},
 	computed: {
@@ -315,6 +319,7 @@ export default defineComponent({
 		async runBackfill(dryRun) {
 			this.backfillRunning = true
 			this.backfillResult = {}
+			this.backfillActionError = ''
 			try {
 				const response = await axios.post(
 					generateUrl('/apps/ownpad/ajax/v1.0/backfillbindings'),
@@ -340,11 +345,15 @@ export default defineComponent({
 			const base = window.location.origin + generateUrl('/')
 			return new URL(path.replace(/^\//, ''), base).toString()
 		},
+		canMarkAsValid(conflict) {
+			return conflict && conflict.reason === 'duplicate_in_current_run'
+		},
 		async markConflictAsValid(conflict) {
 			if (!conflict || !conflict.file_id) {
 				return
 			}
 			this.backfillActionFileId = conflict.file_id
+			this.backfillActionError = ''
 			try {
 				await axios.post(
 					generateUrl('/apps/ownpad/ajax/v1.0/backfillmarkvalid'),
@@ -352,10 +361,7 @@ export default defineComponent({
 				)
 				await this.runBackfill(true)
 			} catch (error) {
-				this.backfillResult = {
-					status: 'error',
-					message: error?.response?.data?.data?.message || this.t('ownpad', 'Unexpected error'),
-				}
+				this.backfillActionError = error?.response?.data?.data?.message || this.t('ownpad', 'Unexpected error')
 			} finally {
 				this.backfillActionFileId = null
 			}
@@ -365,6 +371,7 @@ export default defineComponent({
 				return
 			}
 			this.backfillActionFileId = conflict.file_id
+			this.backfillActionError = ''
 			try {
 				await axios.post(
 					generateUrl('/apps/ownpad/ajax/v1.0/backfillcreatealias'),
@@ -372,10 +379,7 @@ export default defineComponent({
 				)
 				await this.runBackfill(true)
 			} catch (error) {
-				this.backfillResult = {
-					status: 'error',
-					message: error?.response?.data?.data?.message || this.t('ownpad', 'Unexpected error'),
-				}
+				this.backfillActionError = error?.response?.data?.data?.message || this.t('ownpad', 'Unexpected error')
 			} finally {
 				this.backfillActionFileId = null
 			}

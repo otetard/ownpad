@@ -19,8 +19,10 @@ use \OCP\IRequest;
 use OCA\Ownpad\Service\OwnpadException;
 use OCA\Ownpad\Service\OwnpadService;
 use OCA\Ownpad\Service\PadBindingBackfillService;
+use OCA\Ownpad\Service\PadBindingService;
 use OCP\Files\File;
 use OCP\Files\IRootFolder;
+use OCP\IURLGenerator;
 
 class AjaxController extends Controller {
 
@@ -30,7 +32,15 @@ class AjaxController extends Controller {
 	/** @var PadBindingBackfillService */
 	private $backfillService;
 
-	public function __construct($appName, IRequest $request, OwnpadService $service, PadBindingBackfillService $backfillService, private IRootFolder $rootFolder) {
+	public function __construct(
+		$appName,
+		IRequest $request,
+		OwnpadService $service,
+		PadBindingBackfillService $backfillService,
+		private IRootFolder $rootFolder,
+		private IURLGenerator $urlGenerator,
+		private PadBindingService $padBindingService,
+	) {
 		parent::__construct($appName, $request);
 		$this->service = $service;
 		$this->backfillService = $backfillService;
@@ -140,8 +150,13 @@ class AjaxController extends Controller {
 			]);
 		}
 		if (($result['status'] ?? null) === 'conflicts') {
+			$detail = is_array($result['detail'] ?? null) ? $result['detail'] : [];
+			$conflictFileId = (int)($detail['conflict_file_id'] ?? 0);
+			$message = $conflictFileId > 0
+				? 'Conflict: this pad is already bound to file ' . $conflictFileId
+				: 'Conflict while marking file as valid';
 			return new JSONResponse([
-				'data' => ['message' => 'Conflict while marking file as valid'],
+				'data' => ['message' => $message],
 				'status' => 'error',
 			], Http::STATUS_CONFLICT);
 		}
@@ -170,6 +185,26 @@ class AjaxController extends Controller {
 				'status' => 'error',
 			], Http::STATUS_BAD_REQUEST);
 		}
+		$targetNodes = $this->rootFolder->getById($targetFileId);
+		$targetExists = false;
+		foreach ($targetNodes as $targetNode) {
+			if ($targetNode instanceof File) {
+				$targetExists = true;
+				break;
+			}
+		}
+		if (!$targetExists) {
+			return new JSONResponse([
+				'data' => ['message' => 'Target file does not exist'],
+				'status' => 'error',
+			], Http::STATUS_NOT_FOUND);
+		}
+		if ($this->padBindingService->findActiveByFileId($targetFileId) === null) {
+			return new JSONResponse([
+				'data' => ['message' => 'Target file has no active pad binding'],
+				'status' => 'error',
+			], Http::STATUS_CONFLICT);
+		}
 
 		$nodes = $this->rootFolder->getById($fileId);
 		foreach ($nodes as $node) {
@@ -191,18 +226,25 @@ class AjaxController extends Controller {
 				$targetPath = $parentPath . '/' . $targetName;
 
 				$i = 1;
-				while ($node->getRoot()->nodeExists($targetPath)) {
+				$parent = $node->getParent();
+				while ($parent->nodeExists($targetName)) {
 					$targetName = $baseName . '-alias-' . $i . '.md';
 					$targetPath = $parentPath . '/' . $targetName;
 					$i++;
 				}
 
-				$aliasUrl = \OC::$server->getURLGenerator()->getAbsoluteURL('/f/' . $targetFileId);
+				$aliasUrl = $this->urlGenerator->getAbsoluteURL('/f/' . $targetFileId);
 				$content = "# Ownpad alias\n\n";
 				$content .= "This file was replaced by an existing pad link.\n\n";
 				$content .= "Open target file: " . $aliasUrl . "\n";
-				$node->putContent($content);
-				$node->move($targetPath);
+				$moved = $node->move($targetPath);
+				if (!($moved instanceof File)) {
+					return new JSONResponse([
+						'data' => ['message' => 'Unable to create alias note'],
+						'status' => 'error',
+					], Http::STATUS_INTERNAL_SERVER_ERROR);
+				}
+				$moved->putContent($content);
 			} catch (\Throwable $e) {
 				return new JSONResponse([
 					'data' => ['message' => $e->getMessage()],
