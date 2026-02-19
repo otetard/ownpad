@@ -14,6 +14,7 @@ namespace OCA\Ownpad\Service;
 use Exception;
 
 use OCP\IConfig;
+use OCP\ILogger;
 use OCP\IUserSession;
 
 class OwnpadService {
@@ -34,7 +35,8 @@ class OwnpadService {
 
 	public function __construct(
 		private IConfig $config,
-		private IUserSession $userSession
+		private IUserSession $userSession,
+		private ILogger $logger
 	) {
 		$this->config = $config;
 		$this->userSession = $userSession;
@@ -240,7 +242,7 @@ class OwnpadService {
 		}
 	}
 
-	public function deletePadFromUrl(string $url): void {
+	public function deletePadFromUrl(string $url, ?int $fileId = null): void {
 		if (!$this->isDeleteOnTrashEnabled()) {
 			return;
 		}
@@ -259,14 +261,24 @@ class OwnpadService {
 		$url = trim($url);
 		$pattern = '#^' . preg_quote($host, '#') . '/p/([^/]+)$#';
 		if (!preg_match($pattern, $url, $matches)) {
+			$this->logger->warning('Skipping Etherpad pad deletion because URL format is invalid.', [
+				'app' => 'ownpad',
+				'fileId' => $fileId,
+				'url' => $url,
+			]);
 			return;
 		}
 
 		$padId = $matches[1];
 		try {
 			$this->etherpadCallApi('deletePad', ['padID' => $padId]);
-		} catch (Exception) {
-			// Best-effort cleanup. If it fails, do not block trash deletion.
+		} catch (Exception $e) {
+			$this->logger->warning('Failed to delete Etherpad pad while moving file to trash.', [
+				'app' => 'ownpad',
+				'fileId' => $fileId,
+				'padId' => $padId,
+				'exception' => $e,
+			]);
 		}
 	}
 

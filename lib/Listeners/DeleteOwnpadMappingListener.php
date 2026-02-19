@@ -15,7 +15,7 @@ use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Files\File;
 
-class MoveToTrashListener implements IEventListener {
+class DeleteOwnpadMappingListener implements IEventListener {
 	public function __construct(
 		private OwnpadService $ownpadService
 	) {
@@ -31,20 +31,11 @@ class MoveToTrashListener implements IEventListener {
 			return;
 		}
 
-		$name = $node->getName();
-		if (!str_ends_with(strtolower($name), '.pad')) {
+		$name = strtolower($node->getName());
+		if (!str_ends_with($name, '.pad') && !str_ends_with($name, '.calc')) {
 			return;
 		}
 
-		$fileId = (int)$node->getId();
-		$url = $this->ownpadService->getPadUrlForFileId($fileId);
-		if ($url === null) {
-			return;
-		}
-
-		if ($this->ownpadService->isDeleteOnTrashEnabled()) {
-			$this->ownpadService->deletePadFromUrl($url, $fileId);
-		}
-		$this->ownpadService->deletePadUrlForFileId($fileId);
+		$this->ownpadService->deletePadUrlForFileId((int)$node->getId());
 	}
 }
