@@ -71,15 +71,15 @@ class PadBindingBackfillService {
 				}
 
 				$summary['scanned']++;
-				$result = $this->processFile($node, $dryRun, $reservedByFileId, $reservedByPad);
-				$status = $result['status'];
+				$fileResult = $this->processFile($node, $dryRun, $reservedByFileId, $reservedByPad);
+				$status = $fileResult['status'];
 				if (isset($summary[$status])) {
 					$summary[$status]++;
 				} else {
 					$summary['errors']++;
 				}
-				if ($status === 'conflicts' && isset($result['detail']) && count($conflictDetails) < 200) {
-					$conflictDetails[] = $result['detail'];
+				if ($status === 'conflicts' && isset($fileResult['detail']) && count($conflictDetails) < 200) {
+					$conflictDetails[] = $fileResult['detail'];
 				}
 
 				$processed++;
