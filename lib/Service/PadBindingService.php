@@ -52,7 +52,6 @@ class PadBindingService {
 		$qb->select('*')
 			->from(self::TABLE)
 			->where($qb->expr()->eq('file_id', $qb->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->isNull('deleted_at'))
 			->setMaxResults(1);
 
 		$result = $qb->executeQuery();
@@ -75,7 +74,6 @@ class PadBindingService {
 			->from(self::TABLE)
 			->where($qb->expr()->eq('base_url', $qb->createNamedParameter($baseUrl)))
 			->andWhere($qb->expr()->eq('pad_id', $qb->createNamedParameter($padId)))
-			->andWhere($qb->expr()->isNull('deleted_at'))
 			->setMaxResults(1);
 
 		$result = $qb->executeQuery();

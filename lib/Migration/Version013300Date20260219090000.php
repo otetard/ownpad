@@ -10,8 +10,8 @@ namespace OCA\Ownpad\Migration;
 
 use Closure;
 use OCP\DB\ISchemaWrapper;
-use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
+use OCP\Migration\SimpleMigrationStep;
 
 class Version013300Date20260219090000 extends SimpleMigrationStep {
 	/**
@@ -66,14 +66,11 @@ class Version013300Date20260219090000 extends SimpleMigrationStep {
 		$table->addColumn('updated_at', 'integer', [
 			'notnull' => true,
 		]);
-		$table->addColumn('deleted_at', 'integer', [
-			'notnull' => false,
-		]);
 
 		$table->setPrimaryKey(['id']);
 		$table->addUniqueIndex(['file_id'], 'ownpad_binding_fileid_uniq');
 		$table->addUniqueIndex(['origin_token'], 'ownpad_binding_token_uniq');
-		$table->addIndex(['base_url', 'pad_id'], 'ownpad_binding_pad_lookup_idx');
+		$table->addUniqueIndex(['base_url', 'pad_id'], 'ownpad_binding_pad_lookup_uniq');
 		$table->addIndex(['owner_uid', 'pad_id'], 'ownpad_binding_owner_pad_idx');
 
 		return $schema;

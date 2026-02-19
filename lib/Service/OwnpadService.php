@@ -466,6 +466,11 @@ class OwnpadService {
 				'exception' => $e,
 			]);
 
+			$existingPadBinding = $this->padBindingService->findActiveByPad($baseUrl, $padId);
+			if ($existingPadBinding !== null && (int)$existingPadBinding['file_id'] !== $fileId) {
+				throw new OwnpadException($l10n->t('This pad is already bound to another file and cannot be opened here.'));
+			}
+
 			$raceBinding = $this->padBindingService->findActiveByFileId($fileId);
 			if ($raceBinding !== null
 				&& (string)$raceBinding['pad_id'] === $padId
