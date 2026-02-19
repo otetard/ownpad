@@ -151,19 +151,41 @@
 						</NcNoteCard>
 						<NcNoteCard v-if="backfillResult.status === 'success' && conflictGroups.length > 0" type="warning">
 							<strong>{{ t('ownpad', 'Detected conflicts') }}</strong>
+							<p>
+								{{ t('ownpad', 'A conflict means multiple .pad files point to the same Etherpad document. Only one file can be the canonical mapped file in the database.') }}
+							</p>
+							<p>
+								{{ t('ownpad', 'Use the radio choice per group to select the file that should become the valid mapping, then apply all selections once.') }}
+							</p>
 							<div class="ownpad__conflict-groups">
 								<div v-for="(group, gIdx) in conflictGroups" :key="`group-${gIdx}`" class="ownpad__conflict-group">
 									<div class="ownpad__conflict-group-header">
 										{{ t('ownpad', 'Pad {padId} on {baseUrl}', { padId: group.pad_id, baseUrl: group.base_url }) }}
 									</div>
+									<div class="ownpad__conflict-group-description">
+										{{ t('ownpad', 'These files currently reference the same target pad:') }}
+									</div>
 									<ul class="ownpad__conflict-list">
 										<li v-for="(conflict, idx) in group.items"
 											:key="`${group.pad_id}-${conflict.file_id}-${idx}`">
+											<div v-if="canSelectAsValid(conflict)" class="ownpad__conflict-radio">
+												<input
+													:id="`ownpad-conflict-${groupKey(group)}-${conflict.file_id}`"
+													:name="`ownpad-conflict-group-${groupKey(group)}`"
+													type="radio"
+													:value="conflict.file_id"
+													:checked="selectedConflictFileId(group) === conflict.file_id"
+													:disabled="backfillRunning || backfillActionApplying"
+													@change="selectConflictAsValid(group, conflict.file_id)">
+												<label :for="`ownpad-conflict-${groupKey(group)}-${conflict.file_id}`">
+													{{ t('ownpad', 'Select as valid mapping') }}
+												</label>
+											</div>
 											<div>
-												{{ t('ownpad', 'File {fileId} ({path}) ({reason}){conflictFile}', {
+												{{ t('ownpad', 'File {fileId} ({path}): {reason}{conflictFile}', {
 													fileId: conflict.file_id,
 													path: conflict.path,
-													reason: conflict.reason,
+													reason: conflictReasonLabel(conflict.reason),
 													conflictFile: conflict.conflict_file_id ? ` with file ${conflict.conflict_file_id}` : '',
 												}) }}
 											</div>
@@ -174,13 +196,10 @@
 													rel="noopener noreferrer">
 													{{ t('ownpad', 'Show in files') }}
 												</a>
-												<NcButton :disabled="backfillRunning || backfillActionFileId === conflict.file_id || !canMarkAsValid(conflict)"
-													@click="markConflictAsValid(conflict)">
-													{{ t('ownpad', 'Mark as valid') }}
-												</NcButton>
-												<button type="button"
+												<button v-if="canCreateAlias(conflict)"
+													type="button"
 													class="button-vue button-vue--size-small button-vue--text-only ownpad__small-action"
-													:disabled="backfillRunning || backfillActionFileId === conflict.file_id || !conflict.conflict_file_id"
+													:disabled="backfillRunning || backfillActionFileId === conflict.file_id || backfillActionApplying"
 													@click="createAliasNote(conflict)">
 													{{ t('ownpad', 'Create alias note') }}
 												</button>
@@ -188,6 +207,14 @@
 										</li>
 									</ul>
 								</div>
+							</div>
+							<div class="ownpad__actions ownpad__conflict-apply">
+								<NcButton
+									:disabled="backfillRunning || backfillActionApplying || selectedConflictCount === 0"
+									type="primary"
+									@click="applySelectedConflicts">
+									{{ t('ownpad', 'Apply selected as valid') }}
+								</NcButton>
 							</div>
 						</NcNoteCard>
 						<NcNoteCard v-if="backfillResult.status === 'success' && skippedDetails.length > 0" type="info">
@@ -265,7 +292,9 @@ export default defineComponent({
 			backfillResult: {},
 			backfillRunning: false,
 			backfillActionFileId: null,
+			backfillActionApplying: false,
 			backfillActionError: '',
+			conflictSelections: {},
 	    }
 	},
 	computed: {
@@ -295,6 +324,9 @@ export default defineComponent({
 			}
 			return this.backfillResult?.summary?.skipped_details || []
 		},
+		selectedConflictCount() {
+			return Object.values(this.conflictSelections).filter((fileId) => Number(fileId) > 0).length
+		},
 	},
 	methods: {
 	 t,
@@ -320,6 +352,7 @@ export default defineComponent({
 			this.backfillRunning = true
 			this.backfillResult = {}
 			this.backfillActionError = ''
+			this.conflictSelections = {}
 			try {
 				const response = await axios.post(
 					generateUrl('/apps/ownpad/ajax/v1.0/backfillbindings'),
@@ -345,25 +378,63 @@ export default defineComponent({
 			const base = window.location.origin + generateUrl('/')
 			return new URL(path.replace(/^\//, ''), base).toString()
 		},
-		canMarkAsValid(conflict) {
+		canSelectAsValid(conflict) {
 			return conflict && conflict.reason === 'duplicate_in_current_run'
 		},
-		async markConflictAsValid(conflict) {
-			if (!conflict || !conflict.file_id) {
+		groupKey(group) {
+			return `${group?.base_url || ''}\n${group?.pad_id || ''}`
+		},
+		selectedConflictFileId(group) {
+			const key = this.groupKey(group)
+			return Number(this.conflictSelections[key] || 0)
+		},
+		selectConflictAsValid(group, fileId) {
+			const key = this.groupKey(group)
+			const normalizedFileId = Number(fileId)
+			if (!key || normalizedFileId <= 0) {
 				return
 			}
-			this.backfillActionFileId = conflict.file_id
+			this.conflictSelections = {
+				...this.conflictSelections,
+				[key]: normalizedFileId,
+			}
+		},
+		canCreateAlias(conflict) {
+			return conflict
+				&& conflict.reason === 'pad_already_bound_to_other_file'
+				&& !!conflict.conflict_file_id
+		},
+		conflictReasonLabel(reason) {
+			if (reason === 'duplicate_in_current_run') {
+				return this.t('ownpad', 'duplicate found during this backfill run')
+			}
+			if (reason === 'pad_already_bound_to_other_file') {
+				return this.t('ownpad', 'already mapped to another file')
+			}
+			return reason || this.t('ownpad', 'unknown reason')
+		},
+		async applySelectedConflicts() {
+			const selectedFileIds = Object.values(this.conflictSelections)
+				.map((fileId) => Number(fileId))
+				.filter((fileId) => fileId > 0)
+			if (selectedFileIds.length === 0) {
+				return
+			}
+
+			this.backfillActionApplying = true
 			this.backfillActionError = ''
 			try {
-				await axios.post(
-					generateUrl('/apps/ownpad/ajax/v1.0/backfillmarkvalid'),
-					{ fileId: conflict.file_id },
-				)
+				for (const fileId of selectedFileIds) {
+					await axios.post(
+						generateUrl('/apps/ownpad/ajax/v1.0/backfillmarkvalid'),
+						{ fileId },
+					)
+				}
 				await this.runBackfill(true)
 			} catch (error) {
-				this.backfillActionError = error?.response?.data?.data?.message || this.t('ownpad', 'Unexpected error')
+				this.backfillActionError = error?.response?.data?.data?.message || this.t('ownpad', 'Unexpected error while applying selected mappings')
 			} finally {
-				this.backfillActionFileId = null
+				this.backfillActionApplying = false
 			}
 		},
 		async createAliasNote(conflict) {
@@ -456,6 +527,13 @@ export default defineComponent({
 		align-items: center;
 	}
 
+	&__conflict-radio {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		margin-bottom: 4px;
+	}
+
 	&__conflict-groups {
 		display: flex;
 		flex-direction: column;
@@ -473,8 +551,17 @@ export default defineComponent({
 		margin-bottom: 6px;
 	}
 
+	&__conflict-group-description {
+		margin-bottom: 6px;
+		color: var(--color-text-maxcontrast);
+	}
+
 	&__small-action {
 		opacity: 0.9;
+	}
+
+	&__conflict-apply {
+		margin-top: 8px;
 	}
 }
 </style>
