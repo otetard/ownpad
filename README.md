@@ -79,7 +79,7 @@ settings:
 - resolve grouped conflicts (same target pad referenced by multiple
   `.pad` files) via provided actions.
 
-### Update from older versions (v0.x)
+### Update from older versions (<= 0.13.2)
 
 The mapping database table is created automatically during
 installation/update migration.
