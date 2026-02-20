@@ -90,29 +90,32 @@
 
 					<div class="ownpad__sub-section ownpad__legacy-token-mode">
 						<div class="ownpad__legacy-token-label">
-							{{ t('ownpad', 'Legacy pad handling without token') }}
+							{{ t('ownpad', 'How to handle .pad files without OwnpadToken') }}
+						</div>
+						<div class="ownpad__legacy-token-help">
+							{{ t('ownpad', 'This controls what happens when users open .pad files that were created manually or were imported without a token.') }}
 						</div>
 						<NcCheckboxRadioSwitch type="radio"
 							name="ownpad-legacy-token-mode"
 							:checked="settings.legacyTokenMode === 'none'"
-							@update:checked="onLegacyModeChange('none', $event)">
-							{{ t('ownpad', 'Deny all legacy pads (strict)') }}
+							@update:checked="setTokenlessPadMode('none')">
+							{{ t('ownpad', 'Allow only token-based pads (strict)') }}
 						</NcCheckboxRadioSwitch>
 						<NcCheckboxRadioSwitch type="radio"
 							name="ownpad-legacy-token-mode"
 							:checked="settings.legacyTokenMode === 'unprotected'"
-							@update:checked="onLegacyModeChange('unprotected', $event)">
-							{{ t('ownpad', 'Allow only unprotected legacy pads (recommended)') }}
+							@update:checked="setTokenlessPadMode('unprotected')">
+							{{ t('ownpad', 'Allow tokenless pads only for unprotected pads') }}
 						</NcCheckboxRadioSwitch>
 						<NcCheckboxRadioSwitch type="radio"
 							name="ownpad-legacy-token-mode"
 							:checked="settings.legacyTokenMode === 'all'"
-							@update:checked="onLegacyModeChange('all', $event)">
-							{{ t('ownpad', 'Allow all legacy pads (temporary migration mode)') }}
+							@update:checked="setTokenlessPadMode('all')">
+							{{ t('ownpad', 'Allow tokenless pads for all pad types (migration mode)') }}
 						</NcCheckboxRadioSwitch>
 					</div>
 					<NcNoteCard type="warning">
-						{{ t('ownpad', 'Legacy mode should only be used during migration. Protected pads without token are blocked unless you explicitly allow all legacy pads.') }}
+						{{ t('ownpad', 'Token-based pads are safest, especially for protected pads. Keep migration mode only as long as needed, then switch back to token-based mode.') }}
 					</NcNoteCard>
 
 					<div class="ownpad__sub-section ownpad__backfill">
@@ -361,10 +364,8 @@ export default defineComponent({
 	},
 	methods: {
 	 t,
-		onLegacyModeChange(mode, checked) {
-			if (checked) {
-				this.settings.legacyTokenMode = mode
-			}
+		setTokenlessPadMode(mode) {
+			this.settings.legacyTokenMode = mode
 		},
 		async testEtherpadAuthentication() {
 			try {
@@ -637,6 +638,11 @@ export default defineComponent({
 
 	&__legacy-token-label {
 		font-weight: 500;
+	}
+
+	&__legacy-token-help {
+		color: var(--color-text-maxcontrast);
+		margin-bottom: 6px;
 	}
 
 	&__legacy-token-mode {
