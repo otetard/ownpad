@@ -84,6 +84,7 @@ class PublicDisplayController extends Controller {
 
 		$content = $node->getContent();
 		$file = $node->getName();
+		$fileId = $node->getId();
 
 		$params = [
 			'urlGenerator' => $this->urlGenerator,
@@ -92,7 +93,16 @@ class PublicDisplayController extends Controller {
 		];
 
 		try {
-			$params['url'] = $this->ownpadService->parseOwnpadContent($file, $content, true);
+			$params['url'] = $this->ownpadService->parseOwnpadContent(
+				$file,
+				$content,
+				true,
+				$fileId,
+				function (string $newContent) use ($node): bool {
+					$node->setContent($newContent);
+					return true;
+				},
+			);
 			return new TemplateResponse($this->appName, 'viewer', $params, 'blank');
 		} catch(OwnpadException $e) {
 			$params["error"] = $e->getMessage();
