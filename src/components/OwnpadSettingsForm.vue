@@ -178,8 +178,7 @@
 										<li v-for="(conflict, idx) in group.items"
 											:key="`${group.pad_id}-${conflict.file_id}-${idx}`">
 											<div v-if="canSelectAsValid(conflict)" class="ownpad__conflict-radio">
-												<input
-													:id="`ownpad-conflict-${groupKey(group)}-${conflict.file_id}`"
+												<input :id="`ownpad-conflict-${groupKey(group)}-${conflict.file_id}`"
 													:name="`ownpad-conflict-group-${groupKey(group)}`"
 													type="radio"
 													:value="conflict.file_id"
@@ -206,8 +205,7 @@
 													{{ t('ownpad', 'Show in files') }}
 												</a>
 												<div v-if="canQueueAlias(group, conflict)" class="ownpad__conflict-checkbox">
-													<input
-														:id="`ownpad-alias-${groupKey(group)}-${conflict.file_id}`"
+													<input :id="`ownpad-alias-${groupKey(group)}-${conflict.file_id}`"
 														type="checkbox"
 														:checked="isAliasSelected(group, conflict)"
 														:disabled="backfillRunning || backfillActionApplying"
@@ -222,15 +220,13 @@
 								</div>
 							</div>
 							<div v-if="hasMoreConflictGroups" class="ownpad__actions ownpad__conflict-apply">
-								<NcButton
-									:disabled="backfillRunning || backfillActionApplying"
+								<NcButton :disabled="backfillRunning || backfillActionApplying"
 									@click="loadMoreConflictGroups">
 									{{ t('ownpad', 'Show more conflict groups') }}
 								</NcButton>
 							</div>
 							<div class="ownpad__actions ownpad__conflict-apply">
-								<NcButton
-									:disabled="backfillRunning || backfillActionApplying || selectedActionCount === 0"
+								<NcButton :disabled="backfillRunning || backfillActionApplying || selectedActionCount === 0"
 									type="primary"
 									@click="applySelectedActions">
 									{{ t('ownpad', 'Apply selected actions') }}
