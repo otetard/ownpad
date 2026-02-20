@@ -5,10 +5,10 @@ import { basename, extname } from 'path'
 /**
  * Create an unique file name
  *
- * @param name The initial name to use
- * @param otherNames Other names that are already used
- * @param suffix A function that takes an index an returns a suffix to add, defaults to '(index)'
- * @return Either the initial name, if unique, or the name with the suffix so that the name is unique
+ * @param {string} name The initial name to use
+ * @param {string[]} otherNames Other names that are already used
+ * @param {(n: number) => string} suffix A function that takes an index an returns a suffix to add, defaults to '(index)'
+ * @return {string} Either the initial name, if unique, or the name with the suffix so that the name is unique
  */
 export const getUniqueName = (name, otherNames, suffix = (n) => `(${n})`) => {
 	let newName = name

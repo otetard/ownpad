@@ -13,6 +13,7 @@ namespace OCA\Ownpad\AppInfo;
 
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCA\Ownpad\Listeners\CSPListener;
+use OCA\Ownpad\Listeners\DeleteOwnpadMappingListener;
 use OCA\Ownpad\Listeners\LoadPublicViewerListener;
 
 use OCA\Ownpad\Listeners\LoadViewerListener;
@@ -46,6 +47,13 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(LoadViewer::class, LoadViewerListener::class);
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, LoadPublicViewerListener::class);
 		$context->registerEventListener(AddContentSecurityPolicyEvent::class, CSPListener::class);
+
+		if (class_exists('OCA\\Files_Trashbin\\Events\\MoveToTrashEvent')) {
+			$context->registerEventListener('OCA\\Files_Trashbin\\Events\\MoveToTrashEvent', \OCA\Ownpad\Listeners\MoveToTrashListener::class);
+		}
+		if (class_exists('OCP\\Files\\Events\\Node\\NodeDeletedEvent')) {
+			$context->registerEventListener('OCP\\Files\\Events\\Node\\NodeDeletedEvent', DeleteOwnpadMappingListener::class);
+		}
 	}
 
 	public function boot(IBootContext $context): void {

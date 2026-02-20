@@ -34,6 +34,7 @@ OC.L10N.register(
     "Allow “public” pads" : "\"öffentliche\" Pads erlauben",
     "For example, if you host your Etherpad instance on `pad.example.org` and your Nextcloud instance on `cloud.example.org` you need to configure your cookie to `example.org` domain." : "Wenn du z. B. deine Etherpad-Instanz auf \"pad.beispiel.org\" und deine Nextcloud-Instanz auf \"cloud.beispiel.org\" hostest, musst du dein Cookie für die Domäne \"beispiel.org\" konfigurieren.",
     "Etherpad cookie domain" : "Etherpad Cookie-Domain",
+    "Delete Etherpad pads when moved to trash" : "Etherpad-Pads beim Verschieben in den Papierkorb löschen",
     "Enable Ethercalc" : "Ethercalc aktivieren",
     "Ethercalc Host" : "Ethercalc-Host",
     "Created new Etherpad document “{name}”" : "Neues Etherpad-Dokument \"name\" erstellt",
