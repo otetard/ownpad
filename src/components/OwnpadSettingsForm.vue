@@ -111,11 +111,11 @@
 							name="ownpad-legacy-token-mode"
 							:checked="settings.legacyTokenMode === 'all'"
 							@update:checked="setTokenlessPadMode('all')">
-							{{ t('ownpad', 'Allow tokenless pads for all pad types (migration mode)') }}
+							{{ t('ownpad', 'Allow tokenless pads for all pad types') }}
 						</NcCheckboxRadioSwitch>
 					</div>
 					<NcNoteCard type="warning">
-						{{ t('ownpad', 'Token-based pads are safest, especially for protected pads. Keep migration mode only as long as needed, then switch back to token-based mode.') }}
+						{{ t('ownpad', 'When this option is enabled, possession of the pad URL may be sufficient to open protected pads, even without access to the corresponding .pad file.') }}
 					</NcNoteCard>
 
 					<div class="ownpad__sub-section ownpad__backfill">
