@@ -3,7 +3,7 @@
 /** @var OCP\IURLGenerator $urlGenerator */
 $urlGenerator = $_['urlGenerator'];
 $version = $_['ownpad_version'];
-$url = $_['url'];
+$url = $_['url'] ?? '';
 $title = $_['title'];
 $error = $_['error'];
 ?>
