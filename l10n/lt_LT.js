@@ -1,7 +1,7 @@
 OC.L10N.register(
     "ownpad",
     {
-    "Share not found" : "Viešinys nerastas",
+    "Share not found" : "Bendrinimas nerastas",
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Neleistinas pavadinimas, '\\', '/', '<', '>', ':', '\"', '|', '?' ir '*' yra neleidžiami.",
     "The target folder has been moved or deleted." : "Paskirties aplankas buvo perkeltas ar ištrintas.",
     "Error when creating the file" : "Klaida kuriant failą",
