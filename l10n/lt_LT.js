@@ -5,6 +5,7 @@ OC.L10N.register(
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Neleistinas pavadinimas, '\\', '/', '<', '>', ':', '\"', '|', '?' ir '*' yra neleidžiami.",
     "The target folder has been moved or deleted." : "Paskirties aplankas buvo perkeltas ar ištrintas.",
     "Error when creating the file" : "Klaida kuriant failą",
+    "Invalid authentication credentials" : "Neteisingi prisijungimo duomenys autentifikavimui",
     "Error: {error}" : "Klaida: {error}"
 },
 "nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);");
