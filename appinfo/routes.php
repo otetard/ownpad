@@ -21,4 +21,7 @@ return ['routes' => [
 	['name' => 'ajax#getconfig', 'url' => '/ajax/v1.0/getconfig', 'verb' => 'GET'],
 	['name' => 'ajax#newpad', 'url' => '/ajax/v1.0/newpad', 'verb' => 'POST'],
 	['name' => 'ajax#testetherpadtoken', 'url' => '/ajax/v1.0/testetherpadtoken', 'verb' => 'GET'],
+	['name' => 'ajax#backfillbindings', 'url' => '/ajax/v1.0/backfillbindings', 'verb' => 'POST'],
+	['name' => 'ajax#backfillmarkvalid', 'url' => '/ajax/v1.0/backfillmarkvalid', 'verb' => 'POST'],
+	['name' => 'ajax#backfillcreatealias', 'url' => '/ajax/v1.0/backfillcreatealias', 'verb' => 'POST'],
 ]];

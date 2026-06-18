@@ -18,7 +18,7 @@ This application requires to have access to an instance of <a href="https://ethe
   <repository>https://github.com/otetard/ownpad</repository>
   <screenshot small-thumbnail="https://raw.githubusercontent.com/otetard/ownpad/main/screenshots/1-small.png">https://raw.githubusercontent.com/otetard/ownpad/main/screenshots/1.png</screenshot>
   <dependencies>
-    <nextcloud min-version="29" max-version="31" />
+    <nextcloud min-version="29" max-version="32" />
   </dependencies>
   <repair-steps>
     <post-migration>
@@ -33,5 +33,8 @@ This application requires to have access to an instance of <a href="https://ethe
   <settings>
     <admin>OCA\Ownpad\Settings\AdminSettings</admin>
   </settings>
+  <commands>
+    <command>OCA\Ownpad\Command\BackfillPadBindings</command>
+  </commands>
   <ocsid>174679</ocsid>
 </info>

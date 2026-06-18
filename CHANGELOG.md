@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- Introduce a persistent database mapping between `.pad` files and Etherpad pads (`ownpad_pad_binding`).
+- Add a backfill workflow in admin settings (dry-run + execute) to import existing `.pad` files into the mapping table.
+
+### Changed
+
+- Validate pad opening against server-side mapping.
+- Add admin policy settings for how tokenless `.pad` files are handled (`none`, `unprotected`, `all`).
+
 ## 0.13.2
 
 ### Changed

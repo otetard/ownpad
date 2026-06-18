@@ -30,6 +30,71 @@ Nextcloud and Etherpad/Ethercalc are served via HTTPS.
 Afterwards, the “pad” and/or “calc” items will be available in the “+”
 menu from the “File” app.
 
+## Pad mapping and token policy
+
+Ownpad keeps a persistent server-side mapping between Nextcloud
+`.pad` files and Etherpad pads. This mapping is used during open/create
+flows to keep file-to-pad relations consistent and to support future
+lifecycle work (for example delete/restore).
+
+### New `.pad` files
+
+When Ownpad creates a new `.pad` file, it writes:
+
+- `URL=...`
+- `OwnpadToken=...`
+
+and stores a matching binding in the database.
+
+### Existing `.pad` files without token/binding
+
+Existing files are **not** imported automatically during update. Admins
+can control global handling of tokenless `.pad` files in settings:
+
+- `none`: only token-based pads are allowed (strict).
+- `unprotected`: tokenless pads are allowed only for unprotected pads.
+- `all`: tokenless pads are allowed for all pad types.
+
+Warning: if tokenless access is allowed broadly, possession of the pad
+URL may be sufficient to open protected pads even without access to the
+corresponding `.pad` file.
+
+Access model summary:
+
+- Access to a `.pad` file in Nextcloud does **not** automatically grant
+  access to every Etherpad resource.
+- For token-based pads, Ownpad validates the file-to-pad mapping on the
+  server side before opening.
+- If tokenless mode is set to `all`, users who know the Etherpad URL
+  may be able to open protected pads even without access to the related
+  `.pad` file in Nextcloud.
+
+### Backfill from admin settings
+
+Admins can import existing `.pad` files into the mapping table from
+settings:
+
+- run a dry-run first to review results,
+- run backfill to persist mappings,
+- resolve grouped conflicts (same target pad referenced by multiple
+  `.pad` files) via provided actions.
+
+### Update from older versions (<= 0.13.2)
+
+The mapping database table is created automatically during
+installation/update migration.
+To include already existing `.pad` files, admins need to open Ownpad
+admin settings and run the backfill action once.
+
+Recommended upgrade path:
+
+1. Upgrade the app.
+2. In admin settings, choose a temporary tokenless policy (`unprotected`
+   or `all`) if needed for transition.
+3. Run backfill (dry-run first, then execute).
+4. Resolve reported conflicts.
+5. Switch to stricter policy (`none` or `unprotected`) after migration.
+
 ## Mimetype Detection
 
 ### Automatic Configuration

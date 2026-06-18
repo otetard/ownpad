@@ -60,6 +60,8 @@ class DisplayController extends Controller {
 
 		/* Retrieve file content to find pad’s URL */
 		$content = \OC\Files\Filesystem::file_get_contents($file);
+		$fileInfo = \OC\Files\Filesystem::getFileInfo($file);
+		$fileId = $fileInfo?->getId();
 
 		$params = [
 			'urlGenerator' => $this->urlGenerator,
@@ -68,7 +70,13 @@ class DisplayController extends Controller {
 		];
 
 		try {
-			$params['url'] = $this->ownpadService->parseOwnpadContent($file, $content);
+			$params['url'] = $this->ownpadService->parseOwnpadContent(
+				$file,
+				$content,
+				false,
+				$fileId,
+				fn (string $newContent): bool => \OC\Files\Filesystem::file_put_contents($file, $newContent) !== false,
+			);
 			return new TemplateResponse($this->appName, 'viewer', $params, 'blank');
 		} catch(OwnpadException $e) {
 			$params["error"] = $e->getMessage();

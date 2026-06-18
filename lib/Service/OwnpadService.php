@@ -13,8 +13,11 @@ namespace OCA\Ownpad\Service;
 
 use Exception;
 
+use OCP\Files\FileInfo;
 use OCP\IConfig;
 use OCP\IUserSession;
+use OCP\Security\ISecureRandom;
+use Psr\Log\LoggerInterface;
 
 class OwnpadService {
 	private $eplHost;
@@ -32,9 +35,16 @@ class OwnpadService {
 	public const EPL_CODE_INVALID_FUNCTION = 3;
 	public const EPL_CODE_INVALID_API_KEY = 4;
 
+	private const LEGACY_MODE_NONE = 'none';
+	private const LEGACY_MODE_UNPROTECTED = 'unprotected';
+	private const LEGACY_MODE_ALL = 'all';
+
 	public function __construct(
 		private IConfig $config,
-		private IUserSession $userSession
+		private IUserSession $userSession,
+		private ISecureRandom $secureRandom,
+		private PadBindingService $padBindingService,
+		private LoggerInterface $logger,
 	) {
 		$this->config = $config;
 		$this->userSession = $userSession;
@@ -56,10 +66,12 @@ class OwnpadService {
 
 	public function create($dir, $padname, $type, $protected) {
 		// Generate a random pad name
-		$token = \OC::$server->getSecureRandom()->generate(rand(32, 50), \OCP\Security\ISecureRandom::CHAR_LOWER.\OCP\Security\ISecureRandom::CHAR_DIGITS);
+		$token = $this->secureRandom->generate(rand(32, 50), ISecureRandom::CHAR_LOWER . ISecureRandom::CHAR_DIGITS);
 
 		$l10n = \OC::$server->getL10N('ownpad');
 		$l10n_files = \OC::$server->getL10N('files');
+
+		$originToken = null;
 
 		if($type === "ethercalc") {
 			$ext = "calc";
@@ -97,6 +109,7 @@ class OwnpadService {
 			$ext = "pad";
 			$host = \OC::$server->getConfig()->getAppValue('ownpad', 'ownpad_etherpad_host', false);
 			$url = sprintf("%s/p/%s", rtrim($host, "/"), $padID);
+			$originToken = $this->generateOriginToken();
 		}
 
 		if($padname === '' || $padname === '.' || $padname === '..') {
@@ -128,20 +141,61 @@ class OwnpadService {
 		}
 
 		$content = sprintf("[InternetShortcut]\nURL=%s", $url);
+		if ($originToken !== null) {
+			$content .= sprintf("\nOwnpadToken=%s", $originToken);
+		}
 
 		if(\OC\Files\Filesystem::file_put_contents($target, $content)) {
 			$meta = \OC\Files\Filesystem::getFileInfo($target);
+
+			if ($originToken !== null) {
+				if (!($meta instanceof FileInfo)) {
+					\OC\Files\Filesystem::unlink($target);
+					throw new OwnpadException($l10n_files->t('Error when creating the file'));
+				}
+
+				try {
+					$createdByUid = $this->userSession->getUser()?->getUID();
+					$ownerUid = $meta->getOwner()?->getUID() ?? $createdByUid;
+					$baseUrl = rtrim((string)$host, '/');
+					$padId = $this->extractPadIdFromUrl((string)$url, $baseUrl);
+					if ($padId === null || $padId === '') {
+						throw new OwnpadException($l10n->t('Invalid Etherpad URL in pad file.'));
+					}
+
+					$this->padBindingService->create(
+						$meta->getId(),
+						$padId,
+						$baseUrl,
+						$originToken,
+						$createdByUid,
+						$ownerUid,
+						$protected === true,
+					);
+				} catch (\Throwable $e) {
+					\OC\Files\Filesystem::unlink($target);
+					$this->logger->error('Failed to create pad binding for newly created file', [
+						'app' => 'ownpad',
+						'exception' => $e,
+					]);
+					throw new OwnpadException($l10n->t('Unable to secure pad mapping. Please try again.'));
+				}
+			}
+
 			return \OCA\Files\Helper::formatFileInfo($meta);
 		}
 
 		throw new OwnpadException($l10n_files->t('Error when creating the file'));
 	}
 
-	public function parseOwnpadContent($file, $content, bool $publicMode = false) {
+	public function parseOwnpadContent($file, $content, bool $publicMode = false, ?int $fileId = null, ?callable $contentUpdater = null) {
 		$l10n = \OC::$server->getL10N('ownpad');
 
-		preg_match('/URL=(.*)$/', $content, $matches);
-		$url = $matches[1];
+		$url = $this->extractShortcutValue($content, 'URL');
+		if ($url === null || $url === '') {
+			throw new OwnpadException($l10n->t('Invalid pad file: missing URL field.'));
+		}
+		$originToken = $this->extractShortcutValue($content, 'OwnpadToken');
 
 		$eplHostApi = $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', '');
 		$eplHostApi = rtrim($eplHostApi, '/');
@@ -187,8 +241,7 @@ class OwnpadService {
 
 		// Check for valid URL
 		// Get File-Ending
-		$split = explode(".", $file);
-		$fileending = $split[count($split) - 1];
+		$fileending = pathinfo((string)$file, PATHINFO_EXTENSION);
 
 		// Get Host-URL
 		if($fileending === "calc") {
@@ -197,32 +250,20 @@ class OwnpadService {
 			$host = \OC::$server->getConfig()->getAppValue('ownpad', 'ownpad_etherpad_host', false);
 		}
 
-		if(substr($host, -1, 1) !== '/') {
-			$host .= '/';
-		}
-
-		// Escape all RegEx-Characters
-		$hostreg = preg_quote($host);
-		// Escape all Slashes in URL to use in RegEx
-		$hostreg = preg_replace("/\//", "\/", $host);
-
-		// Final Regex-String
-		if($fileending === "calc") {
-			/*
-			 * Ethercalc documents with “multisheet” support starts
-			 * with a `=`.
-			 */
-			$regex = "/^".$hostreg."=?[^\/]+$/";
-		} elseif($fileending === "pad") {
-			/*
-			 * Etherpad documents can contain special characters, for
-			 * “protected pads” for example.
-			 */
-			$regex = "/^".$hostreg."p\/[^\/]+$/";
-		}
-
-		if (preg_match($regex, $url) !== 1) {
+		if (!$this->isAllowedOwnpadUrl((string)$url, (string)$host, (string)$fileending)) {
 			throw new OwnpadException($l10n->t('URL in your Etherpad/Ethercalc document does not match the allowed server'));
+		}
+
+		if ($fileending === 'pad') {
+			$this->validatePadBinding(
+				(string)$file,
+				(string)$content,
+				(string)$url,
+				$originToken,
+				$fileId,
+				$publicMode,
+				$contentUpdater,
+			);
 		}
 
 		return $url;
@@ -301,6 +342,235 @@ class OwnpadService {
 			default:
 				throw new \RuntimeException("An unexpected error occurred whilst handling the response");
 		}
+	}
+
+	private function validatePadBinding(
+		string $file,
+		string $content,
+		string $url,
+		?string $originToken,
+		?int $fileId,
+		bool $publicMode,
+		?callable $contentUpdater,
+	): void {
+		$l10n = \OC::$server->getL10N('ownpad');
+
+		if ($fileId === null) {
+			throw new OwnpadException($l10n->t('Unable to validate pad ownership.'));
+		}
+
+		$baseUrl = rtrim((string)$this->config->getAppValue('ownpad', 'ownpad_etherpad_host', ''), '/');
+		$padId = $this->extractPadIdFromUrl($url, $baseUrl);
+		if ($padId === null || $padId === '') {
+			throw new OwnpadException($l10n->t('Invalid Etherpad URL in pad file.'));
+		}
+
+		$isProtectedPad = preg_match('/^g\.[A-Za-z0-9]{16}\$.+$/', $padId) === 1;
+
+		$binding = $this->padBindingService->findActiveByFileId($fileId);
+		if ($binding !== null) {
+			if ($originToken === null || $originToken === '') {
+				throw new OwnpadException($l10n->t('This pad is missing a required ownership token.'));
+			}
+
+			if (!hash_equals((string)$binding['origin_token'], (string)$originToken)) {
+				throw new OwnpadException($l10n->t('Pad ownership verification failed.'));
+			}
+
+			if ((string)$binding['pad_id'] !== $padId || (string)$binding['base_url'] !== $baseUrl) {
+				throw new OwnpadException($l10n->t('Pad binding does not match this file.'));
+			}
+
+			return;
+		}
+
+		$existingPadBinding = $this->padBindingService->findActiveByPad($baseUrl, $padId);
+		if ($existingPadBinding !== null) {
+			throw new OwnpadException($l10n->t('This pad is already bound to another file and cannot be opened here.'));
+		}
+
+		if (($originToken === null || $originToken === '') && !$this->canOpenLegacyWithoutToken($isProtectedPad)) {
+			throw new OwnpadException($l10n->t('This legacy pad format is not allowed by the current security policy.'));
+		}
+
+		if ($originToken === null || $originToken === '') {
+			$originToken = $this->generateOriginToken();
+			$updatedContent = $this->appendShortcutField($content, 'OwnpadToken', $originToken);
+			$persisted = false;
+
+			if ($contentUpdater !== null) {
+				try {
+					$persisted = (bool)$contentUpdater($updatedContent);
+				} catch (\Throwable $e) {
+					$this->logger->warning('Unable to persist generated OwnpadToken for legacy pad', [
+						'app' => 'ownpad',
+						'file' => $file,
+						'fileId' => $fileId,
+						'exception' => $e,
+					]);
+				}
+			}
+
+			if (!$persisted) {
+				if ($isProtectedPad || $publicMode) {
+					throw new OwnpadException($l10n->t('Unable to migrate this pad to the secure format.'));
+				}
+
+				$this->logger->warning('Opening legacy pad without token backfill because file update failed', [
+					'app' => 'ownpad',
+					'file' => $file,
+					'fileId' => $fileId,
+				]);
+				return;
+			}
+		}
+
+		$createdByUid = $this->userSession->getUser()?->getUID();
+		try {
+			$this->padBindingService->create(
+				$fileId,
+				$padId,
+				$baseUrl,
+				$originToken,
+				$createdByUid,
+				$createdByUid,
+				$isProtectedPad,
+			);
+		} catch (\Throwable $e) {
+			$this->logger->error('Failed to create pad binding during open', [
+				'app' => 'ownpad',
+				'file' => $file,
+				'fileId' => $fileId,
+				'exception' => $e,
+			]);
+
+			$existingPadBinding = $this->padBindingService->findActiveByPad($baseUrl, $padId);
+			if ($existingPadBinding !== null && (int)$existingPadBinding['file_id'] !== $fileId) {
+				throw new OwnpadException($l10n->t('This pad is already bound to another file and cannot be opened here.'));
+			}
+
+			$raceBinding = $this->padBindingService->findActiveByFileId($fileId);
+			if ($raceBinding !== null
+				&& (string)$raceBinding['pad_id'] === $padId
+				&& (string)$raceBinding['base_url'] === $baseUrl
+				&& hash_equals((string)$raceBinding['origin_token'], (string)$originToken)) {
+				return;
+			}
+
+			throw new OwnpadException($l10n->t('Unable to create pad ownership mapping.'));
+		}
+	}
+
+	private function canOpenLegacyWithoutToken(bool $isProtectedPad): bool {
+		$mode = strtolower((string)$this->config->getAppValue('ownpad', 'ownpad_legacy_token_mode', self::LEGACY_MODE_ALL));
+
+		return match ($mode) {
+			self::LEGACY_MODE_ALL => true,
+			self::LEGACY_MODE_NONE => false,
+			default => !$isProtectedPad,
+		};
+	}
+
+	private function generateOriginToken(): string {
+		return $this->secureRandom->generate(64, ISecureRandom::CHAR_LOWER . ISecureRandom::CHAR_DIGITS);
+	}
+
+	private function extractShortcutValue(string $content, string $key): ?string {
+		$regex = sprintf('/^%s=(.*)$/mi', preg_quote($key, '/'));
+		if (preg_match($regex, $content, $matches) !== 1) {
+			return null;
+		}
+
+		return trim((string)$matches[1]);
+	}
+
+	private function appendShortcutField(string $content, string $key, string $value): string {
+		$lines = preg_split('/\r\n|\r|\n/', trim($content));
+		$updated = [];
+		$replaced = false;
+
+		foreach ($lines as $line) {
+			if (str_starts_with((string)$line, $key . '=')) {
+				$updated[] = $key . '=' . $value;
+				$replaced = true;
+				continue;
+			}
+			$updated[] = $line;
+		}
+
+		if (!$replaced) {
+			$updated[] = $key . '=' . $value;
+		}
+
+		return implode("\n", $updated);
+	}
+
+	private function extractPadIdFromUrl(string $url, string $baseUrl): ?string {
+		if (!$this->isAllowedOwnpadUrl($url, $baseUrl, 'pad')) {
+			return null;
+		}
+
+		$urlPath = parse_url($url, PHP_URL_PATH);
+		if (!is_string($urlPath) || $urlPath === '') {
+			return null;
+		}
+
+		$configuredPath = parse_url($baseUrl, PHP_URL_PATH);
+		$configuredPath = is_string($configuredPath) ? rtrim($configuredPath, '/') : '';
+
+		$prefixPath = $configuredPath . '/p/';
+		if (!str_starts_with($urlPath, $prefixPath)) {
+			return null;
+		}
+
+		$padId = substr($urlPath, strlen($prefixPath));
+		if ($padId === false || $padId === '') {
+			return null;
+		}
+
+		return rawurldecode($padId);
+	}
+
+	private function isAllowedOwnpadUrl(string $url, string $configuredHost, string $fileEnding): bool {
+		$configured = parse_url(rtrim($configuredHost, '/'));
+		$actual = parse_url($url);
+		if ($configured === false || $actual === false) {
+			return false;
+		}
+
+		$configuredScheme = strtolower((string)($configured['scheme'] ?? ''));
+		$actualScheme = strtolower((string)($actual['scheme'] ?? ''));
+		$configuredHostName = strtolower((string)($configured['host'] ?? ''));
+		$actualHostName = strtolower((string)($actual['host'] ?? ''));
+
+		if ($configuredScheme === '' || $configuredHostName === '') {
+			return false;
+		}
+		if ($configuredScheme !== $actualScheme || $configuredHostName !== $actualHostName) {
+			return false;
+		}
+		if ($this->normalizeUrlPort($configuredScheme, $configured['port'] ?? null) !== $this->normalizeUrlPort($actualScheme, $actual['port'] ?? null)) {
+			return false;
+		}
+
+		$configuredPath = isset($configured['path']) ? rtrim((string)$configured['path'], '/') : '';
+		$actualPath = (string)($actual['path'] ?? '');
+		if ($fileEnding === 'calc') {
+			return preg_match('/^' . preg_quote($configuredPath . '/', '/') . '=?[^\/]+$/', $actualPath) === 1;
+		}
+		if ($fileEnding === 'pad') {
+			return preg_match('/^' . preg_quote($configuredPath . '/p/', '/') . '[^\/]+$/', $actualPath) === 1;
+		}
+
+		return false;
+	}
+
+	private function normalizeUrlPort(string $scheme, mixed $port): int {
+		if (is_int($port)) {
+			return $port;
+		}
+
+		return $scheme === 'https' ? 443 : 80;
 	}
 
 	protected function etherpadConvertBools($candidate) {
