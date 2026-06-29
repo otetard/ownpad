@@ -1,7 +1,11 @@
 { "translations": {
     "Share not found" : "Partilha não encontrada",
+    "Unable to communicate with Etherpad API due to the following error: “%s”." : "Não é possível comunicar com a API do Etherpad devido ao seguinte erro: “%s”.",
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Nome inválido, os carateres '\\', '/', '<', '>', ':', '\"', '|', '?' e '*' não são permitidos.",
     "The target folder has been moved or deleted." : "A pasta de destino foi movida ou eliminada.",
-    "Error: {error}" : "Error: {error}"
+    "URL in your Etherpad/Ethercalc document does not match the allowed server" : "URL em seu documento Etherpad/Ethercalc não corresponde ao servidor permitido",
+    "Created new Etherpad document “{name}”" : "Novo documento do Etherpad “{name}” criado",
+    "Error: {error}" : "Error: {error}",
+    "Calc" : "Cálc"
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
