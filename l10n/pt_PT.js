@@ -6,6 +6,7 @@ OC.L10N.register(
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Nome inválido, os carateres '\\', '/', '<', '>', ':', '\"', '|', '?' e '*' não são permitidos.",
     "The target folder has been moved or deleted." : "A pasta de destino foi movida ou eliminada.",
     "The name %s is already used in the folder %s. Please choose a different name." : "O nome %s já é usado na pasta %s. Escolha um nome diferente.",
+    "You are not allowed to open this pad." : "Você não tem permissão para abrir este pad.",
     "URL in your Etherpad/Ethercalc document does not match the allowed server" : "URL em seu documento Etherpad/Ethercalc não corresponde ao servidor permitido",
     "Invalid authentication credentials" : "Credenciais de autenticação inválidas",
     "Unable to authenticate to Etherpad API" : "Não é possível autenticar na API Etherpad",
@@ -14,12 +15,15 @@ OC.L10N.register(
     "Ownpad (collaborative documents)" : "Ownpad (documentos colaborativos)",
     "Ownpad is not correctly configured, you should update your configuration. Please refer to the documentation for more information." : "Ownpad não está configurado corretamente, você deve atualizar sua configuração. Consulte a documentação para obter mais informações.",
     "Enable Etherpad" : "Ativar Etherpad",
+    "You need to enable Etherpad API if you want to create “protected” pads, that will only be accessible through Nextcloud." : "Você precisa ativar a API Etherpad se quiser criar pads “protegidos”, que só serão acessíveis através do Nextcloud.",
     "You have to host your Etherpad instance in a subdomain or sibbling domain of the one that is used by Nextcloud (due to cookie isolation)." : "Você deve hospedar sua instância Etherpad em um subdomínio ou domínio irmão daquele que é usado pelo Nextcloud (devido ao isolamento de cookies).",
     "Use Etherpad API" : "Usar API Etherpad",
     "Etherpad Apikey" : "Chave API do Etherpad",
+    "In order to enable OAuth2 authentication in Etherpad, you need to configure a dedicated service account. Please refer to the Etherpad documentation to proceed." : "Para ativar a autenticação OAuth2 no Etherpad, você precisa configurar uma conta de serviço dedicada. Consulte a documentação do Etherpad para prosseguir.",
     "Etherpad authentication Client Secret" : "Segredo do cliente para autenticação no Etherpad",
     "The following error occurred while trying to authenticate to Etherpad: {message}" : "Ocorreu o seguinte erro ao tentar autenticar no Etherpad: {message}",
     "Authentication to Etherpad successful!" : "Autenticação no Etherpad bem-sucedida!",
+    "Allow “public” pads" : "Permitir pads “públicos”",
     "For example, if you host your Etherpad instance on `pad.example.org` and your Nextcloud instance on `cloud.example.org` you need to configure your cookie to `example.org` domain." : "Por exemplo, se você hospedar sua instância Etherpad em `pad.example.org` e sua instância Nextcloud em `cloud.example.org`, você precisará configurar seu cookie para o domínio `example.org`.",
     "Etherpad cookie domain" : "Domínio de cookies do Etherpad",
     "Created new Etherpad document “{name}”" : "Novo documento do Etherpad “{name}” criado",
@@ -27,6 +31,7 @@ OC.L10N.register(
     "Pad" : "Pad",
     "Protected Pad" : "Pad Protegido",
     "New protected pad.pad" : "Novo pad protegido.pad",
-    "Calc" : "Cálc"
+    "Calc" : "Cálc",
+    "New calc.calc" : "Novo calc.calc"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
