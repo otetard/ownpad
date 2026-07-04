@@ -10,6 +10,7 @@
     "URL in your Etherpad/Ethercalc document does not match the allowed server" : "URL em seu documento Etherpad/Ethercalc não corresponde ao servidor permitido",
     "Invalid authentication credentials" : "Credenciais de autenticação inválidas",
     "Unable to authenticate to Etherpad API" : "Não é possível autenticar na API Etherpad",
+    "Ownpad" : "Ownpad",
     "Create and open Etherpad and Ethercalc documents." : "Crie e abra documentos Etherpad e Ethercalc.",
     "Ownpad is a Nextcloud application that allows to create and open Etherpad and Ethercalc documents.\n\nThis application requires to have access to an instance of <a href=\"https://etherpad.org/\">Etherpad</a> and/or <a href=\"https://ethercalc.net/\">Ethercalc</a> to work properly." : "Ownpad é um aplicativo Nextcloud que permite criar e abrir documentos Etherpad e Ethercalc\n\nEste aplicativo requer acesso a uma instância de <a href=\"https://etherpad.org/\">Etherpad</a> e/ou <a href=\"https://ethercalc.net/\">Ethercalc</a> para funcionar corretamente.",
     "Ownpad (collaborative documents)" : "Ownpad (documentos colaborativos)",
@@ -22,6 +23,7 @@
     "Enable OAuth2 authentication to communicate with Etherpad (introduced in Etherpad 2)" : "Ativar a autenticação OAuth2 para comunicar com o Etherpad (introduzido no Etherpad 2)",
     "Etherpad Apikey" : "Chave API do Etherpad",
     "In order to enable OAuth2 authentication in Etherpad, you need to configure a dedicated service account. Please refer to the Etherpad documentation to proceed." : "Para ativar a autenticação OAuth2 no Etherpad, você precisa configurar uma conta de serviço dedicada. Consulte a documentação do Etherpad para prosseguir.",
+    "Etherpad authentication Client ID" : "ID do cliente para autenticação no Etherpad",
     "Etherpad authentication Client Secret" : "Segredo do cliente para autenticação no Etherpad",
     "Test Etherpad authentication" : "Testar a autenticação no Etherpad",
     "The following error occurred while trying to authenticate to Etherpad: {message}" : "Ocorreu o seguinte erro ao tentar autenticar no Etherpad: {message}",
@@ -37,6 +39,7 @@
     "Protected Pad" : "Pad Protegido",
     "New protected pad.pad" : "Novo pad protegido.pad",
     "Calc" : "Cálc",
-    "New calc.calc" : "Novo calc.calc"
+    "New calc.calc" : "Novo calc.calc",
+    "Your Etherpad/Ethercalc document could not be opened, the following error was reported: “%s”." : "Seu documento Etherpad/Ethercalc não pôde ser aberto, o seguinte erro foi relatado: “%s”."
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
