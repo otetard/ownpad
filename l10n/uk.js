@@ -4,7 +4,7 @@ OC.L10N.register(
     "Share not found" : "Спільний ресурс не знайдено",
     "Unable to communicate with Etherpad API due to the following error: “%s”." : "Не вдалося встановити зв'язок з Etherpad API через наступну помилку: \"%s\".",
     "Incorrect padname." : "Неправильний псевдонім.",
-    "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Невірне ім'я, '\\', '/', '<', '>', ':', '\"', '|', '?' та '*' не дозволені.",
+    "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Недійсне ім'я: '\\', '/', '<', '>', ':', '\"', '|', '?' та '*' не дозволено.",
     "The target folder has been moved or deleted." : "Каталог призначення було переміщено або вилучено.",
     "The name %s is already used in the folder %s. Please choose a different name." : "Ім'я %s вже використовується у теці %s. Будь ласка, виберіть інше ім'я.",
     "Error when creating the file" : "Помилка при створенні файлу",
