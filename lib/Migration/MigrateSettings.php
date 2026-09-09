@@ -34,7 +34,7 @@ class MigrateSettings implements IRepairStep {
 	public function run(IOutput $output) {
 		$installedVersion = $this->config->getAppValue('ownpad', 'installed_version', '0.0.0');
 		if(version_compare($installedVersion, '0.5.2', '<')) {
-			$appConfig = \OC::$server->getConfig();
+			$appConfig = $this->config;
 
 			$enabled = ($appConfig->getAppValue('ownpad', 'ownpad_etherpad_host', '') !== '') ? 'yes' : 'no';
 			$appConfig->setAppValue('ownpad', 'ownpad_etherpad_enable', $enabled);
