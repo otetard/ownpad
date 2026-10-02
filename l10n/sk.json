@@ -14,7 +14,7 @@
     "Create and open Etherpad and Ethercalc documents." : "Vytvárajte a otvárajte dokumenty Etherpad a Ethercalc.",
     "Ownpad is a Nextcloud application that allows to create and open Etherpad and Ethercalc documents.\n\nThis application requires to have access to an instance of <a href=\"https://etherpad.org/\">Etherpad</a> and/or <a href=\"https://ethercalc.net/\">Ethercalc</a> to work properly." : "Ownpad je aplikácia Nextcloudu, ktorá umožňuje vytvárať a otvárať dokumenty Etherpad a Ethercalc.\n\nNa správne fungovanie táto aplikácia vyžaduje prístup k inštancii <a href=\"https://etherpad.org/\">Etherpad</a> a/alebo <a href=\"https://ethercalc.net/\">Ethercalc</a>.",
     "Ownpad (collaborative documents)" : "Ownpad (spolupracujúce dokumenty)",
-    "This is used to link collaborative documents inside Nextcloud." : "Slúži na prepojenie spolupracujúcich dokumentov v Nextcloude.",
+    "This is used to link collaborative documents inside Nextcloud." : "Slúži na prepájanie kolaboratívnych dokumentov v Nextcloude.",
     "Ownpad is not correctly configured, you should update your configuration. Please refer to the documentation for more information." : "Ownpad nie je správne nakonfigurovaný, mali by ste aktualizovať konfiguráciu. Ďalšie informácie nájdete v dokumentácii.",
     "Enable Etherpad" : "Povoliť Etherpad",
     "Etherpad Host" : "Hostiteľ Etherpadu",
