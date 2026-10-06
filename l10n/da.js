@@ -5,6 +5,7 @@ OC.L10N.register(
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Ugyldigt navn, '\\', '/', '<', '>', ':' | '?', '\"', '', og '*' er ikke tilladt.",
     "The target folder has been moved or deleted." : "Mappen er blevet slettet eller fjernet.",
     "Invalid authentication credentials" : "Ugyldige godkendelseslegitimationsoplysninger",
-    "Authentication to Etherpad successful!" : "Godkendelse til Etherpad lykkedes!"
+    "Authentication to Etherpad successful!" : "Godkendelse til Etherpad lykkedes!",
+    "Error: {error}" : "Fejl: {error}"
 },
 "nplurals=2; plural=(n != 1);");
