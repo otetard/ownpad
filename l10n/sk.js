@@ -40,7 +40,7 @@ OC.L10N.register(
     "Error: {error}" : "Chyba: {error}",
     "Pad" : "Pad",
     "New pad.pad" : "Nový pad.pad",
-    "Protected Pad" : "Chránený pad",
+    "Protected Pad" : "Chránený Pad",
     "New protected pad.pad" : "Nový chránený pad.pad",
     "Calc" : "Calc",
     "New calc.calc" : "Nový calc.calc",
