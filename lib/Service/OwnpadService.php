@@ -15,6 +15,8 @@ use Exception;
 
 use OCP\IConfig;
 use OCP\IUserSession;
+use OCP\L10N\IFactory;
+use OCP\Security\ISecureRandom;
 
 class OwnpadService {
 	private $eplHost;
@@ -34,10 +36,14 @@ class OwnpadService {
 
 	public function __construct(
 		private IConfig $config,
-		private IUserSession $userSession
+		private IUserSession $userSession,
+		private IFactory $l10nFactory,
+		private ISecureRandom $secureRandom
 	) {
 		$this->config = $config;
 		$this->userSession = $userSession;
+		$this->l10nFactory = $l10nFactory;
+		$this->secureRandom = $secureRandom;
 
 		if($this->config->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no') !== 'no' and
 		   $this->config->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no') !== 'no') {
@@ -56,14 +62,14 @@ class OwnpadService {
 
 	public function create($dir, $padname, $type, $protected) {
 		// Generate a random pad name
-		$token = \OC::$server->getSecureRandom()->generate(rand(32, 50), \OCP\Security\ISecureRandom::CHAR_LOWER.\OCP\Security\ISecureRandom::CHAR_DIGITS);
+		$token = $this->secureRandom->generate(rand(32, 50), \OCP\Security\ISecureRandom::CHAR_LOWER.\OCP\Security\ISecureRandom::CHAR_DIGITS);
 
-		$l10n = \OC::$server->getL10N('ownpad');
-		$l10n_files = \OC::$server->getL10N('files');
+		$l10n = $this->l10nFactory->get('ownpad');
+		$l10n_files = $this->l10nFactory->get('files');
 
 		if($type === "ethercalc") {
 			$ext = "calc";
-			$host = \OC::$server->getConfig()->getAppValue('ownpad', 'ownpad_ethercalc_host', false);
+			$host = $this->config->getAppValue('ownpad', 'ownpad_ethercalc_host', false);
 
 			/*
 			 * Prepend the calc’s name with a `=` to enable multisheet
@@ -77,7 +83,7 @@ class OwnpadService {
 		} elseif($type === "etherpad") {
 			$padID = $token;
 
-			$config = \OC::$server->getConfig();
+			$config = $this->config;
 			if($config->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no') !== 'no' and $config->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no') !== 'no') {
 				try {
 					if($protected === true) {
@@ -95,7 +101,7 @@ class OwnpadService {
 			}
 
 			$ext = "pad";
-			$host = \OC::$server->getConfig()->getAppValue('ownpad', 'ownpad_etherpad_host', false);
+			$host = $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', false);
 			$url = sprintf("%s/p/%s", rtrim($host, "/"), $padID);
 		}
 
@@ -138,7 +144,7 @@ class OwnpadService {
 	}
 
 	public function parseOwnpadContent($file, $content, bool $publicMode = false) {
-		$l10n = \OC::$server->getL10N('ownpad');
+		$l10n = $this->l10nFactory->get('ownpad');
 
 		preg_match('/URL=(.*)$/', $content, $matches);
 		$url = $matches[1];
@@ -192,9 +198,9 @@ class OwnpadService {
 
 		// Get Host-URL
 		if($fileending === "calc") {
-			$host = \OC::$server->getConfig()->getAppValue('ownpad', 'ownpad_ethercalc_host', false);
+			$host = $this->config->getAppValue('ownpad', 'ownpad_ethercalc_host', false);
 		} elseif($fileending === "pad") {
-			$host = \OC::$server->getConfig()->getAppValue('ownpad', 'ownpad_etherpad_host', false);
+			$host = $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', false);
 		}
 
 		if(substr($host, -1, 1) !== '/') {
@@ -232,7 +238,7 @@ class OwnpadService {
 		try {
 			return $this->etherpadCallApi('checkToken');
 		} catch(Exception) {
-			$l10n = \OC::$server->getL10N('ownpad');
+			$l10n = $this->l10nFactory->get('ownpad');
 			throw new OwnpadException($l10n->t('Invalid authentication credentials'));
 		}
 	}
@@ -327,7 +333,7 @@ class OwnpadService {
 		$result = file_get_contents($oidcUrl, false, $context);
 
 		if ($result === false) {
-			$l10n = \OC::$server->getL10N('ownpad');
+			$l10n = $this->l10nFactory->get('ownpad');
 			throw new OwnpadException($l10n->t('Unable to authenticate to Etherpad API'));
 		}
 
