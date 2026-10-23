@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Share not found" : "Partajarea nu a fost găsită",
     "Invalid name, '\\', '/', '<', '>', ':', '\"', '|', '?' and '*' are not allowed." : "Nume invalid, '\\', '/', '<', '>', ':', '\"', '|', '?' și '*' nu sunt permise.",
-    "The target folder has been moved or deleted." : "Dosarul țintă a fost mutat sau șters."
+    "The target folder has been moved or deleted." : "Dosarul țintă a fost mutat sau șters.",
+    "Error: {error}" : "Eroare: {error}"
 },
 "nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");
