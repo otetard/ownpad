@@ -13,6 +13,7 @@ namespace OCA\Ownpad\Settings;
 
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IInitialState;
+use OCP\Files\IMimeTypeDetector;
 use OCP\IConfig;
 use OCP\Settings\ISettings;
 
@@ -25,6 +26,7 @@ class AdminSettings implements ISettings {
 		private string $appName,
 		private IConfig $config,
 		private IInitialState $initialState,
+		private IMimeTypeDetector $mimeTypeDetector,
 	) {
 	}
 
@@ -45,8 +47,8 @@ class AdminSettings implements ISettings {
 			'etherpadCookieDomain' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_cookie_domain', ''),
 			'ethercalcEnable' => $this->getHumanBooleanConfig('ownpad', 'ownpad_ethercalc_enable', false),
 			'ethercalcHost' => $this->config->getAppValue('ownpad', 'ownpad_ethercalc_host', ''),
-			'mimetypeEpConfigured' => \OC::$server->getMimeTypeDetector()->detectPath("test.pad") === 'application/x-ownpad',
-			'mimetypeEcConfigured' => \OC::$server->getMimeTypeDetector()->detectPath("test.calc") === 'application/x-ownpad-calc',
+			'mimetypeEpConfigured' => $this->mimeTypeDetector->detectPath("test.pad") === 'application/x-ownpad',
+			'mimetypeEcConfigured' => $this->mimeTypeDetector->detectPath("test.calc") === 'application/x-ownpad-calc',
 		];
 		$this->initialState->provideInitialState('settings', $parameters);
 
